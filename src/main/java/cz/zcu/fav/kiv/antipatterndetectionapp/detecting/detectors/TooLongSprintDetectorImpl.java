@@ -1,0 +1,50 @@
+package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
+
+import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
+
+public class TooLongSprintDetectorImpl implements AntiPatternDetector {
+
+    private final AntiPattern antiPattern = new AntiPattern(1L,
+            "Too Long Sprint",
+            "TooLongSprint",
+            "Iterations too long. (ideal iteration length is about 1-2 weeks, " +
+            "maximum 3 weeks). It could also be detected here if the length " +
+            "of the iteration does not change often (It can change at the " +
+            "beginning and at the end of the project, but it should not " +
+            "change in the already started project).");
+
+    private final String sqlFileName = "too_long_sprint.sql";
+
+    @Override
+    public Long getAntiPatternId() {
+        return this.antiPattern.getId();
+    }
+
+    @Override
+    public String getAntiPatternName() {
+        return this.antiPattern.getName();
+    }
+
+    @Override
+    public String getAntiPatternPrintName() {
+        return this.antiPattern.getPrintName();
+    }
+
+    @Override
+    public String getAntiPatternDescription() {
+        return this.antiPattern.getDescription();
+    }
+
+    @Override
+    public AntiPattern getAntiPatternModel() {
+        return this.antiPattern;
+    }
+
+    @Override
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+        return new QueryResultItem(this.antiPattern, false, null);
+    }
+}

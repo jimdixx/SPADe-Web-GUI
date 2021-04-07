@@ -2,6 +2,12 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 import java.util.List;
 
+/**
+ * Model class for store results of one specific projects.
+ *
+ * project: analyzed project
+ * queryResultItems: all analyzed anti-patterns with results and results details
+ */
 public class QueryResult {
     private Project project;
     private List<QueryResultItem> queryResultItems;

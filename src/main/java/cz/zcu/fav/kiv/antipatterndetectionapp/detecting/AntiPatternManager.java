@@ -6,6 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 
 import java.util.List;
 
-public interface AntiPatternManager  {
-    List<QueryResult> analyze(Query query);
+public interface AntiPatternManager {
+
+    List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns);
 }

@@ -1,8 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting;
 
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.*;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,21 +16,30 @@ import java.util.List;
 @Service
 public class AntiPatternManagerImpl implements AntiPatternManager {
 
-    public List<QueryResult> analyze(Query query) {
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private AntiPatternService antiPatternService;
+
+    @Override
+    public List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns) {
+
+        return this.analyze(antiPatternService.getAllAntiPatterns(), projectService.getAllProjects());
+    }
+
+    private List<QueryResult> analyze(List<AntiPatternDetector> antiPatternDetectors, List<Project> projects) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         List<QueryResult> queryResults = new ArrayList<>();
 
 
-        for (Project project : query.getProjects()) {
+        for (Project project : projects) {
             QueryResult queryResult = new QueryResult();
             queryResult.setProject(project);
             List<QueryResultItem> queryResultItems = new ArrayList<>();
-            for (AntiPattern antiPattern : query.getAntiPatterns()) {
-                QueryResultItem queryResultItem = new QueryResultItem();
-                queryResultItem.setAntiPattern(antiPattern);
-                queryResultItem.setDetected(getAntiPatternService(antiPattern).analyze(project, databaseConnection));
-                queryResultItems.add(queryResultItem);
+            for (AntiPatternDetector antiPattern : antiPatternDetectors) {
+                queryResultItems.add(antiPattern.analyze(project, databaseConnection));
             }
             queryResult.setQueryResultItems(queryResultItems);
             queryResults.add(queryResult);
@@ -35,25 +49,5 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
         databaseConnection.closeConnection();
 
         return queryResults;
-    }
-
-    private AntiPatternDetector getAntiPatternService(AntiPattern antiPattern) {
-        switch (antiPattern.getName()) {
-            case "TooLongSprint":
-                return new TooLongSprintDetectorDetector();
-            case "BusinessAsUsual":
-                return new BusinessAsUsualDetector();
-            case "VaryingSprintLength":
-                return new VaryingSprintLengthDetector();
-            case "IndifferentSpecialist":
-                return new IndifferentSpecialistDetector();
-            case "LongOrNonExistentFeedbackLoops":
-                return new LongOrNonExistentFeedbackLoopsDetector();
-            case "RoadToNowhere":
-                return new RoadToNowhereDetector();
-            case "SpecifyNothing":
-                return new SpecifyNothingDetector();
-        }
-        return null;
     }
 }
