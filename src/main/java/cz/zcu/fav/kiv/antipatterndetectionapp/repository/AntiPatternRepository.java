@@ -23,7 +23,7 @@ public class AntiPatternRepository {
             Set<Class<? extends AntiPatternDetector>> subTypes = reflections.getSubTypesOf(AntiPatternDetector.class);
             for (Class<? extends AntiPatternDetector> subType : subTypes) {
                 AntiPatternDetector antiPatternDetector = subType.getDeclaredConstructor().newInstance();
-                antiPatterns.putIfAbsent(antiPatternDetector.getAntiPatternId(), antiPatternDetector);
+                antiPatterns.putIfAbsent(antiPatternDetector.getAntiPatternModel().getId(), antiPatternDetector);
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();

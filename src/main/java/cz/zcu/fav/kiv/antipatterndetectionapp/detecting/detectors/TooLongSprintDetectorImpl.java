@@ -23,26 +23,6 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     private final String sqlFileName = "too_long_sprint.sql";
 
     @Override
-    public Long getAntiPatternId() {
-        return this.antiPattern.getId();
-    }
-
-    @Override
-    public String getAntiPatternName() {
-        return this.antiPattern.getName();
-    }
-
-    @Override
-    public String getAntiPatternPrintName() {
-        return this.antiPattern.getPrintName();
-    }
-
-    @Override
-    public String getAntiPatternDescription() {
-        return this.antiPattern.getDescription();
-    }
-
-    @Override
     public AntiPattern getAntiPatternModel() {
         return this.antiPattern;
     }

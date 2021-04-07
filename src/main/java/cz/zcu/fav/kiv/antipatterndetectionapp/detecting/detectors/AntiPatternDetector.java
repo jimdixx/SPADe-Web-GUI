@@ -7,15 +7,6 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 
 public interface AntiPatternDetector {
 
-
-    Long getAntiPatternId();
-
-    String getAntiPatternName();
-
-    String getAntiPatternPrintName();
-
-    String getAntiPatternDescription();
-
     AntiPattern getAntiPatternModel();
 
     QueryResultItem analyze(Project project, DatabaseConnection databaseConnection);
