@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Anti Pattern Detector</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        tbody tr:hover {
+            background-color: #F8F9FA;
+        }
+
+        .analyze-button-container {
+            margin-left: 40%;
+            margin-right: 40%;
+            margin-bottom: 40px;
+        }
+    </style>
+
+    <script>
+        function checkAllProjects(checkBox) {
+            var projects = document.querySelectorAll('*[id^="project_"]');
+            var i;
+            for (i = 0; i < projects.length; i++) {
+                projects[i].checked = !!checkBox.checked;
+            }
+        }
+
+        function checkAllAntiPatterns(checkBox) {
+            var antiPatterns = document.querySelectorAll('*[id^="anti-pattern"]');
+            var i;
+            for (i = 0; i < antiPatterns.length; i++) {
+                antiPatterns[i].checked = !!checkBox.checked;
+            }
+        }
+    </script>
+</head>
+<body>
+<!-- Navigation bar imported -->
+<div th:replace="fragments/navbar :: navBar"></div>
+<!-- ./Navigation bar imported -->
+<form action="#" th:action="@{/analyze}" th:object="${query}" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Projects</h1>
+            </div>
+            <div class="col">
+                <h1>Anti Patterns</h1><br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Project Name</th>
+                        <th scope="col">Detail</th>
+                        <th scope="col">Analyze?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="project : ${query.projects}">
+                        <td th:text="${project.id}"></td>
+                        <td th:text="${project.name}"></td>
+                        <td><a th:href="@{/projects/} + ${project.id}">Show</a></td>
+                        <td style="text-align: center">
+                            <input checked type="checkbox" class="form-check-input" name="selectedProjects" th:value="${project.id}" th:id="@{project_} + ${project.id}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input checked type="checkbox" class="form-check-input" id="select_all_projects"
+                                   onclick="checkAllProjects(this)">
+                            <label class="form-check-label" for="select_all_projects">Select All</label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Anti Pattern</th>
+                        <th scope="col">Detail</th>
+                        <th scope="col">Analyze?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="antiPattern : ${query.antiPatterns}">
+                        <td th:text="${antiPattern.id}"></td>
+                        <td th:text="${antiPattern.printName}"></td>
+                        <td><a th:href="@{/anti-patterns/} + ${antiPattern.id}">Show</a></td>
+                        <td style="text-align: center">
+                            <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns" th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <input checked type="checkbox" class="form-check-input" id="select_all_anti_patterns"
+                                   onclick="checkAllAntiPatterns(this)">
+                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div th:if="${errorMessage}"  th:text="${errorMessage}" class="alert alert-danger" role="alert">
+        </div>
+    </div>
+    <div class="analyze-button-container">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Analyze</button>
+    </div>
+</form>
+</body>
+</html>
