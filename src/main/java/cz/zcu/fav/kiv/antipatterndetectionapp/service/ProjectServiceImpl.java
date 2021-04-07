@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,5 +30,15 @@ public class ProjectServiceImpl implements ProjectService {
         } else {
             return result.get();
         }
+    }
+
+    @Override
+    public List<Project> getAllProjectsForGivenIds(Long[] ids) {
+        List<Project> projects = new ArrayList<>();
+
+        for (Long id : ids) {
+            projects.add(getProjectById(id));
+        }
+        return projects;
     }
 }

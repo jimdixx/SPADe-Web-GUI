@@ -38,6 +38,14 @@ public class Utils {
         return queries;
     }
 
+    public static Long[] arrayOfStringsToArrayOfLongs(String[] strings) {
+        Long[] longs = new Long[strings.length];
+        for (int i = 0; i < strings.length; i++) {
+            longs[i] = Long.parseLong(strings[i]);
+        }
+        return longs;
+    }
+
     public static long daysBetween(Date firstDate, Date secondDate) {
         //24-May-2017, change this to your desired Start Date
         LocalDate dateBefore = firstDate.toLocalDate();

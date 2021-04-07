@@ -9,4 +9,6 @@ public interface ProjectService {
     List<Project> getAllProjects();
 
     Project getProjectById(Long id);
+
+    List<Project> getAllProjectsForGivenIds(Long[] ids);
 }

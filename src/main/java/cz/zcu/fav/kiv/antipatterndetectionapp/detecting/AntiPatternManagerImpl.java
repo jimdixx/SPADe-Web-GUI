@@ -7,6 +7,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,11 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
     @Override
     public List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns) {
 
-        return this.analyze(antiPatternService.getAllAntiPatterns(), projectService.getAllProjects());
+        return this.analyze(projectService.getAllProjectsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedProjects)),
+                antiPatternService.getAllAntiPatternsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedAntiPatterns)));
     }
 
-    private List<QueryResult> analyze(List<AntiPatternDetector> antiPatternDetectors, List<Project> projects) {
+    private List<QueryResult> analyze(List<Project> projects, List<AntiPatternDetector> antiPatternDetectors) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         List<QueryResult> queryResults = new ArrayList<>();

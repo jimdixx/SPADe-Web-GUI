@@ -6,6 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,5 +39,15 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     @Override
     public AntiPattern antiPatternToModel(AntiPatternDetector antiPatternDetector) {
         return antiPatternDetector.getAntiPatternModel();
+    }
+
+    @Override
+    public List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids) {
+        List<AntiPatternDetector> antiPatternDetectors = new ArrayList<>();
+
+        for (Long id : ids) {
+            antiPatternDetectors.add(antiPatternRepository.getAntiPatternById(id));
+        }
+        return antiPatternDetectors;
     }
 }

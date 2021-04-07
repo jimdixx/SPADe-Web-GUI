@@ -15,5 +15,7 @@ public interface AntiPatternService {
 
     AntiPattern antiPatternToModel(AntiPatternDetector antiPatternDetector);
 
+    List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids);
+
 
 }
