@@ -1,25 +1,29 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.ApplicationProperties;
+import cz.zcu.fav.kiv.antipatterndetectionapp.SpringApplicationContext;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String connectionUrl = "jdbc:mysql://localhost:3306/ppicha";
-    private static final String user = "root";
-    private static final String password = "";
-
     private Connection databaseConnection;
 
     public DatabaseConnection() {
-        this.databaseConnection = createConnection();
+        ApplicationProperties applicationProperties = ((ApplicationProperties) SpringApplicationContext.getContext()
+                .getBean("applicationProperties"));
+        String connectionUrl = applicationProperties.getDataSourceUrl();
+        String dataSourceUsername = applicationProperties.getDataSourceUsername();
+        String dataSourcePassword = applicationProperties.getDataSourcePassword();
+        this.databaseConnection = createConnection(connectionUrl, dataSourceUsername, dataSourcePassword);
     }
 
-    private Connection createConnection() {
+    private Connection createConnection(String connectionUrl, String dataSourceUsername, String dataSourcePassword) {
         Connection conn = null;
         try {
-             conn = DriverManager.getConnection(connectionUrl, user, password);
+            conn = DriverManager.getConnection(connectionUrl, dataSourceUsername, dataSourcePassword);
 
         } catch (SQLException e) {
             e.printStackTrace();
