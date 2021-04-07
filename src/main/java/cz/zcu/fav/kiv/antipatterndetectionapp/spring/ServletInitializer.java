@@ -1,5 +1,6 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp;
+package cz.zcu.fav.kiv.antipatterndetectionapp.spring;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.AntiPatternDetectionAppApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

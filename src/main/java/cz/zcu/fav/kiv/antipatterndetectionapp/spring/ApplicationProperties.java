@@ -1,4 +1,4 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp;
+package cz.zcu.fav.kiv.antipatterndetectionapp.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

@@ -1,7 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.ApplicationProperties;
-import cz.zcu.fav.kiv.antipatterndetectionapp.SpringApplicationContext;
+import cz.zcu.fav.kiv.antipatterndetectionapp.spring.ApplicationProperties;
+import cz.zcu.fav.kiv.antipatterndetectionapp.spring.SpringApplicationContext;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

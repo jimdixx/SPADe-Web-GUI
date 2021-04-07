@@ -1,4 +1,4 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp;
+package cz.zcu.fav.kiv.antipatterndetectionapp.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

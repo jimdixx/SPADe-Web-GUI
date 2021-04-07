@@ -2,6 +2,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 @Component
 public class AntiPatternRepository {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
 
     private List<AntiPatternDetector> antiPatternDetectors = init();
 
@@ -24,7 +28,7 @@ public class AntiPatternRepository {
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
-            // TODO LOG
+            LOGGER.error("Cannot get all detectors with reflection", e);
         }
         return antiPatterns;
     }
@@ -35,7 +39,7 @@ public class AntiPatternRepository {
 
     public AntiPatternDetector getAntiPatternById(Long id) {
         for (AntiPatternDetector antiPatternDetector : antiPatternDetectors) {
-            if(antiPatternDetector.getAntiPatternId().equals(id)) {
+            if (antiPatternDetector.getAntiPatternId().equals(id)) {
                 return antiPatternDetector;
             }
             return antiPatternDetector;

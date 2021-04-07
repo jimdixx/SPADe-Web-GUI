@@ -1,4 +1,4 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp;
+package cz.zcu.fav.kiv.antipatterndetectionapp.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
