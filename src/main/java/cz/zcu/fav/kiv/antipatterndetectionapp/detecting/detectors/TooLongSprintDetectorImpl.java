@@ -48,13 +48,13 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
      * Postup detekce:
      *      1) najít všechny iterace danného projektu
      *      2) odebrat první a poslední iteraci( ty mohou být z důvodu nastartování projektu dlouhé)
-     *      2) zjistit jejich délku (rozdíl mezi start date a end date)
-     *      3) pokud iterace přesháne délku 21 dní (3 týdny), tak jsou označeny jako moc dlouhé
-     *      4) pokud je delší více jak 1/3 ze všech sledovaných iterací, tak je anti pattern detekován
+     *      3) zjistit jejich délku (rozdíl mezi start date a end date)
+     *      4) pokud iterace přesháne délku 21 dní (3 týdny), tak jsou označeny jako moc dlouhé
+     *      5) pokud je delší více jak 1/3 ze všech sledovaných iterací, tak je anti pattern detekován
      * @param project analyzovaný project
      * @param databaseConnection    databázové připojení
      * @param queries   list sql dotazů
-     * @return
+     * @return výsledek detekce
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
@@ -86,7 +86,7 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
                 new ResultDetail("Count of iterations", String.valueOf(totalCountOfIteration)),
                 new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)),
                 new ResultDetail("Is detected", String.valueOf(numberOfLongIterations >= maxIterationLimit)));
-
+        LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
         return new QueryResultItem(this.antiPattern, numberOfLongIterations >= maxIterationLimit, resultDetails);
