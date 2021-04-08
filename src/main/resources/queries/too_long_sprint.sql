@@ -17,7 +17,7 @@ set @projectId = ?;
 /* Maximum iteration length in days */
 set @maxSprintLength = 20;
 /* Exclude first and last iteration? */
-set @excludeFirstAndLastIteration = true;
+set @excludeFirstAndLastIteration = false;
 /* Id of first iteration */
 set @idOfFirstIteration = (select id from iteration where iteration.superProjectId = @projectId order by startDate limit 1);
 /* Id of last iteration */

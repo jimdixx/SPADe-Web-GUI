@@ -1,11 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.spring.ApplicationProperties;
 import cz.zcu.fav.kiv.antipatterndetectionapp.spring.SpringApplicationContext;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class DatabaseConnection {
 
@@ -41,5 +43,27 @@ public class DatabaseConnection {
 
     public Connection getDatabaseConnection() {
         return databaseConnection;
+    }
+
+    public ResultSet executeQueries(Project project, List<String> queries) {
+        Statement stmt;
+        ResultSet resultSet = null;
+        try {
+            stmt = this.getDatabaseConnection().createStatement();
+
+            for (String query : queries) {
+                if(queries.indexOf(query) != queries.size()-1){
+                    if(query.contains("?"))
+                        query = query.replace("?", project.getId().toString());
+                    stmt.executeQuery(query);
+                } else {
+                    resultSet = stmt.executeQuery(query);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }

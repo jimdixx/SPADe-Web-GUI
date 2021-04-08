@@ -1,5 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.utils;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +10,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Utils {
@@ -52,5 +56,9 @@ public class Utils {
         //29-July-2017, change this to your desired End Date
         LocalDate dateAfter = secondDate.toLocalDate();
         return ChronoUnit.DAYS.between(dateBefore, dateAfter);
+    }
+
+    public static List<ResultDetail> createResultDetailsList(ResultDetail... resultDetails) {
+        return new ArrayList<>(Arrays.asList(resultDetails));
     }
 }

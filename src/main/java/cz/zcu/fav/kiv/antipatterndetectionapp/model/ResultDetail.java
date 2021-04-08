@@ -30,4 +30,12 @@ public class ResultDetail {
     public void setResultDetailValue(String resultDetailValue) {
         this.resultDetailValue = resultDetailValue;
     }
+
+    @Override
+    public String toString() {
+        return "ResultDetail{" +
+                "resultDetailName='" + resultDetailName + '\'' +
+                ", resultDetailValue='" + resultDetailValue + '\'' +
+                '}';
+    }
 }
