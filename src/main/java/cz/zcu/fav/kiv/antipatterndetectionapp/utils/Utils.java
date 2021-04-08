@@ -21,7 +21,7 @@ public class Utils {
 
     public static List<String> loadQueryFromFile(String fileName) {
         List<String> queries = new ArrayList<>();
-        InputStream is = Utils.class.getClassLoader().getResourceAsStream(fileName);
+        InputStream is = Utils.class.getClassLoader().getResourceAsStream("./queries/" + fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         try {
             while (reader.ready()) {

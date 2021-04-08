@@ -7,7 +7,9 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TooLongSprintDetectorImpl implements AntiPatternDetector {
+import java.util.List;
+
+public class TooLongSprintDetectorImpl extends AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TooLongSprintDetectorImpl.class);
 
@@ -28,7 +30,12 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public String getAntiPatternSqlFileName() {
+        return this.sqlFileName;
+    }
+
+    @Override
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> sql) {
         return new QueryResultItem(this.antiPattern, false, null);
     }
 }
