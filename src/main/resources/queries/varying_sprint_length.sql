@@ -20,9 +20,9 @@ set @projectId = ?;
 /* Exclude first and last iteration? */
 set @excludeFirstAndLastIteration = true;
 /* Id of first iteration */
-set @idOfFirstIteration = (select id from iteration where iteration.superProjectId = @projectId order by startDate limit 1);
+set @idOfFirstIteration = (select id from iteration where iteration.superProjectId = @projectId order by name limit 1);
 /* Id of last iteration */
-set @idOfLastIteration = (select id from iteration where iteration.superProjectId = @projectId order by startDate desc limit 1);
+set @idOfLastIteration = (select id from iteration where iteration.superProjectId = @projectId order by name desc limit 1);
 /* Select all iterations with their length */
-select datediff(endDate, startDate) as `iterationLength` from iteration where iteration.superProjectId = @projectId and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfFirstIteration, -1) and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfLastIteration, -1) order by iteration.startDate;
+select datediff(endDate, startDate) as `iterationLength` from iteration where iteration.superProjectId = @projectId and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfFirstIteration, -1) and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfLastIteration, -1) order by iteration.name;
 

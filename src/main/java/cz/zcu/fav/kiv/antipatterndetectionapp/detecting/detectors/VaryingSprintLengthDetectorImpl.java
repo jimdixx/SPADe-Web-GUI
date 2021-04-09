@@ -47,7 +47,7 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
 
     /**
      * Postup detekce:
-     *      1) najít všechny iterace pro danný projekt seřazené dle start date
+     *      1) najít všechny iterace pro danný projekt seřazené dle name (start date má divné hodnoty a nejdou iterace po sobě)
      *      2) odebrání první a poslední iterace z důvodu možných výkyvů
      *      3) zjistit jejich délku (rozdíl mezi start date a end date)
      *      4) vždy porovnat dvě po sobě jdoucí iterace
