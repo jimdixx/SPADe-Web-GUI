@@ -15,17 +15,15 @@ Detection: There will be no activities in the project
            retrospectives (%retr%).
 */
 
-/* Init global variables */
+/* Init project id */
 set @projectId = ?;
 /* Retrospective substring */
 set @restrospectiveSubstring = '%retr%';
-/* Number of developers in project */
-set @numberOfPeople =  (select count(DISTINCT assigneeId) from workunitview where projectId = @projectId and assigneeName != 'unknown');
+/* Revision substring */
+set @revisionSubstring = '%revi%';
 /* Number of iterations for given project */
-set @numberOfIterations = (select COUNT(*) from iteration where superProjectId = @projectId);
-/* Number of wikipages with substring retr */
-set @numberOfWikipageWithRetr = (select count(*) from artifactview where projectId = @projectId AND artifactClass like 'WIKIPAGE' AND (name like @restrospectiveSubstring OR description like @restrospectiveSubstring));
-/* Number of issues with retr root ends same day like iteration and all members of team are logging  time on this issue */
-set @numberOfRestrospectiveActivities = (select COUNT(distinct activityEndDate) from (select workunitview.id, workunitview.activityEndDate from workunitview INNER JOIN fieldchangeview on workunitview.id = fieldchangeview.itemId where workunitview.projectId = @projectId AND fieldchangeview.changeName LIKE 'LOGTIME' AND (abs(datediff(workunitview.activityEndDate, workunitview.iterationEndDate) = 0)) AND (workunitview.name like @restrospectiveSubstring OR workunitview.description LIKE @restrospectiveSubstring) GROUP by workunitview.id HAVING COUNT(DISTINCT fieldchangeview.authorId) = @numberOfPeople) as test);
-/* Show all statistics */
-select @projectId as `projectId`, @numberOfPeople as `numberOfPeople`, @numberOfIterations as `numberOfIterations`, @numberOfWikipageWithRetr as `numberOfWikipageWithRetr`, @numberOfRestrospectiveActivities as `numberOfRestrospectiveActivities`;
+select COUNT(id) as 'numberOfIterations' from iteration where superProjectId = @projectId;
+/* Select all iteration with detected retrospective activities */
+select  iterationName as 'iterationName', count(name) as 'numberOfIssues' from workunitview where projectId = @projectId and (name like @restrospectiveSubstring or name like @revisionSubstring) group by iterationName;
+/* Select all wikipages that were created or updated in iteration and have name with retr or revi*/
+select iteration.name as 'iterationName', count(distinct(artifactview.name)) as 'numberOfWikiPages' from artifactview inner join fieldchangeview on artifactview.id = fieldchangeview.itemId inner join iteration on (fieldchangeview.itemCreated between iteration.startDate and iteration.endDate) and iteration.superProjectId = @projectId where artifactview.projectId = @projectId and artifactview.artifactClass like 'WIKIPAGE' and (artifactview.name like '%retr%' or artifactview.description like '%retr%') group by iteration.id order by iteration.name;
