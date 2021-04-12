@@ -38,6 +38,17 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
         return this.sqlFileName;
     }
 
+    /**
+     * Postup detekce:
+     *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky s projektovým plánem
+     *      2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaký projektový plán
+     *      5) pokud nebude nalezena žádná aktivita nebo wiki stránka, tak je antivzor detekován
+     *
+     * @param project            analyzovaný project
+     * @param databaseConnection databázové připojení
+     * @param queries            list sql dotazů
+     * @return výsledek detekce
+     */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
         int numberOfIssuesForProjectPlan = 0;

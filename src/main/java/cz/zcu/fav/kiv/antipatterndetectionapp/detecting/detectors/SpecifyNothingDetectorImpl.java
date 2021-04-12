@@ -40,11 +40,11 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
 
     /**
      * Postup detekce:
-     * 1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky se specifikací projektu
-     * 2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaký projektový blán
-     * 3) dále vzít průměrnou délku textu, která je uvedena jako popis u kativity
-     * 4) pokud nebude nalezena žádná aktivity ani wiki stránka, tak se zkontroluje průměrná délka popisku aktivity
-     * 5) pokud ani jedno nezabere, tak je anti-pattern detekován
+     *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky se specifikací projektu
+     *      2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaká specifikace projektu
+     *      3) dále vzít průměrnou délku textu, která je uvedena jako popis u aktivity
+     *      4) pokud nebude nalezena žádná aktivity ani wiki stránka, tak se zkontroluje průměrná délka popisku aktivity
+     *      5) pokud ani jedno nezabere, tak je anti-pattern detekován
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
