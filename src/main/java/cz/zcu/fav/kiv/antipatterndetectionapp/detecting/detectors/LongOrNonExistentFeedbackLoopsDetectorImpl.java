@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,15 +87,18 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
         }
         int minFeedbackLimit =  totalNumberIterations.intValue() - Math.round(totalNumberIterations * DIVISION_LONG_OR_NON_FEEDBACK_ITERATIONS);
 
+        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                new ResultDetail("Project id", project.getId().toString()));
+
         if ((totalNumberIterations.intValue() != iterationsResults.size())) {
             if (totalNumberIterations - iterationsResults.size() > minFeedbackLimit) {
-                return new QueryResultItem(this.antiPattern, true , null);
+                return new QueryResultItem(this.antiPattern, true , resultDetails);
             } else {
-                return new QueryResultItem(this.antiPattern, false , null);
+                return new QueryResultItem(this.antiPattern, false , resultDetails);
 
             }
         } else {
-            return new QueryResultItem(this.antiPattern, false , null);
+            return new QueryResultItem(this.antiPattern, false , resultDetails);
         }
     }
 }

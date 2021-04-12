@@ -46,4 +46,13 @@ public class QueryResultItem {
     public void setResultDetails(List<ResultDetail> resultDetails) {
         this.resultDetails = resultDetails;
     }
+
+    public String resultDetailsToString() {
+        StringBuilder result = new StringBuilder();
+        for (ResultDetail resultDetails :
+                resultDetails) {
+            result.append(resultDetails.getResultDetailName()).append(" = ").append(resultDetails.getResultDetailValue()).append("<br>");
+        }
+        return result.toString();
+    }
 }

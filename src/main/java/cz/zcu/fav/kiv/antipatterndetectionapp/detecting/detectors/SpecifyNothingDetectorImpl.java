@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,14 +80,17 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
         LOGGER.info("wiki:" + numberOfWikiPages);
         LOGGER.info("average:" + averageLengthOfIssueDescription);
 
+        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                new ResultDetail("Project id", project.getId().toString()));
+
         if (numberOfActivitiesForSpecification >= MINIMUM_NUMBER_OF_ACTIVITIES ||
                 numberOfWikiPages >= MINIMUM_NUMBER_OF_WIKI_PAGES) {
-            return new QueryResultItem(this.antiPattern, false, null);
+            return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
             if (averageLengthOfIssueDescription > MINIMUM_AVERAGE_LENGTH_OF_ACTIVITY_DESCRIPTION) {
-                return new QueryResultItem(this.antiPattern, false, null);
+                return new QueryResultItem(this.antiPattern, false, resultDetails);
             } else {
-                return new QueryResultItem(this.antiPattern, true, null);
+                return new QueryResultItem(this.antiPattern, true, resultDetails);
             }
         }
     }
