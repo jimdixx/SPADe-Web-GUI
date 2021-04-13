@@ -68,6 +68,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+
+        // init values
         long totalNumberIterations = 0;
         int averageIterationLength = 0;
         int numberOfIterationsWitchContainsAtLeastOneActivityForFeedback = 0;
