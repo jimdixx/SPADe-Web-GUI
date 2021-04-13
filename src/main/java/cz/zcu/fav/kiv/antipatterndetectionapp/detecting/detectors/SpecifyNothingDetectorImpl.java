@@ -5,12 +5,12 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
@@ -57,6 +57,7 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
 
         /* Init values */
+        List<ResultDetail> resultDetails = new ArrayList<>();
         int numberOfWikiPages = 0;
         int numberOfActivitiesForSpecification = 0;
         double averageLengthOfIssueDescription = 0;
@@ -72,24 +73,24 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot read results from db");
+            resultDetails.add(new ResultDetail("Problem in reading database", e.toString()));
+            return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
 
-        LOGGER.info("Project id: " + project.getId());
-        LOGGER.info("actvitiy:" + numberOfActivitiesForSpecification);
-        LOGGER.info("wiki:" + numberOfWikiPages);
-        LOGGER.info("average:" + averageLengthOfIssueDescription);
-
-        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
-                new ResultDetail("Project id", project.getId().toString()));
+        resultDetails.add(new ResultDetail("Number of activities for specification", String.valueOf(numberOfActivitiesForSpecification)));
+        resultDetails.add(new ResultDetail("Number of wiki pages for specification", String.valueOf(numberOfWikiPages)));
 
         if (numberOfActivitiesForSpecification >= MINIMUM_NUMBER_OF_ACTIVITIES ||
                 numberOfWikiPages >= MINIMUM_NUMBER_OF_WIKI_PAGES) {
+            resultDetails.add(new ResultDetail("Conclusion", "Found activities or wiki pages that represents creation of specification"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
             if (averageLengthOfIssueDescription > MINIMUM_AVERAGE_LENGTH_OF_ACTIVITY_DESCRIPTION) {
+                resultDetails.add(new ResultDetail("Conclusion", "Average length of activity description is grater then minimum"));
                 return new QueryResultItem(this.antiPattern, false, resultDetails);
             } else {
+                resultDetails.add(new ResultDetail("Conclusion", "Average length of activity description is smaller then minimum"));
                 return new QueryResultItem(this.antiPattern, true, resultDetails);
             }
         }
