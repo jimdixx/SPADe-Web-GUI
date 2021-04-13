@@ -5,12 +5,12 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
@@ -53,6 +53,9 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+
+        /* Init values */
+        List<ResultDetail> resultDetails = new ArrayList<>();
         int numberOfIssuesForProjectPlan = 0;
         int numberOfWikiPagesForProjectPlan = 0;
 
@@ -66,15 +69,19 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot read results from db");
+            resultDetails.add(new ResultDetail("Problem in reading database", e.toString()));
+            return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
-        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
-                new ResultDetail("Project id", project.getId().toString()));
+
+        resultDetails.add(new ResultDetail("Number of issues for creating project plan", String.valueOf(numberOfIssuesForProjectPlan)));
+        resultDetails.add(new ResultDetail("Number of wiki pages for creating project plan", String.valueOf(numberOfWikiPagesForProjectPlan)));
 
         if( numberOfIssuesForProjectPlan >= this.MINIMUM_NUMBER_OF_ACTIVITIES || numberOfWikiPagesForProjectPlan >= this.MINIMUM_NUMBER_OF_WIKI_PAGES) {
-
+            resultDetails.add(new ResultDetail("Conclusion", "Found some activities or wiki pages for project plan in first two iterations"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
+            resultDetails.add(new ResultDetail("Conclusion", "No wiki pages and activities for project plan in first two iterations"));
             return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
     }
