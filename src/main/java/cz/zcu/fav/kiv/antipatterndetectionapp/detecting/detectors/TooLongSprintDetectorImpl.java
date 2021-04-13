@@ -5,12 +5,12 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TooLongSprintDetectorImpl extends AntiPatternDetector {
@@ -26,12 +26,7 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
                     "beginning and at the end of the project, but it should not " +
                     "change in the already started project).");
 
-    private final String sqlFileName = "too_long_sprint.sql";
-
-    /**
-     * Settings
-     */
-    private final float DIVISION_OF_TOO_LONG_ITERATIONS = (float) 1/3;
+    private final String SQL_FILE_NAME = "too_long_sprint.sql";
 
 
     @Override
@@ -41,7 +36,7 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
 
     @Override
     public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+        return this.SQL_FILE_NAME;
     }
 
     /**
@@ -50,10 +45,11 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
      *      2) odebrat první a poslední iteraci( ty mohou být z důvodu nastartování projektu dlouhé)
      *      3) zjistit jejich délku (rozdíl mezi start date a end date)
      *      4) pokud iterace přesháne délku 21 dní (3 týdny), tak jsou označeny jako moc dlouhé
-     *      5) pokud je delší více jak 1/3 ze všech sledovaných iterací, tak je anti pattern detekován
-     * @param project analyzovaný project
-     * @param databaseConnection    databázové připojení
-     * @param queries   list sql dotazů
+     *      5) pokud je nalezena jedna nebo více iterací jako dlouhé, tak je anti pattern detekován
+     *
+     * @param project            analyzovaný project
+     * @param databaseConnection databázové připojení
+     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
@@ -62,6 +58,7 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
         int numberOfLongIterations = 0;
         int totalCountOfIteration = 0;
 
+        // get results from sql queries
         try {
             ResultSet rs = databaseConnection.executeQueries(project, queries);
             if (rs != null) {
@@ -75,20 +72,24 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot read results from db");
+            List<ResultDetail> resultDetails = new ArrayList<>();
+            resultDetails.add(new ResultDetail("Problem in reading database", e.toString()));
+            return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
 
-        int maxIterationLimit = Math.round(totalCountOfIteration * DIVISION_OF_TOO_LONG_ITERATIONS);
+        List<ResultDetail> resultDetails = new ArrayList<>();
+        resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(totalCountOfIteration)));
+        resultDetails.add(new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)));
+        if (numberOfLongIterations >= 1) {
+            resultDetails.add(new ResultDetail("Conclusion", "One or more iteration is too long"));
+        } else {
+            resultDetails.add(new ResultDetail("Conclusion", "All iterations in limit"));
+        }
 
-        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
-                new ResultDetail("Project id", project.getId().toString()),
-                new ResultDetail("Max Iteration limit", String.valueOf(maxIterationLimit)),
-                new ResultDetail("Count of iterations", String.valueOf(totalCountOfIteration)),
-                new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)),
-                new ResultDetail("Is detected", String.valueOf(numberOfLongIterations >= maxIterationLimit)));
         LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
-        return new QueryResultItem(this.antiPattern, numberOfLongIterations >= maxIterationLimit, resultDetails);
+        return new QueryResultItem(this.antiPattern, numberOfLongIterations >= 1, resultDetails);
     }
 }

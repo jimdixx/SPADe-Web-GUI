@@ -15,7 +15,7 @@ Detection: Detect the beginning and end of the iteration and what is
 /* Init project id */
 set @projectId = ?;
 /* Maximum iteration length in days */
-set @maxSprintLength = 20;
+set @maxSprintLength = 21;
 /* Exclude first and last iteration? */
 set @excludeFirstAndLastIteration = false;
 /* Id of first iteration */
