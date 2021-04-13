@@ -25,4 +25,3 @@ set @idOfFirstIteration = (select id from iteration where iteration.superProject
 set @idOfLastIteration = (select id from iteration where iteration.superProjectId = @projectId order by name desc limit 1);
 /* Select all iterations with their length */
 select datediff(endDate, startDate) as `iterationLength` from iteration where iteration.superProjectId = @projectId and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfFirstIteration, -1) and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfLastIteration, -1) order by iteration.name;
-

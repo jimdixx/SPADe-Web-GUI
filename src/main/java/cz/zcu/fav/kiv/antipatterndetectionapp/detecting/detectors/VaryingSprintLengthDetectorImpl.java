@@ -5,12 +5,12 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
@@ -29,11 +29,10 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
     private final String sqlFileName = "varying_sprint_length.sql";
 
     /**
-     *
-     * @return
+     * SETTINGS
      */
-    private final int  MAXIMUM_DAYS_DIFFERENCE = 5;
-    private final float DIVISION_OF_VARYING_SPRINT_LENGTH = (float) 1/3;
+    private final int MAXIMUM_DAYS_DIFFERENCE = 7; // one week
+    private final int MAXIMUM_ITERATION_CHANGE = 2; // how many times can iteration significantly change
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -51,18 +50,21 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
      *      2) odebrání první a poslední iterace z důvodu možných výkyvů
      *      3) zjistit jejich délku (rozdíl mezi start date a end date)
      *      4) vždy porovnat dvě po sobě jdoucí iterace
-     *      5) pokud se délka porovnávaných iterací liší o více než 5 dní, tak je zvednut counter
-     *      6) pokud counter překročí 1/3 ze všech sledovaných iterací, tak je anti pattern detekován
+     *      5) pokud se délka porovnávaných iterací liší o více než 7 dní, tak je zvednut counter
+     *      6) pokud counter překročí hodnotu 2, tak je anti paatern detekován
+     * <p>
+     * Alternativa (sledovat rozptyl délek jednotlivých iterací a pokud překročí nějakou hodnotu, tak detevat)
      *
-     *      Alternativa (sledovat rozptyl délek jednotlivých iterací a pokud překročí nějakou hodnotu, tak detevat)
-     * @param project analyzovaný project
-     * @param databaseConnection    databázové připojení
-     * @param queries   list sql dotazů
+     * @param project            analyzovaný project
+     * @param databaseConnection databázové připojení
+     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
 
+        // init values
+        List<ResultDetail> resultDetails = new ArrayList<>();
         int counter = 0;
         int numberOfIterations = 0;
 
@@ -89,21 +91,25 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Cannot read results from db");
+            resultDetails.add(new ResultDetail("Problem in reading database", e.toString()));
+            return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
 
-        int maxIterationLimit = Math.round(numberOfIterations * DIVISION_OF_VARYING_SPRINT_LENGTH);
+        resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(MAXIMUM_ITERATION_CHANGE)));
+        resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(numberOfIterations)));
+        resultDetails.add(new ResultDetail("Iteration length changed", String.valueOf(counter)));
 
-        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
-                new ResultDetail("Project id", project.getId().toString()),
-                new ResultDetail("Max Iteration limit", String.valueOf(maxIterationLimit)),
-                new ResultDetail("Count of iterations", String.valueOf(numberOfIterations)),
-                new ResultDetail("Number of significant change of iteration length", String.valueOf(counter)),
-                new ResultDetail("Is detected", String.valueOf((counter >= maxIterationLimit))));
+
+        if (counter >= MAXIMUM_ITERATION_CHANGE) {
+            resultDetails.add(new ResultDetail("Conclusion", "Iteration length changed significantly too often"));
+        } else {
+            resultDetails.add(new ResultDetail("Conclusion", "Varying iteration length is all right"));
+        }
 
         LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
-        return new QueryResultItem(this.antiPattern, (counter >= maxIterationLimit), resultDetails);
+        return new QueryResultItem(this.antiPattern, (counter >= MAXIMUM_ITERATION_CHANGE), resultDetails);
     }
 }
