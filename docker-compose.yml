@@ -7,10 +7,11 @@ services:
     container_name: mysql-db
     environment:
       - MYSQL_ROOT_PASSWORD=testtest
-      - MYSQL_USER=root
     ports:
       - "3306:3306"
     restart: always
+    volumes:
+      - ./ppicha.sql:/usr/local/etc/backup.sql
 
 
   #service 2: definition of phpMyAdmin
@@ -43,6 +44,6 @@ services:
     depends_on:                           #define dependencies of this app
       - db                                #dependency name (which is defined with this name 'db' in this file earlier)
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ppicha?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ppicha
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: testtest
