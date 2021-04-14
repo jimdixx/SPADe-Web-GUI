@@ -10,4 +10,4 @@ RUN mvn -f pom.xml clean package -Dmaven.test.skip=true
 FROM adoptopenjdk:11-jre-hotspot
 COPY --from=build /workspace/target/*.war app.war
 EXPOSE 8080
-ENTRYPOINT ["java","-","app.war"]
+ENTRYPOINT ["java","-jar","app.war"]
