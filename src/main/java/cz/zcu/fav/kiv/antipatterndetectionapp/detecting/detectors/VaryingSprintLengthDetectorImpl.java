@@ -51,7 +51,7 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
      *      3) zjistit jejich délku (rozdíl mezi start date a end date)
      *      4) vždy porovnat dvě po sobě jdoucí iterace
      *      5) pokud se délka porovnávaných iterací liší o více než 7 dní, tak je zvednut counter
-     *      6) pokud counter překročí hodnotu 2, tak je anti paatern detekován
+     *      6) pokud counter překročí hodnotu 2, tak je anti patern detekován
      * <p>
      * Alternativa (sledovat rozptyl délek jednotlivých iterací a pokud překročí nějakou hodnotu, tak detevat)
      *

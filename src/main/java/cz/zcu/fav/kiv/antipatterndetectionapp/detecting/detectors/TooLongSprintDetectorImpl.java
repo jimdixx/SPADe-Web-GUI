@@ -28,6 +28,8 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
 
     private final String SQL_FILE_NAME = "too_long_sprint.sql";
 
+    // TODO vytáhnout konstanty ZDE
+
 
     @Override
     public AntiPattern getAntiPatternModel() {
