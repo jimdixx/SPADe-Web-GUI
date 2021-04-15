@@ -27,6 +27,8 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
                     "change in the already started project).");
 
     private final String SQL_FILE_NAME = "too_long_sprint.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
 
     // TODO vytáhnout konstanty ZDE
 
@@ -41,6 +43,11 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
         return this.SQL_FILE_NAME;
     }
 
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
     /**
      * Postup detekce:
      *      1) najít všechny iterace danného projektu
@@ -51,18 +58,17 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         int numberOfLongIterations = 0;
         int totalCountOfIteration = 0;
 
         // get results from sql queries
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, queries);
+            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
             if (rs != null) {
                 while (rs.next()) {
                     totalCountOfIteration++;

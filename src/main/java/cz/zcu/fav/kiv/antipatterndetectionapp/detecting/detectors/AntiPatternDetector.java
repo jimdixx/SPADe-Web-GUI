@@ -14,9 +14,7 @@ public abstract class AntiPatternDetector {
 
     public abstract String getAntiPatternSqlFileName();
 
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
-        return this.analyze(project, databaseConnection, Utils.loadQueryFromFile(getAntiPatternSqlFileName()));
-    }
+    public abstract void setSqlQueries(List<String> queries);
 
-    public abstract QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> sql);
+    public abstract QueryResultItem analyze(Project project, DatabaseConnection databaseConnection);
 }

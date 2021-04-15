@@ -25,6 +25,8 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
                     "outcome and deadline. There is no project plan in the project.");
 
     private final String sqlFileName = "road_to_nowhere.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
 
     /* Settings */
     private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
@@ -40,6 +42,11 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
         return this.sqlFileName;
     }
 
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
     /**
      * Postup detekce:
      *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky s projektovým plánem
@@ -48,11 +55,10 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         /* Init values */
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -60,7 +66,7 @@ public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
         int numberOfWikiPagesForProjectPlan = 0;
 
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, queries);
+            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
             if (rs != null) {
                 while (rs.next()) {
                     numberOfIssuesForProjectPlan = rs.getInt("numberOfIssuesForProjectPlan");

@@ -29,6 +29,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
                     "a lot of effort and time to redo it. ");
 
     private final String SQL_FILE_NAME = "long_or_non_existent_feedback_loops.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
 
     /**
      * Settings
@@ -49,6 +51,11 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
         return this.SQL_FILE_NAME;
     }
 
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
     /**
      * Postup detekce:
      * A)
@@ -63,11 +70,10 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         // init values
         long totalNumberIterations = 0;
@@ -77,7 +83,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
         Date projectStartDate = null;
         Date projectEndDate = null;
 
-        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, queries);
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, this.sqlQueries);
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 

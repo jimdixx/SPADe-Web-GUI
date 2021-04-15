@@ -24,6 +24,8 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
                     "expected to work better without written specifications.");
 
     private final String sqlFileName = "specify_nothing.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
 
     /* Settings */
     private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
@@ -40,6 +42,11 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
         return this.sqlFileName;
     }
 
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
     /**
      * Postup detekce:
      *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky se specifikací projektu
@@ -50,11 +57,10 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         /* Init values */
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -63,7 +69,7 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
         double averageLengthOfIssueDescription = 0;
 
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, queries);
+            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
             if (rs != null) {
                 while (rs.next()) {
                     numberOfWikiPages = rs.getInt("numberOfWikiPages");

@@ -5,7 +5,6 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +25,9 @@ public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
 
     private final String sqlFileName = "business_as_usual.sql";
 
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
+
     /**
      * Settings
      */
@@ -39,6 +41,11 @@ public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
     @Override
     public String getAntiPatternSqlFileName() {
         return this.sqlFileName;
+    }
+
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
     }
 
     /**
@@ -55,11 +62,10 @@ public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         // init values
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -67,7 +73,7 @@ public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
         Map<String, Integer> iterationsResults = new HashMap<>();
 
         // projít výsledky dotazů a dát do jedné mapy => v této mapě by měly být všechny iterace
-        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, queries);
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, this.sqlQueries);
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 

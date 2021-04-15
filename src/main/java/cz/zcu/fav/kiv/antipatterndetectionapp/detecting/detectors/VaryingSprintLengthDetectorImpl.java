@@ -27,6 +27,10 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
                     "during the project.");
 
     private final String sqlFileName = "varying_sprint_length.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
+
+
 
     /**
      * SETTINGS
@@ -44,6 +48,11 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
         return this.sqlFileName;
     }
 
+    @Override
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
     /**
      * Postup detekce:
      *      1) najít všechny iterace pro danný projekt seřazené dle name (start date má divné hodnoty a nejdou iterace po sobě)
@@ -57,11 +66,10 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
-     * @param queries            list sql dotazů
      * @return výsledek detekce
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> queries) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
 
         // init values
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -69,7 +77,7 @@ public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
         int numberOfIterations = 0;
 
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, queries);
+            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
             if (rs != null) {
                 int firstIterationLength = Integer.MIN_VALUE;
                 int secondIterationLength;

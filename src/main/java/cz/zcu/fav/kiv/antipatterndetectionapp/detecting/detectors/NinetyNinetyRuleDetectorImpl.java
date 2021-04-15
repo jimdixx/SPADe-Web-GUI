@@ -21,6 +21,8 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
             "TODO");
 
     private final String sqlFileName = "ninety_ninety_rule.sql";
+    // sql queries loaded from sql file
+    private List<String> sqlQueries;
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -33,7 +35,12 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
     }
 
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, List<String> sql) {
+    public void setSqlQueries(List<String> queries) {
+        this.sqlQueries = queries;
+    }
+
+    @Override
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
         List<ResultDetail> resultDetails = new ArrayList<>();
         return new QueryResultItem(this.antiPattern, false, resultDetails);
     }
