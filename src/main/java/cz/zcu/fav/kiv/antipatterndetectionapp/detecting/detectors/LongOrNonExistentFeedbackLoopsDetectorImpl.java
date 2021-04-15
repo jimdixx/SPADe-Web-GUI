@@ -53,15 +53,14 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
 
     /**
      * Postup detekce:
-     * A)
-     * 1) najít všechny aktivity, které by mohli představovat zákaznické demo (název bude obsahovat substring)
-     * 2) zjistit průměrnou délku iterací
-     * 3) zjistit počet iterací
-     * 4) nejprve porovnat s počtem iterací => iterace a nalezené aktivity by se měly ideálně rovnat (mohou být menší i větší ale né o moc menší)
-     * 5) u každých dvou po sobě jdoucích aktivitách udělat rozdíl datumů a porovnat s průměrnou délkou iterace => rozdíl by se neměl moc lišit od průěrné délky iterace
-     * 6) pokud u bodu 4) dojde k detekci máleho počtu nalezených aktivit (tým nedělá aktivity na schůzky a může zaznamenávat pouze do wiki)
-     * 7) najít všechny wiki stránky a udělat join kdy se měnily (může být použita jedná stránka pro více schůzek) s příslušným názvem
-     * 8) udělat group podle dne
+     *      1) najít všechny aktivity, které by mohli představovat zákaznické demo (název bude obsahovat substring)
+     *      2) zjistit průměrnou délku iterací
+     *      3) zjistit počet iterací
+     *      4) nejprve porovnat s počtem iterací => iterace a nalezené aktivity by se měly ideálně rovnat (mohou být menší i větší ale né o moc menší)
+     *      5) u každých dvou po sobě jdoucích aktivitách udělat rozdíl datumů a porovnat s průměrnou délkou iterace => rozdíl by se neměl moc lišit od průěrné délky iterace
+     *      6) pokud u bodu 4) dojde k detekci máleho počtu nalezených aktivit (tým nedělá aktivity na schůzky a může zaznamenávat pouze do wiki)
+     *      7) najít všechny wiki stránky a udělat join kdy se měnily (může být použita jedná stránka pro více schůzek) s příslušným názvem
+     *      8) udělat group podle dne
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení

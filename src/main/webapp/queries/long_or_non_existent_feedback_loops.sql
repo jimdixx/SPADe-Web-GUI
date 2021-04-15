@@ -22,8 +22,6 @@ set @projectId = ?;
 select COUNT(id) as 'numberOfIterations' from iteration where superProjectId = @projectId;
 /* Average iteration length */
 select avg(abs(dateDiff(iteration.endDate, iteration.startDate))) as 'averageIterationLength' from iteration where superProjectId = @projectId;
-/* Avoid error in sql execution */
-
 /* Select number of iterations which contains at least one feedback activity */
 select count(*) over () as 'totalCountOfIterationsWithFeedbackActivity' from workUnitView as wuv where wuv.projectId = @projectId and (wuv.name like "%schůz%zákazník%" OR wuv.name like "%předvedení%zákazník%" OR wuv.name LIKE "%zákazn%demo%" OR wuv.name like "%schůz%zadavat%" OR wuv.name like "%inform%schůz%" OR wuv.name like "%zákazn%" OR wuv.name like "%zadavatel%") group by wuv.iterationName order by wuv.activityEndDate;
 /* Select all activities for feedback loop with last modified date as end date */
