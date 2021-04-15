@@ -22,10 +22,12 @@ set @projectId = ?;
 select COUNT(id) as 'numberOfIterations' from iteration where superProjectId = @projectId;
 /* Average iteration length */
 select avg(abs(dateDiff(iteration.endDate, iteration.startDate))) as 'averageIterationLength' from iteration where superProjectId = @projectId;
+/* Avoid error in sql execution */
+
 /* Select number of iterations which contains at least one feedback activity */
-select count(*) over () as 'totalCountOfIterationsWithFeedbackActivity' from workunitview as wuv where wuv.projectId = @projectId and (wuv.name like "%schůz%zákazník%" OR wuv.name like "%předvedení%zákazník%" OR wuv.name LIKE "%zákazn%demo%" OR wuv.name like "%schůz%zadavat%" OR wuv.name like "%inform%schůz%" OR wuv.name like "%zákazn%" OR wuv.name like "%zadavatel%") group by wuv.iterationName order by wuv.activityEndDate;
+select count(*) over () as 'totalCountOfIterationsWithFeedbackActivity' from workUnitView as wuv where wuv.projectId = @projectId and (wuv.name like "%schůz%zákazník%" OR wuv.name like "%předvedení%zákazník%" OR wuv.name LIKE "%zákazn%demo%" OR wuv.name like "%schůz%zadavat%" OR wuv.name like "%inform%schůz%" OR wuv.name like "%zákazn%" OR wuv.name like "%zadavatel%") group by wuv.iterationName order by wuv.activityEndDate;
 /* Select all activities for feedback loop with last modified date as end date */
-select wuv.id, wuv.iterationName, wuv.name, cast(max(fieldchangeview.created) as date) as 'endDate' from workunitview as wuv inner join fieldchangeview on wuv.id = fieldchangeview.itemId where wuv.projectId = @projectId and (wuv.name like "%schůz%zákazník%" OR wuv.name like "%předvedení%zákazník%" OR wuv.name LIKE "%zákazn%demo%" OR wuv.name like "%schůz%zadavat%" OR wuv.name like "%inform%schůz%" OR wuv.name like "%zákazn%" OR wuv.name like "%zadavatel%") GROUP by id order by fieldchangeview.created;
+select wuv.id, wuv.iterationName, wuv.name, cast(max(fieldChangeView.created) as date) as 'endDate' from workUnitView as wuv inner join fieldChangeView on wuv.id = fieldChangeView.itemId where wuv.projectId = @projectId and (wuv.name like "%schůz%zákazník%" OR wuv.name like "%předvedení%zákazník%" OR wuv.name LIKE "%zákazn%demo%" OR wuv.name like "%schůz%zadavat%" OR wuv.name like "%inform%schůz%" OR wuv.name like "%zákazn%" OR wuv.name like "%zadavatel%") GROUP by id order by fieldChangeView.created;
 /* Get project start date */
 select startDate as 'projectStartDate' from iteration where superProjectId = @projectId order by startDate limit 1;
 /* Get project end date */
