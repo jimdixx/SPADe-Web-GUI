@@ -33,13 +33,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
     private List<String> sqlQueries;
 
     /**
-     * Settings
+     * SETTINGS
      */
-    private final float DIVISION_LONG_OR_NON_FEEDBACK_ITERATIONS = (float) 1 / 3;
-
-    /* Settings */
-    private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
-    private final int MINIMUM_NUMBER_OF_ACTIVITIES = 1;
 
     @Override
     public AntiPattern getAntiPatternModel() {

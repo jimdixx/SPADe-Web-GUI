@@ -29,7 +29,7 @@ public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
     private List<String> sqlQueries;
 
     /**
-     * Settings
+     * SETTINGS
      */
     private final float DIVISION_BUSINESS_AS_USUAL_ITERATIONS = (float) 1/3;
 

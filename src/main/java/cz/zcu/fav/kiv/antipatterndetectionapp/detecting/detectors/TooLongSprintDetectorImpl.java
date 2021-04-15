@@ -30,7 +30,10 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    // TODO vytáhnout konstanty ZDE
+    /**
+     * SETTINGS
+     */
+    private static final int MAX_NUMBER_OF_TOO_LONG_ITERATIONS = 1;
 
 
     @Override
@@ -89,7 +92,7 @@ public class TooLongSprintDetectorImpl extends AntiPatternDetector {
         List<ResultDetail> resultDetails = new ArrayList<>();
         resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(totalCountOfIteration)));
         resultDetails.add(new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)));
-        if (numberOfLongIterations >= 1) {
+        if (numberOfLongIterations >= MAX_NUMBER_OF_TOO_LONG_ITERATIONS) {
             resultDetails.add(new ResultDetail("Conclusion", "One or more iteration is too long"));
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "All iterations in limit"));

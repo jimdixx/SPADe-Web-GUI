@@ -27,7 +27,9 @@ public class SpecifyNothingDetectorImpl extends AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    /* Settings */
+    /**
+     * SETTINGS
+     */
     private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
     private final int MINIMUM_NUMBER_OF_ACTIVITIES = 1;
     private final double MINIMUM_AVERAGE_LENGTH_OF_ACTIVITY_DESCRIPTION = 150;

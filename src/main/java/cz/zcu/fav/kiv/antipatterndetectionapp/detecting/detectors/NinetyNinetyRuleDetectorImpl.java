@@ -24,6 +24,10 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
+    /**
+     * SETTINGS
+     */
+
     @Override
     public AntiPattern getAntiPatternModel() {
         return this.antiPattern;
