@@ -12,6 +12,7 @@ services:
     restart: always
     volumes:
       - ./db_dump.sql:/usr/local/etc/db_dump.sql
+      - ./config.sql:/usr/local/etc/config.sql
 
 
   #service 2: definition of phpMyAdmin
@@ -21,7 +22,6 @@ services:
     ports:
       - "8082:80"
     restart: always
-
     depends_on:
       - db
     environment:
@@ -45,6 +45,6 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/spade?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/spade
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: testtest
