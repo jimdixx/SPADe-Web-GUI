@@ -51,7 +51,7 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
      *      1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
      *      2) udělat podíl strávený čas / odhadovaný čas
      *      3) pokud všechny výsledky podílů budou v rozsahu 0.8 - 1.2 => vše ok
-     *      4) čím více ke konci projektu tím by se měly odhady zpřesňovat 
+     *      4) čím více ke konci projektu tím by se měly odhady zpřesňovat
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení

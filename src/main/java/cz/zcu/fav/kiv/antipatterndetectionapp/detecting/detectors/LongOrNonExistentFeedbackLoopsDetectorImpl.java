@@ -53,14 +53,14 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
 
     /**
      * Postup detekce:
-     *      1) najít všechny aktivity, které by mohli představovat zákaznické demo (název bude obsahovat substring)
-     *      2) zjistit průměrnou délku iterací
-     *      3) zjistit počet iterací
-     *      4) nejprve porovnat s počtem iterací => iterace a nalezené aktivity by se měly ideálně rovnat (mohou být menší i větší ale né o moc menší)
-     *      5) u každých dvou po sobě jdoucích aktivitách udělat rozdíl datumů a porovnat s průměrnou délkou iterace => rozdíl by se neměl moc lišit od průěrné délky iterace
-     *      6) pokud u bodu 4) dojde k detekci máleho počtu nalezených aktivit (tým nedělá aktivity na schůzky a může zaznamenávat pouze do wiki)
-     *      7) najít všechny wiki stránky a udělat join kdy se měnily (může být použita jedná stránka pro více schůzek) s příslušným názvem
-     *      8) udělat group podle dne
+     * 1) najít všechny aktivity, které by mohli představovat zákaznické demo (název bude obsahovat substring)
+     * 2) zjistit průměrnou délku iterací
+     * 3) zjistit počet iterací
+     * 4) nejprve porovnat s počtem iterací => iterace a nalezené aktivity by se měly ideálně rovnat (mohou být menší i větší ale né o moc menší)
+     * 5) u každých dvou po sobě jdoucích aktivitách udělat rozdíl datumů a porovnat s průměrnou délkou iterace => rozdíl by se neměl moc lišit od průěrné délky iterace
+     * 6) pokud u bodu 4) dojde k detekci máleho počtu nalezených aktivit (tým nedělá aktivity na schůzky a může zaznamenávat pouze do wiki)
+     * 7) najít všechny wiki stránky a udělat join kdy se měnily (může být použita jedná stránka pro více schůzek) s příslušným názvem
+     * 8) udělat group podle dne
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
@@ -72,8 +72,10 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
         // init values
         long totalNumberIterations = 0;
         int averageIterationLength = 0;
-        int numberOfIterationsWitchContainsAtLeastOneActivityForFeedback = 0;
+        int numberOfIterationsWhichContainsAtLeastOneActivityForFeedback = 0;
+        int numberOfIterationsWhichContainsAtLeastOneWikiPageForFeedback = 0;
         List<Date> feedbackActivityEndDates = new ArrayList<>();
+        List<Date> feedbackWikiPagesEndDates = new ArrayList<>();
         Date projectStartDate = null;
         Date projectEndDate = null;
 
@@ -90,7 +92,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
                     break;
                 case 2:
                     if (rs.size() != 0) {
-                        numberOfIterationsWitchContainsAtLeastOneActivityForFeedback = ((Long) rs.get(0).get("totalCountOfIterationsWithFeedbackActivity")).intValue();
+                        numberOfIterationsWhichContainsAtLeastOneActivityForFeedback = ((Long) rs.get(0).get("totalCountOfIterationsWithFeedbackActivity")).intValue();
                     }
                     break;
                 case 3:
@@ -106,6 +108,14 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
                 case 5:
                     projectEndDate = (Date) rs.get(0).get("endDate");
                     break;
+                case 6:
+                    numberOfIterationsWhichContainsAtLeastOneWikiPageForFeedback = rs.size();
+                    Date wikiPageEndDate;
+                    for (Map<String, Object> map : rs) {
+                        wikiPageEndDate = (Date) map.get("appointmentDate");
+                        feedbackWikiPagesEndDates.add(wikiPageEndDate);
+                    }
+                    break;
                 default:
 
             }
@@ -114,10 +124,10 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
         double halfNumberOfIterations = totalNumberIterations / 2.0;
 
         // pokud je počet iterací, které obsahují alespoň jednu aktivitu s feedbackem, tak je to ideální případ
-        if (totalNumberIterations <= numberOfIterationsWitchContainsAtLeastOneActivityForFeedback) {
+        if (totalNumberIterations <= numberOfIterationsWhichContainsAtLeastOneActivityForFeedback) {
             List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                     new ResultDetail("Number of iterations", Long.toString(totalNumberIterations)),
-                    new ResultDetail("Number of iterations with feedback loops", Integer.toString(numberOfIterationsWitchContainsAtLeastOneActivityForFeedback)),
+                    new ResultDetail("Number of iterations with feedback loops", Integer.toString(numberOfIterationsWhichContainsAtLeastOneActivityForFeedback)),
                     new ResultDetail("Conclusion", "In each iteration is at least one activity that represents feedback loop"));
 
 
@@ -155,12 +165,43 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetec
 
             // bylo nalezeno příliš málo aktivit => zkusit se podívat ve wiki stránkách
         } else {
-            // TODO udělat analýzu WIKI stránek
+
+            // pokud je v každé iteraci alespoň jeda wiki stránka naznačující schůzku => ideální případ
+            if (numberOfIterationsWhichContainsAtLeastOneWikiPageForFeedback >= totalNumberIterations) {
+                List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                        new ResultDetail("Number of iterations", Long.toString(totalNumberIterations)),
+                        new ResultDetail("Number of iterations with feedback loops", Integer.toString(numberOfIterationsWhichContainsAtLeastOneWikiPageForFeedback)),
+                        new ResultDetail("Conclusion", "In each iteration is created/edited at least one wiki page that represents feedback loop"));
+
+                return new QueryResultItem(this.antiPattern, false, resultDetails);
+            }
+
+            // pokud alespoň v polovině iteracích došlo ke kontaktu se zákazníkem => zkontrolovat rozestupy
+            Date firstDate = projectStartDate;
+            Date secondDate = null;
+
+            for (Date feedbackWikipagesDate : feedbackWikiPagesEndDates) {
+                secondDate = feedbackWikipagesDate;
+                long daysBetween = Utils.daysBetween(firstDate, secondDate);
+                firstDate = secondDate;
+
+                if (daysBetween >= 2 * averageIterationLength) {
+                    List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                            new ResultDetail("Days between", Long.toString(daysBetween)),
+                            new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
+                            new ResultDetail("Conclusion", "Customer feedback loop is too long"));
+
+
+                    return new QueryResultItem(this.antiPattern, true, resultDetails);
+                }
+            }
+            // rozestupy feedbacků jsou ok
+            List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                    new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
+                    new ResultDetail("Conclusion", "Customer feedback has been detected and there is not too much gap between them"));
+
+
+            return new QueryResultItem(this.antiPattern, false, resultDetails);
         }
-
-        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
-                new ResultDetail("Project id", project.getId().toString()));
-
-        return new QueryResultItem(this.antiPattern, true, resultDetails);
     }
 }
