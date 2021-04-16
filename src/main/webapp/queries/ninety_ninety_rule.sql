@@ -14,4 +14,4 @@ Detection: In each iteration, find out how much time the activities were estimat
 /* Init project id */
 set @projectId = ?;
 /* Select all activities for each iteration and sum estimated time and spent time */
-select iterationName, sum(estimatedTime) as 'estimatedTime', sum(spentTime) as 'spentTime', sum(spentTime)/sum(estimatedTime) as 'timeDivision' from workUnitView where projectid = @projectId group by iterationName order by iterationName;
+select iterationName, sum(estimatedTime) as 'estimatedTime', sum(spentTime) as 'spentTime', sum(spentTime)/sum(estimatedTime) as 'timeDivision',  abs(1-(sum(spentTime)/sum(estimatedTime))) as 'deviation' from workUnitView where projectid = @projectId and iterationName is not null group by iterationName order by iterationName;

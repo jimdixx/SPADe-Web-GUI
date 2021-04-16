@@ -51,9 +51,7 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
      *      1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
      *      2) udělat podíl strávený čas / odhadovaný čas
      *      3) pokud všechny výsledky podílů budou v rozsahu 0.8 - 1.2 => vše ok
-     *      4) pokud budou některé výsledky mimo rozsah, tak se najde iterace s nejhorším výsledkem
-     *      5) od této iteraci by měl být výsledek podílů mít klesající tendenci
-     *      tato časová řada by měla mít klesající tendenci
+     *      4) čím více ke konci projektu tím by se měly odhady zpřesňovat 
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
@@ -86,6 +84,8 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
             resultDetails.add(new ResultDetail("Conclusion", "All divisions of estimated and spent time are in range"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         }
+
+        //TODO když je mimo rozsah
 
         return new QueryResultItem(this.antiPattern, true, resultDetails);
     }
