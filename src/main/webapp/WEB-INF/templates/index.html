@@ -15,9 +15,7 @@
         }
 
         .analyze-button-container {
-            margin-left: 40%;
-            margin-right: 40%;
-            margin-bottom: 40px;
+            margin: 20px 40% 40px;
         }
     </style>
 
@@ -37,12 +35,21 @@
                 antiPatterns[i].checked = !!checkBox.checked;
             }
         }
+
+        function showProgressBar() {
+            $('#progressBar').css('display', '');
+            var analyzeButton = $('#analyzeButton');
+            analyzeButton.addClass('disabled');
+            analyzeButton.text('Analyzing...');
+        }
     </script>
 </head>
 <body>
 <!-- Navigation bar imported -->
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
+
+<!-- Form for selecting projects and anti patterns-->
 <form action="#" th:action="@{/analyze}" th:object="${query}" method="post">
     <div class="container">
         <div class="row">
@@ -56,6 +63,7 @@
 
         <div class="row">
             <div class="col">
+                <!-- Table for selecting projects -->
                 <table class="table">
                     <thead>
                     <tr>
@@ -71,7 +79,8 @@
                         <td th:text="${project.name}"></td>
                         <td><a th:href="@{/projects/} + ${project.id}">Show</a></td>
                         <td style="text-align: center">
-                            <input checked type="checkbox" class="form-check-input" name="selectedProjects" th:value="${project.id}" th:id="@{project_} + ${project.id}">
+                            <input checked type="checkbox" class="form-check-input" name="selectedProjects"
+                                   th:value="${project.id}" th:id="@{project_} + ${project.id}">
                         </td>
                     </tr>
                     <tr>
@@ -86,8 +95,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <!-- ./Table for selecting projects -->
             </div>
             <div class="col">
+                <!-- Table for selecting anti patterns -->
                 <table class="table">
                     <thead>
                     <tr>
@@ -103,7 +114,8 @@
                         <td th:text="${antiPattern.printName}"></td>
                         <td><a th:href="@{/anti-patterns/} + ${antiPattern.id}">Show</a></td>
                         <td style="text-align: center">
-                            <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns" th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
+                            <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns"
+                                   th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
                         </td>
                     </tr>
                     <tr>
@@ -118,17 +130,34 @@
                     </tr>
                     </tbody>
                 </table>
+                <!-- ./Table for selecting anti patterns -->
             </div>
         </div>
-
     </div>
+
+    <!-- Container for show error message -->
     <div class="container">
-        <div th:if="${errorMessage}"  th:text="${errorMessage}" class="alert alert-danger" role="alert">
+        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
         </div>
     </div>
-    <div class="analyze-button-container">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Analyze</button>
+    <!-- ./Container for show error message -->
+
+    <!-- Container for progress bar -->
+    <div class="container" id="progressBar" style="display: none">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75"
+                 aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+        </div>
     </div>
+    <!-- ./Container for progress bar -->
+
+    <!-- Container for analyze button -->
+    <div class="analyze-button-container">
+        <button id="analyzeButton" type="submit" class="btn btn-primary btn-lg btn-block" onclick="showProgressBar()">Analyze</button>
+    </div>
+    <!-- ./Container for analyze button -->
+
 </form>
+<!-- ./Form for selecting projects and anti patterns-->
 </body>
 </html>
