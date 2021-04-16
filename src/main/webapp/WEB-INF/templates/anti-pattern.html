@@ -15,7 +15,6 @@
             margin-top: 40px;
             margin-left: 5%;
             margin-right: 5%;
-
         }
     </style>
 </head>
@@ -31,12 +30,13 @@
             <input disabled type="text" class="form-control" id="projectId" th:value="${antiPattern.id}">
         </div>
         <div class="form-group">
-            <label for="projectId">Project id:</label>
+            <label for="projectId">Anti Pattern name:</label>
             <input disabled type="text" class="form-control" id="projectName" th:value="${antiPattern.printName}">
         </div>
         <div class="form-group">
-            <label for="projectId">Project id:</label>
-            <textarea disabled class="form-control" id="projectDescription" rows="5" th:text="${antiPattern.description}"></textarea>
+            <label for="projectId">Project description:</label>
+            <textarea disabled class="form-control" id="projectDescription" rows="5"
+                      th:text="${antiPattern.description}"></textarea>
         </div>
     </div>
 </div>
