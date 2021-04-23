@@ -30,6 +30,7 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
      */
     private static final double MAX_DIVISION_RANGE = 1.2;
     private static final double MIN_DIVISION_RANGE = 0.8;
+    private static final int MAX_BAD_ITERATION_LIMIT = 3;
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -51,7 +52,8 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
      *      1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
      *      2) udělat podíl strávený čas / odhadovaný čas
      *      3) pokud všechny výsledky podílů budou v rozsahu 0.8 - 1.2 => vše ok
-     *      4) čím více ke konci projektu tím by se měly odhady zpřesňovat
+     *      4) pokud předchozí bod nezabere, tak iterovat přes všechny podíly
+     *      5) pokud budou nalezeny tři iterace po sobě, které se stále zhoršují stejným směrem => detekce
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
@@ -81,12 +83,39 @@ public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
         }
 
         if (isAllInRange) {
-            resultDetails.add(new ResultDetail("Conclusion", "All divisions of estimated and spent time are in range"));
+            resultDetails.add(new ResultDetail("Conclusion",
+                    "All divisions of estimated and spent time are in range"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         }
 
-        //TODO když je mimo rozsah
+        int counterOverEstimated = 0;
+        int counterUnderEstimated = 0;
+        for (Double divisionResult : divisionsResults) {
+            if (divisionResult > MAX_DIVISION_RANGE) {
+                counterOverEstimated++;
+                counterUnderEstimated = 0;
+            }
 
-        return new QueryResultItem(this.antiPattern, true, resultDetails);
+            if (divisionResult < MIN_DIVISION_RANGE) {
+                counterUnderEstimated++;
+                counterOverEstimated = 0;
+            }
+
+            if (counterOverEstimated >= MAX_BAD_ITERATION_LIMIT) {
+                resultDetails.add(new ResultDetail("Conclusion",
+                        "Found bad significant trend in estimated time - over estimated."));
+                return new QueryResultItem(this.antiPattern, false, resultDetails);
+            }
+
+            if (counterUnderEstimated >= MAX_BAD_ITERATION_LIMIT) {
+                resultDetails.add(new ResultDetail("Conclusion",
+                        "Found bad significant trend in estimated time - under estimated."));
+                return new QueryResultItem(this.antiPattern, false, resultDetails);
+            }
+        }
+
+        resultDetails.add(new ResultDetail("Conclusion",
+                "No significant trend was found for estimation and time worked on activities"));
+        return new QueryResultItem(this.antiPattern, false, resultDetails);
     }
 }
