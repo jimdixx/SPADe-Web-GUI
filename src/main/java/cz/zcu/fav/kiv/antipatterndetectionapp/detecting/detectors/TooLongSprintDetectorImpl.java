@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TooLongSprintDetectorImpl extends AntiPatternDetector {
+public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TooLongSprintDetectorImpl.class);
 

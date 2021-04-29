@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VaryingSprintLengthDetectorImpl extends AntiPatternDetector {
+public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VaryingSprintLengthDetectorImpl.class);
 

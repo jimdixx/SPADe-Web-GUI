@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NinetyNinetyRuleDetectorImpl extends AntiPatternDetector {
+public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BusinessAsUsualDetectorImpl.class);
 

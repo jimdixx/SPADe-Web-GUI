@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BusinessAsUsualDetectorImpl extends AntiPatternDetector {
+public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BusinessAsUsualDetectorImpl.class);
 

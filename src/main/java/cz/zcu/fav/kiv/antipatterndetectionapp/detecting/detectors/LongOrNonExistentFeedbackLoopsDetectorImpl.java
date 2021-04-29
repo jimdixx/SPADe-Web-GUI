@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LongOrNonExistentFeedbackLoopsDetectorImpl extends AntiPatternDetector {
+public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(LongOrNonExistentFeedbackLoopsDetectorImpl.class);
 

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoadToNowhereDetectorImpl extends AntiPatternDetector {
+public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SpecifyNothingDetectorImpl.class);
 

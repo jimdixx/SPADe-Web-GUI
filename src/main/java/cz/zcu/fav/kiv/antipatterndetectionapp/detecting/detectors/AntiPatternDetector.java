@@ -8,13 +8,13 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 
 import java.util.List;
 
-public abstract class AntiPatternDetector {
+public interface AntiPatternDetector {
 
-    public abstract AntiPattern getAntiPatternModel();
+    AntiPattern getAntiPatternModel();
 
-    public abstract String getAntiPatternSqlFileName();
+    String getAntiPatternSqlFileName();
 
-    public abstract void setSqlQueries(List<String> queries);
+    void setSqlQueries(List<String> queries);
 
-    public abstract QueryResultItem analyze(Project project, DatabaseConnection databaseConnection);
+    QueryResultItem analyze(Project project, DatabaseConnection databaseConnection);
 }
