@@ -73,7 +73,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
         // init values
         List<ResultDetail> resultDetails = new ArrayList<>();
-        int counter = 0;
+        int iterationLengthChanged = 0;
         int numberOfIterations = 0;
 
         try {
@@ -92,7 +92,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                     }
 
                     if (Math.abs(firstIterationLength - secondIterationLength) >= MAXIMUM_DAYS_DIFFERENCE) {
-                        counter = counter + 1;
+                        iterationLengthChanged = iterationLengthChanged + 1;
                     }
                     firstIterationLength = secondIterationLength;
                 }
@@ -106,10 +106,10 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
         resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(MAXIMUM_ITERATION_CHANGE)));
         resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(numberOfIterations)));
-        resultDetails.add(new ResultDetail("Iteration length changed", String.valueOf(counter)));
+        resultDetails.add(new ResultDetail("Iteration length changed", String.valueOf(iterationLengthChanged)));
 
 
-        if (counter >= MAXIMUM_ITERATION_CHANGE) {
+        if (iterationLengthChanged >= MAXIMUM_ITERATION_CHANGE) {
             resultDetails.add(new ResultDetail("Conclusion", "Iteration length changed significantly too often"));
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "Varying iteration length is all right"));
@@ -118,6 +118,6 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
         LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
-        return new QueryResultItem(this.antiPattern, (counter >= MAXIMUM_ITERATION_CHANGE), resultDetails);
+        return new QueryResultItem(this.antiPattern, (iterationLengthChanged >= MAXIMUM_ITERATION_CHANGE), resultDetails);
     }
 }

@@ -14,13 +14,11 @@ Detection: Detect the beginning and end of the iteration and what is
 
 /* Init project id */
 set @projectId = ?;
-/* Maximum iteration length in days */
-set @maxSprintLength = 21;
 /* Exclude first and last iteration? */
-set @excludeFirstAndLastIteration = false;
+set @excludeFirstAndLastIteration = true;
 /* Id of first iteration */
 set @idOfFirstIteration = (select id from iteration where iteration.superProjectId = @projectId order by name limit 1);
 /* Id of last iteration */
 set @idOfLastIteration = (select id from iteration where iteration.superProjectId = @projectId order by name desc limit 1);
-/* Select all too long iterations */
-select datediff(iteration.endDate, iteration.startDate) as `iterationLength`, if(datediff(iteration.endDate, iteration.startDate) > @maxSprintLength, true, false) as `isTooLongSprint`, iteration.startDate as `iterationStartDate` from iteration where iteration.superProjectId = @projectId and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfFirstIteration, -1) and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfLastIteration, -1) order by iteration.name;
+/* Select all iterations with their length */
+select datediff(endDate, startDate) as `iterationLength` from iteration where iteration.superProjectId = @projectId and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfFirstIteration, -1) and iteration.id != if(@excludeFirstAndLastIteration = true, @idOfLastIteration, -1) order by iteration.name;

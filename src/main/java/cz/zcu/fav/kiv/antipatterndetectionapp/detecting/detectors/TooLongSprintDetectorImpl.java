@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
@@ -34,6 +35,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
      * SETTINGS
      */
     private static final int MAX_NUMBER_OF_TOO_LONG_ITERATIONS = 1;
+    private static final int MAX_ITERATION_LENGTH = 21;
 
 
     @Override
@@ -69,28 +71,20 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         int numberOfLongIterations = 0;
         int totalCountOfIteration = 0;
 
-        // get results from sql queries
-        try {
-            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
-            if (rs != null) {
-                while (rs.next()) {
-                    totalCountOfIteration++;
-                    boolean isTooLongSprint = rs.getBoolean("isTooLongSprint");
-                    if (isTooLongSprint) {
-                        numberOfLongIterations++;
-                    }
-                }
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, this.sqlQueries);
+        List<Map<String, Object>> rs = resultSets.get(0);
+
+        for (Map<String, Object> iterationLengths : rs) {
+            totalCountOfIteration++;
+            if (!iterationLengths.containsKey("iterationLength") || iterationLengths.get("iterationLength") == null)
+                continue;
+            int iterationLength = (int) iterationLengths.get("iterationLength");
+            if (iterationLength > MAX_ITERATION_LENGTH) {
+                numberOfLongIterations++;
             }
-
-        } catch (SQLException e) {
-            LOGGER.error("Cannot read results from db");
-            List<ResultDetail> resultDetails = new ArrayList<>();
-            resultDetails.add(new ResultDetail("Problem in reading database", e.toString()));
-            return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
-
         List<ResultDetail> resultDetails = new ArrayList<>();
-        resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(totalCountOfIteration)));
+        resultDetails.add(new ResultDetail("Count of iterations without first and last", String.valueOf(totalCountOfIteration)));
         resultDetails.add(new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)));
         if (numberOfLongIterations >= MAX_NUMBER_OF_TOO_LONG_ITERATIONS) {
             resultDetails.add(new ResultDetail("Conclusion", "One or more iteration is too long"));

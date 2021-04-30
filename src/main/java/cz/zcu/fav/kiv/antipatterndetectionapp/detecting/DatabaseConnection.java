@@ -94,7 +94,7 @@ public class DatabaseConnection {
         return allResults;
     }
 
-    public List<Map<String,Object>> resultSetToArrayList(ResultSet rs) throws SQLException {
+    private List<Map<String,Object>> resultSetToArrayList(ResultSet rs) throws SQLException {
         ResultSetMetaData md = rs.getMetaData();
         int columns = md.getColumnCount();
         List<Map<String, Object>> list = new ArrayList<>();
