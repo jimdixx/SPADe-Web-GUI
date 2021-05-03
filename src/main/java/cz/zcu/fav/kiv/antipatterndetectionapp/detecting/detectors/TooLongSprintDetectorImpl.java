@@ -28,7 +28,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
                         "Maximum iteration length in days", 21));
                 put("maxNumberOfTooLongIterations", new Configuration<Integer>("maxNumberOfTooLongIterations",
                         "Max number of foo long iterations",
-                        "Maximum number of too long iterations in project", 1));
+                        "Maximum number of too long iterations in project", 0));
             }}
     );
 
@@ -97,7 +97,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         List<ResultDetail> resultDetails = new ArrayList<>();
         resultDetails.add(new ResultDetail("Count of iterations without first and last", String.valueOf(totalCountOfIteration)));
         resultDetails.add(new ResultDetail("Number of too long iterations", String.valueOf(numberOfLongIterations)));
-        if (numberOfLongIterations >= maxNumberOfTooLongIterations) {
+        if (numberOfLongIterations > maxNumberOfTooLongIterations) {
             resultDetails.add(new ResultDetail("Conclusion", "One or more iteration is too long"));
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "All iterations in limit"));
@@ -106,6 +106,6 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
-        return new QueryResultItem(this.antiPattern, numberOfLongIterations >= maxNumberOfTooLongIterations, resultDetails);
+        return new QueryResultItem(this.antiPattern, numberOfLongIterations > maxNumberOfTooLongIterations, resultDetails);
     }
 }
