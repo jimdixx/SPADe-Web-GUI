@@ -1,10 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,15 +24,29 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                     "enters the project and sees the final result. In the end, the customer " +
                     "may not get what he really wanted. With long intervals of feedback, " +
                     "some misunderstood functionality can be created and we have to spend " +
-                    "a lot of effort and time to redo it. ");
+                    "a lot of effort and time to redo it. ",
+            new HashMap<>() {{
+                put("divisionOfIterationsWithFeedbackLoop", new Configuration<Float>("divisionOfIterationsWithFeedbackLoop",
+                        "Division of iterations with feedback loop",
+                        "Minimum percentage of the total number of iterations with feedback loop (0,1)", 0.5f));
+                put("maxGapBetweenFeedbackLoopRate", new Configuration<Float>("maxGapBetweenFeedbackLoopRate",
+                        "Maximum gap between feedback loop rate",
+                        "Value that multiplies average iteration length for given project. Result" +
+                                " is maximum threshold value for gap between feedback loops in days.", 2f));
+            }}
+            );
 
     private final String SQL_FILE_NAME = "long_or_non_existent_feedback_loops.sql";
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    /**
-     * SETTINGS
-     */
+    private float getDivisionOfIterationsWithFeedbackLoop() {
+        return (float) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue();
+    }
+
+    private float getMaxGapBetweenFeedbackLoopRate() {
+        return (float) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -121,7 +133,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             }
         }
 
-        double halfNumberOfIterations = totalNumberIterations / 2.0;
+        double halfNumberOfIterations = totalNumberIterations * getDivisionOfIterationsWithFeedbackLoop();
 
         // pokud je počet iterací, které obsahují alespoň jednu aktivitu s feedbackem, tak je to ideální případ
         if (totalNumberIterations <= numberOfIterationsWhichContainsAtLeastOneActivityForFeedback) {
@@ -144,7 +156,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 long daysBetween = Utils.daysBetween(firstDate, secondDate);
                 firstDate = secondDate;
 
-                if (daysBetween >= 2 * averageIterationLength) {
+                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate() * averageIterationLength) {
                     List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                             new ResultDetail("Days between", Long.toString(daysBetween)),
                             new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
@@ -185,7 +197,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 long daysBetween = Utils.daysBetween(firstDate, secondDate);
                 firstDate = secondDate;
 
-                if (daysBetween >= 2 * averageIterationLength) {
+                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate() * averageIterationLength) {
                     List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                             new ResultDetail("Days between", Long.toString(daysBetween)),
                             new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
