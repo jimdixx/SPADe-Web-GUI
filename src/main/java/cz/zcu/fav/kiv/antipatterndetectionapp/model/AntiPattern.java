@@ -1,17 +1,28 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
+import java.util.Map;
+
 public class AntiPattern {
 
     private Long id;
     private String printName;
     private String name;
     private String description;
+    private Map<String, Configuration> configurations;
 
     public AntiPattern(Long id, String printName, String name, String description) {
         this.id = id;
         this.printName = printName;
         this.name = name;
         this.description = description;
+    }
+
+    public AntiPattern(Long id, String printName, String name, String description, Map<String, Configuration> configurations) {
+        this.id = id;
+        this.printName = printName;
+        this.name = name;
+        this.description = description;
+        this.configurations = configurations;
     }
 
     public Long getId() {
@@ -44,6 +55,14 @@ public class AntiPattern {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Map<String, Configuration> getConfigurations() {
+        return configurations;
+    }
+
+    public void setConfigurations(Map<String, Configuration> configurations) {
+        this.configurations = configurations;
     }
 
     @Override

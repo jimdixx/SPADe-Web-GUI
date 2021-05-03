@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Anti Pattern Detector - Configuration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        .analyze-button-container {
+            margin: 20px 40% 40px;
+        }
+    </style>
+
+</head>
+<body>
+<!-- Navigation bar imported -->
+<div th:replace="fragments/navbar :: navBar"></div>
+<!-- ./Navigation bar imported -->
+
+<!-- Page body -->
+<div class="container">
+    <h1>Configuration</h1>
+
+    <!-- Form for configuration values -->
+    <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
+        <div th:each="antiPattern : ${antiPatterns}">
+            <h3 th:text="${antiPattern.printName}"></h3>
+            <div th:each="config : ${antiPattern.configurations}">
+                <div class="form-group row">
+                    <label th:text="${config.value.printName}" th:for="${config.value.name}"
+                           class="col-sm-5 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input th:value="${config.value.value}" type="number" class="form-control" th:id="${config.value.name}"
+                               name="configValues">
+                        <input th:value="${config.value.name}" style="display: none" class="form-control"
+                               name="configNames">
+                        <small th:text="${config.value.description}" th:value="${config.value.name}"
+                               class="form-text text-muted"></small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Container for show error message -->
+        <div class="container">
+            <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
+            </div>
+        </div>
+        <!-- ./Container for show error message -->
+        <!-- Container for show success message -->
+        <div class="container">
+            <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert">
+            </div>
+        </div>
+        <!-- ./Container for show success message -->
+        <div class="analyze-button-container">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
+        </div>
+    </form>
+    <!-- ./Form for configuration values -->
+</div>
+<!-- ./Page body -->
+
+</body>
+</html>
+

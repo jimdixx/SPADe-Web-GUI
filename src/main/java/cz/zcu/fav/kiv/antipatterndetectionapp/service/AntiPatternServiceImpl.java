@@ -50,4 +50,32 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         }
         return antiPatternDetectors;
     }
+
+    @Override
+    public boolean saveNewConfiguration(String[] configNames, String[] configValues) {
+        List<AntiPatternDetector> antiPatternDetectors = antiPatternRepository.getAllAntiPatterns();
+
+        for (AntiPatternDetector antiPatternDetector : antiPatternDetectors) {
+            // not every anti-pattern should have configuration
+            if (antiPatternDetector.getAntiPatternModel().getConfigurations() == null) {
+                continue;
+            }
+            for (int i = 0; i < configNames.length; i++) {
+                if (antiPatternDetector.getAntiPatternModel().getConfigurations().containsKey(configNames[i])) {
+
+                    if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Integer.class) {
+                        try {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Integer.parseInt(configValues[i])));
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
+
+                    }
+
+
+                }
+            }
+        }
+        return true;
+    }
 }

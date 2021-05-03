@@ -82,4 +82,26 @@ public class AppController {
     public String about() {
         return "about";
     }
+
+    @GetMapping("/configuration")
+    public String configuration(Model model) {
+        model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
+        return "configuration";
+    }
+
+    @PostMapping("/configuration")
+    public String configurationPost(Model model,
+                                    @RequestParam(value = "configValues", required = false) String[] configValues,
+                                    @RequestParam(value = "configNames", required = false) String[] configNames) {
+
+        if (antiPatternService.saveNewConfiguration(configNames, configValues)) {
+            model.addAttribute("successMessage", "All threshold values has been successfully saved.");
+        } else {
+            model.addAttribute("errorMessage", "One or more configuration values are not in correct format");
+        }
+
+        model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
+
+        return "configuration";
+    }
 }

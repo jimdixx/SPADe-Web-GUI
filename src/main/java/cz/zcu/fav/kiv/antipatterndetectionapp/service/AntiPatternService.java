@@ -17,5 +17,5 @@ public interface AntiPatternService {
 
     List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids);
 
-
+    boolean saveNewConfiguration(String[] configNames, String[] configValues);
 }
