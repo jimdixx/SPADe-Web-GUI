@@ -70,9 +70,13 @@ public class AntiPatternServiceImpl implements AntiPatternService {
                             return false;
                         }
 
+                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Float.class) {
+                        try {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Float.parseFloat(configValues[i])));
+                        } catch (NumberFormatException e) {
+                            return false;
+                        }
                     }
-
-
                 }
             }
         }

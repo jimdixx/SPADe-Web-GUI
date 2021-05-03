@@ -1,10 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,17 +18,21 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
             "Business As Usual",
             "BusinessAsUsual",
             "Absence of a retrospective after individual " +
-                    "iterations or after the completion project.");
+                    "iterations or after the completion project.",
+            new HashMap<>() {{
+                put("divisionOfIterationsWithRetrospective", new Configuration<Float>("divisionOfIterationsWithRetrospective",
+                        "Division of iterations with retrospective",
+                        "Minimum percentage of the total number of iterations with a retrospective (0,1)", 0.66666f));
+            }});
 
     private final String sqlFileName = "business_as_usual.sql";
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
-
-    /**
-     * SETTINGS
-     */
-    private final float DIVISION_BUSINESS_AS_USUAL_ITERATIONS = (float) 1/3;
+    
+    private float getDivisionOfIterationsWithRetrospective() {
+        return (float) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -99,7 +100,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
         }
 
-        int minRetrospectiveLimit =  totalNumberIterations.intValue() - Math.round(totalNumberIterations * DIVISION_BUSINESS_AS_USUAL_ITERATIONS);
+        int minRetrospectiveLimit =  Math.round(totalNumberIterations * getDivisionOfIterationsWithRetrospective());
 
         resultDetails.add(new ResultDetail("Min retrospective limit", String.valueOf(minRetrospectiveLimit)));
         resultDetails.add(new ResultDetail("Found retrospectives", String.valueOf(iterationsResults.size())));

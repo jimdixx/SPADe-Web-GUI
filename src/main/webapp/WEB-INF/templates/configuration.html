@@ -34,7 +34,7 @@
                     <label th:text="${config.value.printName}" th:for="${config.value.name}"
                            class="col-sm-5 col-form-label"></label>
                     <div class="col-sm-5">
-                        <input th:value="${config.value.value}" type="number" class="form-control" th:id="${config.value.name}"
+                        <input th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
                                name="configValues">
                         <input th:value="${config.value.name}" style="display: none" class="form-control"
                                name="configNames">
