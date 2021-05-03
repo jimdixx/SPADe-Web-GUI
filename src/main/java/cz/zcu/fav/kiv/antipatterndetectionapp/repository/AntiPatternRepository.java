@@ -72,7 +72,7 @@ public class AntiPatternRepository implements ServletContextAware {
                     new InputStreamReader(test.openStream()));
             String line;
             while ((line = read.readLine()) != null) {
-                if (line.startsWith("select") || line.startsWith("set")) {
+                if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length()-1) == ';') {
                     queries.add(line);
                 }
             }
