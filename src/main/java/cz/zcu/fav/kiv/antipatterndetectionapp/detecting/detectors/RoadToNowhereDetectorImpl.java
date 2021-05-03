@@ -1,16 +1,14 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
@@ -22,17 +20,27 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
             "RoadToNowhere",
             "The project is not sufficiently planned and therefore " +
                     "takes place on an ad hoc basis with an uncertain " +
-                    "outcome and deadline. There is no project plan in the project.");
+                    "outcome and deadline. There is no project plan in the project.",
+            new HashMap<>() {{
+                put("minNumberOfWikiPagesWithProjectPlan", new Configuration<Integer>("minNumberOfWikiPagesWithProjectPlan",
+                        "Minimum number of wiki pages with project plan",
+                        "Number of wiki pages", 1));
+                put("minNumberOfActivitiesWithProjectPlan", new Configuration<Integer>("minNumberOfActivitiesWithProjectPlan",
+                        "Minimum number of activities with project plan",
+                        "Number of activities", 1));
+            }});
 
     private final String sqlFileName = "road_to_nowhere.sql";
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    /**
-     * SETTINGS
-     */
-    private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
-    private final int MINIMUM_NUMBER_OF_ACTIVITIES = 1;
+    private int getMinNumberOfWikiPagesWithProjectPlan() {
+        return (int) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithProjectPlan").getValue();
+    }
+
+    private int getMinNumberOfActivitiesWithProjectPlan() {
+        return (int) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -85,7 +93,7 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Number of issues for creating project plan", String.valueOf(numberOfIssuesForProjectPlan)));
         resultDetails.add(new ResultDetail("Number of wiki pages for creating project plan", String.valueOf(numberOfWikiPagesForProjectPlan)));
 
-        if( numberOfIssuesForProjectPlan >= this.MINIMUM_NUMBER_OF_ACTIVITIES || numberOfWikiPagesForProjectPlan >= this.MINIMUM_NUMBER_OF_WIKI_PAGES) {
+        if( numberOfIssuesForProjectPlan >= getMinNumberOfActivitiesWithProjectPlan() || numberOfWikiPagesForProjectPlan >= getMinNumberOfWikiPagesWithProjectPlan()) {
             resultDetails.add(new ResultDetail("Conclusion", "Found some activities or wiki pages for project plan in first two iterations"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
