@@ -1,16 +1,14 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
@@ -21,18 +19,34 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
             "Specify Nothing",
             "SpecifyNothing",
             "The specification is not done intentionally. Programmers are " +
-                    "expected to work better without written specifications.");
+                    "expected to work better without written specifications.",
+            new HashMap<>() {{
+                put("minNumberOfWikiPagesWithSpecification", new Configuration<Integer>("minNumberOfWikiPagesWithSpecification",
+                        "Minimum number of wiki pages with project specification",
+                        "Number of wiki pages", 1));
+                put("minNumberOfActivitiesWithSpecification", new Configuration<Integer>("minNumberOfActivitiesWithSpecification",
+                        "Minimum number of activities with project specification",
+                        "Number of activities", 1));
+                put("minAvgLengthOfActivityDescription", new Configuration<Integer>("minAvgLengthOfActivityDescription",
+                        "Minimum average length of activity description",
+                        "Minimum average number of character of activity description", 150));
+            }});
 
     private final String sqlFileName = "specify_nothing.sql";
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    /**
-     * SETTINGS
-     */
-    private final int MINIMUM_NUMBER_OF_WIKI_PAGES = 1;
-    private final int MINIMUM_NUMBER_OF_ACTIVITIES = 1;
-    private final double MINIMUM_AVERAGE_LENGTH_OF_ACTIVITY_DESCRIPTION = 150;
+    private int getMinNumberOfWikiPagesWithSpecification() {
+        return (int) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue();
+    }
+
+    private int getMinNumberOfActivitiesWithSpecification() {
+        return (int) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue();
+    }
+
+    private int getMinAvgLengthOfActivityDescription() {
+        return (int) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -89,12 +103,12 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Number of activities for specification", String.valueOf(numberOfActivitiesForSpecification)));
         resultDetails.add(new ResultDetail("Number of wiki pages for specification", String.valueOf(numberOfWikiPages)));
 
-        if (numberOfActivitiesForSpecification >= MINIMUM_NUMBER_OF_ACTIVITIES ||
-                numberOfWikiPages >= MINIMUM_NUMBER_OF_WIKI_PAGES) {
+        if (numberOfActivitiesForSpecification >= getMinNumberOfActivitiesWithSpecification() ||
+                numberOfWikiPages >= getMinNumberOfWikiPagesWithSpecification()) {
             resultDetails.add(new ResultDetail("Conclusion", "Found activities or wiki pages that represents creation of specification"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
-            if (averageLengthOfIssueDescription > MINIMUM_AVERAGE_LENGTH_OF_ACTIVITY_DESCRIPTION) {
+            if (averageLengthOfIssueDescription > getMinAvgLengthOfActivityDescription()) {
                 resultDetails.add(new ResultDetail("Conclusion", "Average length of activity description is grater then minimum"));
                 return new QueryResultItem(this.antiPattern, false, resultDetails);
             } else {
