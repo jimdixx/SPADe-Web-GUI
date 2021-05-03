@@ -23,7 +23,7 @@
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
 <div class="card">
-    <h5 class="card-header">Anti Pattern</h5>
+    <h3 class="card-header">Anti Pattern</h3>
     <div class="card-body">
         <div class="form-group">
             <label for="projectId">Anti Pattern Id:</label>
@@ -34,9 +34,15 @@
             <input disabled type="text" class="form-control" id="projectName" th:value="${antiPattern.printName}">
         </div>
         <div class="form-group">
-            <label for="projectId">Project description:</label>
+            <label for="projectId">Anti Pattern description:</label>
             <textarea disabled class="form-control" id="projectDescription" rows="5"
                       th:text="${antiPattern.description}"></textarea>
+        </div>
+        <h5>Anti Pattern configurations</h5>
+        <div th:each="config : ${antiPattern.configurations}" class="form-group">
+            <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"></label>
+            <input disabled type="text" class="form-control" th:id="${config.value.name}" th:value="${config.value.value}">
+            <small th:text="${config.value.description}" th:value="${config.value.name}" class="form-text text-muted"></small>
         </div>
     </div>
 </div>

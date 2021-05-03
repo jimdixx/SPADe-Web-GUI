@@ -31,7 +31,7 @@
             <h3 th:text="${antiPattern.printName}"></h3>
             <div th:each="config : ${antiPattern.configurations}">
                 <div class="form-group row">
-                    <label th:text="${config.value.printName}" th:for="${config.value.name}"
+                    <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"
                            class="col-sm-5 col-form-label"></label>
                     <div class="col-sm-5">
                         <input th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
