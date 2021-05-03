@@ -1,16 +1,14 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
@@ -24,19 +22,27 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                     "It is clear that iterations will be different " +
                     "lengths at the beginning and end of the project, " +
                     "but the length of the sprint should not change " +
-                    "during the project.");
+                    "during the project.",
+            new HashMap<>() {{
+                put("maxDaysDifference", new Configuration<Integer>("maxDaysDifference",
+                        "Max days difference",
+                        "Maximum distance of two consecutive iterations in days", 7));
+                put("maxIterationChanged", new Configuration<Integer>("maxIterationChanged",
+                        "Max number of iteration changed",
+                        "Maximum allowed number of significant changes in iteration lengths", 2));
+            }});
 
     private final String sqlFileName = "varying_sprint_length.sql";
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
+    private Integer getMaxDaysDifference(){
+        return (Integer) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue();
+    }
 
-
-    /**
-     * SETTINGS
-     */
-    private final int MAXIMUM_DAYS_DIFFERENCE = 7; // one week
-    private final int MAXIMUM_ITERATION_CHANGE = 2; // how many times can iteration significantly change
+    private Integer getMaxIterationChanged(){
+        return (Integer) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -91,7 +97,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                         secondIterationLength = iterationLength;
                     }
 
-                    if (Math.abs(firstIterationLength - secondIterationLength) >= MAXIMUM_DAYS_DIFFERENCE) {
+                    if (Math.abs(firstIterationLength - secondIterationLength) >= getMaxDaysDifference()) {
                         iterationLengthChanged = iterationLengthChanged + 1;
                     }
                     firstIterationLength = secondIterationLength;
@@ -104,12 +110,12 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
             return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
 
-        resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(MAXIMUM_ITERATION_CHANGE)));
+        resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(getMaxIterationChanged())));
         resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(numberOfIterations)));
         resultDetails.add(new ResultDetail("Iteration length changed", String.valueOf(iterationLengthChanged)));
 
 
-        if (iterationLengthChanged >= MAXIMUM_ITERATION_CHANGE) {
+        if (iterationLengthChanged > getMaxIterationChanged()) {
             resultDetails.add(new ResultDetail("Conclusion", "Iteration length changed significantly too often"));
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "Varying iteration length is all right"));
@@ -118,6 +124,6 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
         LOGGER.info(this.antiPattern.getPrintName());
         LOGGER.info(resultDetails.toString());
 
-        return new QueryResultItem(this.antiPattern, (iterationLengthChanged >= MAXIMUM_ITERATION_CHANGE), resultDetails);
+        return new QueryResultItem(this.antiPattern, (iterationLengthChanged > getMaxIterationChanged()), resultDetails);
     }
 }
