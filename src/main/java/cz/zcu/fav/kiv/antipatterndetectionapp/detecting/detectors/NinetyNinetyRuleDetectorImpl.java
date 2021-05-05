@@ -22,7 +22,7 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
             new HashMap<>() {{
                 put("maxDivisionRange", new Configuration<Double>("maxDivisionRange",
                         "Maximum ration value",
-                        "Maximum ratio value of spent and estimated time", 1.2));
+                        "Maximum ratio value of spent and estimated time", 1.25));
                 put("maxBadDivisionLimit", new Configuration<Integer>("maxBadDivisionLimit",
                         "Maximum iterations thresholds",
                         "Maximum number of consecutive iterations where the thresholds were exceeded", 2));
