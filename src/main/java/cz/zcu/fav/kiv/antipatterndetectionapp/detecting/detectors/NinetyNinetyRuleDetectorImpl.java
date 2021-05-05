@@ -1,16 +1,11 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
 
@@ -19,18 +14,31 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     private final AntiPattern antiPattern = new AntiPattern(7L,
             "Ninety Ninety Rule",
             "NinetyNinetyRule",
-            "TODO");
+            "The first 90 percent of the code represents the first 90 percent of development time. The " +
+                    "remaining 10 percent of the code represents another 90 percent of development time. " +
+                    "Then decide on a long delay of the project compared to the original estimate. " +
+                    "The functionality is almost done, some number is already closed and is only waiting " +
+                    "for one activity to close, but it has been open for a long time.",
+            new HashMap<>() {{
+                put("maxDivisionRange", new Configuration<Double>("maxDivisionRange",
+                        "Maximum ration value",
+                        "Maximum ratio value of spent and estimated time", 1.2));
+                put("maxBadDivisionLimit", new Configuration<Integer>("maxBadDivisionLimit",
+                        "Maximum iterations thresholds",
+                        "Maximum number of consecutive iterations where the thresholds were exceeded", 2));
+            }});
 
     private final String sqlFileName = "ninety_ninety_rule.sql";
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    /**
-     * SETTINGS
-     */
-    private static final double MAX_DIVISION_RANGE = 1.2;
-    private static final double MIN_DIVISION_RANGE = 0.8;
-    private static final int MAX_BAD_ITERATION_LIMIT = 3;
+    private double getMaxDivisionRange() {
+        return (Double) antiPattern.getConfigurations().get("maxDivisionRange").getValue();
+    }
+
+    private int getMaxBadDivisionLimit() {
+        return (int) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue();
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {
@@ -51,9 +59,9 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
      * Postup detekce:
      *      1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
      *      2) udělat podíl strávený čas / odhadovaný čas
-     *      3) pokud všechny výsledky podílů budou v rozsahu 0.8 - 1.2 => vše ok
+     *      3) pokud všechny výsledky podílů budou menší než 1.2 => vše ok
      *      4) pokud předchozí bod nezabere, tak iterovat přes všechny podíly
-     *      5) pokud budou nalezeny tři iterace po sobě, které se stále zhoršují stejným směrem => detekce
+     *      5) pokud budou nalezeny tři iterace po sobě, kde se stále zhoršují odhady => detekováno
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
@@ -76,7 +84,7 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
                 }
                 divisionsResults.add(resultDivision);
                 // if is one division is out of range set boolean to false
-                if (resultDivision > MAX_DIVISION_RANGE || resultDivision < MIN_DIVISION_RANGE) {
+                if (resultDivision > getMaxDivisionRange()) {
                     isAllInRange = false;
                 }
             }
@@ -89,29 +97,19 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
         }
 
         int counterOverEstimated = 0;
-        int counterUnderEstimated = 0;
         for (Double divisionResult : divisionsResults) {
-            if (divisionResult > MAX_DIVISION_RANGE) {
+            if (divisionResult > getMaxDivisionRange()) {
                 counterOverEstimated++;
-                counterUnderEstimated = 0;
-            }
-
-            if (divisionResult < MIN_DIVISION_RANGE) {
-                counterUnderEstimated++;
+            } else {
                 counterOverEstimated = 0;
             }
 
-            if (counterOverEstimated >= MAX_BAD_ITERATION_LIMIT) {
+            if (counterOverEstimated > getMaxBadDivisionLimit()) {
                 resultDetails.add(new ResultDetail("Conclusion",
-                        "Found bad significant trend in estimated time - over estimated."));
-                return new QueryResultItem(this.antiPattern, false, resultDetails);
+                        getMaxBadDivisionLimit() + " or more consecutive iterations has a bad trend in estimates"));
+                return new QueryResultItem(this.antiPattern, true, resultDetails);
             }
 
-            if (counterUnderEstimated >= MAX_BAD_ITERATION_LIMIT) {
-                resultDetails.add(new ResultDetail("Conclusion",
-                        "Found bad significant trend in estimated time - under estimated."));
-                return new QueryResultItem(this.antiPattern, false, resultDetails);
-            }
         }
 
         resultDetails.add(new ResultDetail("Conclusion",

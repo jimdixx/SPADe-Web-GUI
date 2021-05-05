@@ -7,8 +7,9 @@ Description: The first 90 percent of the code represents the first 90 percent of
              The functionality is almost done, some number is already closed and is only waiting
              for one activity to close, but it has been open for a long time.
 
-Detection: In each iteration, find out how much time the activities were estimated and how much time
-           they actually took. During the iterations, the estimates and time spent on activities should equal.
+Detection: Compare the estimated time and time spent in each iteration. If the estimates deteriorate
+           continuously during the project, it will be detected.
+
 */
 
 /* Init project id */
