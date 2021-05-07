@@ -13,9 +13,9 @@ Detection: No specification artifact. There is no issue that will have something
 /* Init project id */
 set @projectId = ?;
 /* Find number of wikipages with some project specification */
-set @numberOfWikiPages = (select count(name) from artifactView where projectId = @projectId and (name like '%DSP%' or name like '%specifikace%' or name like '%specification%' or description like '%DSP%' or description like '%specifikace%' or description like '%specification%'));
+set @numberOfWikiPages = (select count(name) from artifactView where projectId = @projectId and artifactClass = 'WIKIPAGE' and (lower(name) like lower('%dsp%') or lower(name) like lower('%specifikace%') or lower(name) like lower('%specification%') or lower(name) like lower('%vize%proj%') or lower(name) like lower('%vize%produ%') or lower(description) like lower('%DSP%') or lower(description) like lower('%specifikace%') or lower(description) like lower('%specification%')));
 /* Find activities for creating DSP or project specification */
-set @numberOfActivitiesForSpecification = (SELECT count(id) from workUnitView where projectId = @projectId and (name like '%DSP%' or name like '%specifikace%' or name like '%specification%'));
+set @numberOfActivitiesForSpecification = (SELECT count(id) from workUnitView where projectId = @projectId and (lower(name) like lower('%DSP%') or lower(name) like lower('%specifikace%') or lower(name) like lower('%specification%') or lower(name) like lower('%vize%proj%')));
 /* Count average length of issues description */
 set @averageLengthOfIssueDescription = (select AVG(CHAR_LENGTH(workUnitView.description)) from workUnitView where workUnitView.projectId = @projectId);
 /* Show all statistics */

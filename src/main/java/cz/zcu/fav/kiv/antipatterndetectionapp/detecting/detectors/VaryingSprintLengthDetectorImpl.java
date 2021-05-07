@@ -29,7 +29,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                         "Maximum distance of two consecutive iterations in days", 7));
                 put("maxIterationChanged", new Configuration<Integer>("maxIterationChanged",
                         "Max number of iteration changed",
-                        "Maximum allowed number of significant changes in iteration lengths", 2));
+                        "Maximum allowed number of significant changes in iteration lengths", 1));
             }});
 
     private final String sqlFileName = "varying_sprint_length.sql";

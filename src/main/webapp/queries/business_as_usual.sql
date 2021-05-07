@@ -22,7 +22,7 @@ set @restrospectiveSubstring = '%retr%';
 /* Revision substring */
 set @revisionSubstring = '%revi%';
 /* Number of iterations for given project */
-select COUNT(id) as 'numberOfIterations' from iteration where superProjectId = @projectId;
+select COUNT(id) as 'numberOfIterations' from iteration where superProjectId = @projectId and name like '%itera%';
 /* Select all iteration with detected retrospective activities */
 select iterationName as 'iterationName', count(name) as 'numberOfIssues' from workUnitView where projectId = @projectId and (name like @restrospectiveSubstring or name like @revisionSubstring or name like '%week%scrum%') group by iterationName;
 /* Select all wikipages that were created or updated in iteration and have name with retr or revi*/
