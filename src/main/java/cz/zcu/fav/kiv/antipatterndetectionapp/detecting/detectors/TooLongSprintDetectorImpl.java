@@ -64,7 +64,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
      *      1) najít všechny iterace danného projektu
      *      2) odebrat první a poslední iteraci ( ty mohou být z důvodu nastartování projektu dlouhé)
      *      3) zjistit jejich délku (rozdíl mezi start date a end date)
-     *      4) pokud iterace přesháne délku 21 dní (3 týdny), tak jsou označeny jako moc dlouhé
+     *      4) pokud iterace přesháne délku 21 dní (nastavitelná prahová hodnota), tak jsou označeny jako moc dlouhé
      *      5) pokud je nalezena jedna nebo více iterací jako dlouhé, tak je anti pattern detekován
      *
      * @param project            analyzovaný project
@@ -89,7 +89,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
             totalCountOfIteration++;
             if (!iterationLengths.containsKey("iterationLength") || iterationLengths.get("iterationLength") == null)
                 continue;
-            int iterationLength = (int) iterationLengths.get("iterationLength");
+            int iterationLength = ((Long) iterationLengths.get("iterationLength")).intValue();
             if (iterationLength > maxIterationLength) {
                 numberOfLongIterations++;
             }
