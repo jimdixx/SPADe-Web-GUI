@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>cz.zcu.fav.kiv</groupId>
 	<artifactId>anti-pattern-detection-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<name>anti-pattern-detection-app</name>
 	<description>Basic web application for anti pattern detection</description>
