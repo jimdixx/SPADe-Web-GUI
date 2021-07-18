@@ -1,5 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
+
 import java.util.Map;
 
 public class AntiPattern {
@@ -9,6 +11,7 @@ public class AntiPattern {
     private String name;
     private String description;
     private Map<String, Configuration> configurations;
+    private String catalogueFileName;
 
     public AntiPattern(Long id, String printName, String name, String description) {
         this.id = id;
@@ -23,6 +26,15 @@ public class AntiPattern {
         this.name = name;
         this.description = description;
         this.configurations = configurations;
+    }
+
+    public AntiPattern(Long id, String printName, String name, String description, Map<String, Configuration> configurations, String catalogueFileName) {
+        this.id = id;
+        this.printName = printName;
+        this.name = name;
+        this.description = description;
+        this.configurations = configurations;
+        this.catalogueFileName = catalogueFileName;
     }
 
     public Long getId() {
@@ -69,6 +81,18 @@ public class AntiPattern {
         return "<a href='/anti-patterns/" + this.id.toString() + "'>Detail</a>";
     }
 
+    public String getCatalogueFileName() {
+        return catalogueFileName;
+    }
+
+    public void setCatalogueFileName(String catalogueFileName) {
+        this.catalogueFileName = catalogueFileName;
+    }
+
+    public String getFullCatalogueUrl() {
+        return Constants.ANTI_PATTERN_CATALOGUE_URL + this.catalogueFileName;
+    }
+
     @Override
     public String toString() {
         return "AntiPattern{" +
@@ -77,6 +101,7 @@ public class AntiPattern {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", configurations=" + configurations +
+                ", catalogueFileName='" + catalogueFileName + '\'' +
                 '}';
     }
 }

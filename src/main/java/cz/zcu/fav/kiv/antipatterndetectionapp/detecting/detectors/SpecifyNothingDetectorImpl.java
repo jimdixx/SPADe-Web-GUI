@@ -30,7 +30,8 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
                 put("minAvgLengthOfActivityDescription", new Configuration<Integer>("minAvgLengthOfActivityDescription",
                         "Minimum average length of activity description",
                         "Minimum average number of character of activity description", 150));
-            }});
+            }},
+            "Specify_Nothing.md");
 
     private final String sqlFileName = "specify_nothing.sql";
     // sql queries loaded from sql file

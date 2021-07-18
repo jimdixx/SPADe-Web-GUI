@@ -28,7 +28,8 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
                 put("minNumberOfActivitiesWithProjectPlan", new Configuration<Integer>("minNumberOfActivitiesWithProjectPlan",
                         "Minimum number of activities with project plan",
                         "Number of activities", 1));
-            }});
+            }},
+            "Road_To_Nowhere.md");
 
     private final String sqlFileName = "road_to_nowhere.sql";
     // sql queries loaded from sql file
