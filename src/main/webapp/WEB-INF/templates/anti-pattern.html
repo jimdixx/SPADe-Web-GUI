@@ -22,30 +22,74 @@
 <!-- Navigation bar imported -->
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
+
+<!-- Card for anti pattern details-->
 <div class="card">
     <h3 class="card-header">Anti Pattern</h3>
     <div class="card-body">
+
+        <!-- Anti pattern id -->
         <div class="form-group">
-            <label for="projectId">Anti Pattern Id:</label>
-            <input disabled type="text" class="form-control" id="projectId" th:value="${antiPattern.id}">
+            <label for="antiPatternId">Anti Pattern Id:</label>
+            <input disabled type="text" class="form-control" id="antiPatternId" th:value="${antiPattern.id}">
         </div>
+        <!-- ./Anti pattern id -->
+
+        <!-- Anti pattern name -->
         <div class="form-group">
-            <label for="projectId">Anti Pattern name:</label>
-            <input disabled type="text" class="form-control" id="projectName" th:value="${antiPattern.printName}">
+            <label for="antiPatternName">Anti Pattern name:</label>
+            <input disabled type="text" class="form-control" id="antiPatternName" th:value="${antiPattern.printName}">
         </div>
+        <!-- ./Anti pattern name -->
+
+        <!-- Anti pattern description -->
         <div class="form-group">
-            <label for="projectId">Anti Pattern description:</label>
-            <textarea disabled class="form-control" id="projectDescription" rows="5"
+            <label for="antiPatternDescription">Anti Pattern description:</label>
+            <textarea disabled class="form-control" id="antiPatternDescription" rows="5"
                       th:text="${antiPattern.description}"></textarea>
         </div>
+        <!-- ./Anti pattern description -->
+
+        <!-- Anti pattern catalogue url if is filled in AntiPattern model class -->
+        <div class="form-group">
+            <label for="antiPatternCatalogueUrl">Software process Anti Patterns catalogue:</label>
+            <br>
+
+            <!-- Anti pattern catalogue file name is filled -->
+            <a th:if="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+               id="antiPatternCatalogueUrl"
+               th:href="${antiPattern.getFullCatalogueUrl()}"
+               th:text="${antiPattern.printName}"
+               target="_blank">
+            </a>
+            <!-- ./Anti pattern catalogue file name is filled -->
+
+            <!-- Anti pattern catalogue file name is NOT filled -->
+            <del><a th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+               id="antiPatternCatalogueUrl"
+               th:text="${antiPattern.printName}"
+               target="_blank"
+               style="color: grey"
+            ></a></del>
+            <small th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+                   style="color: grey"> This anti pattern is not occur in catalogue </small>
+            <!-- ./Anti pattern catalogue file name is NOT filled -->
+        </div>
+        <!-- ./Anti pattern catalogue url if is filled in AntiPattern model class -->
+
+        <!-- Anti pattern configuration form -->
         <h5>Anti Pattern configurations</h5>
         <div th:each="config : ${antiPattern.configurations}" class="form-group">
             <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"></label>
-            <input disabled type="text" class="form-control" th:id="${config.value.name}" th:value="${config.value.value}">
-            <small th:text="${config.value.description}" th:value="${config.value.name}" class="form-text text-muted"></small>
+            <input disabled type="text" class="form-control" th:id="${config.value.name}"
+                   th:value="${config.value.value}">
+            <small th:text="${config.value.description}" th:value="${config.value.name}"
+                   class="form-text text-muted"></small>
         </div>
+        <!-- ./Anti pattern configuration form -->
     </div>
 </div>
+<!-- ./Card for anti pattern details-->
 
 </body>
 </html>

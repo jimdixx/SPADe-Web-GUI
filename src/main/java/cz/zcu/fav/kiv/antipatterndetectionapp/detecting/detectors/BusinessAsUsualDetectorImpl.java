@@ -23,7 +23,8 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
                 put("divisionOfIterationsWithRetrospective", new Configuration<Float>("divisionOfIterationsWithRetrospective",
                         "Division of iterations with retrospective",
                         "Minimum percentage of the total number of iterations with a retrospective (0,1)", 0.66666f));
-            }});
+            }},
+            "Business_As_Usual.md");
 
     private final String sqlFileName = "business_as_usual.sql";
 
