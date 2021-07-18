@@ -65,6 +65,10 @@ public class AntiPattern {
         this.configurations = configurations;
     }
 
+    public String getUrl() {
+        return "<a href='/anti-patterns/" + this.id.toString() + "'>Detail</a>";
+    }
+
     @Override
     public String toString() {
         return "AntiPattern{" +
@@ -72,6 +76,7 @@ public class AntiPattern {
                 ", printName='" + printName + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", configurations=" + configurations +
                 '}';
     }
 }
