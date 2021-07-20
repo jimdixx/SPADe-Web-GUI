@@ -40,7 +40,6 @@
             <th scope="col">Project Name</th>
             <th scope="col" th:each="antiPattern: ${queryResults.get(0).getQueryResultItems()}">
                 <a data-toggle="popover"
-                   title="Anti-Pattern info"
                    data-html="true"
                    data-content=""
                    th:text="${antiPattern.getAntiPattern().printName}"
