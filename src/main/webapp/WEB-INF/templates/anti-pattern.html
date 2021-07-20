@@ -25,22 +25,38 @@
 
 <!-- Card for anti pattern details-->
 <div class="card">
-    <h3 class="card-header">Anti Pattern</h3>
+    <!-- Card header -->
+    <div>
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h3 th:text="${antiPattern.printName}"></h3>
+
+                <!-- Anti pattern catalogue file name is filled -->
+                <a th:if="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+                   id="antiPatternCatalogueUrl"
+                   th:href="${antiPattern.getFullCatalogueUrl()}"
+                   target="_blank">&nbsp;View in catalogue
+                </a>
+                <!-- Anti pattern catalogue file name is filled -->
+
+                <!-- Anti pattern catalogue file name is NOT filled -->
+                <del>
+                    <a th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+                       id="antiPatternCatalogueUrl"
+                       target="_blank"
+                       style="color: grey">&nbsp;View in catalogue
+                    </a>
+                </del>
+            </div>
+            <small th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
+                   style="color: grey"> This anti pattern is not occur in catalogue or anti pattern file name is it not
+                filled in model class </small>
+            <!-- ./Anti pattern catalogue file name is NOT filled -->
+        </div>
+    </div>
+    <!-- ./Card header -->
+
     <div class="card-body">
-
-        <!-- Anti pattern id -->
-        <div class="form-group">
-            <label for="antiPatternId">Anti Pattern Id:</label>
-            <input disabled type="text" class="form-control" id="antiPatternId" th:value="${antiPattern.id}">
-        </div>
-        <!-- ./Anti pattern id -->
-
-        <!-- Anti pattern name -->
-        <div class="form-group">
-            <label for="antiPatternName">Anti Pattern name:</label>
-            <input disabled type="text" class="form-control" id="antiPatternName" th:value="${antiPattern.printName}">
-        </div>
-        <!-- ./Anti pattern name -->
 
         <!-- Anti pattern description -->
         <div class="form-group">
@@ -49,33 +65,6 @@
                       th:text="${antiPattern.description}"></textarea>
         </div>
         <!-- ./Anti pattern description -->
-
-        <!-- Anti pattern catalogue url if is filled in AntiPattern model class -->
-        <div class="form-group">
-            <label for="antiPatternCatalogueUrl">Software process Anti Patterns catalogue:</label>
-            <br>
-
-            <!-- Anti pattern catalogue file name is filled -->
-            <a th:if="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
-               id="antiPatternCatalogueUrl"
-               th:href="${antiPattern.getFullCatalogueUrl()}"
-               th:text="${antiPattern.printName}"
-               target="_blank">
-            </a>
-            <!-- ./Anti pattern catalogue file name is filled -->
-
-            <!-- Anti pattern catalogue file name is NOT filled -->
-            <del><a th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
-               id="antiPatternCatalogueUrl"
-               th:text="${antiPattern.printName}"
-               target="_blank"
-               style="color: grey"
-            ></a></del>
-            <small th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
-                   style="color: grey"> This anti pattern is not occur in catalogue </small>
-            <!-- ./Anti pattern catalogue file name is NOT filled -->
-        </div>
-        <!-- ./Anti pattern catalogue url if is filled in AntiPattern model class -->
 
         <!-- Anti pattern configuration form -->
         <h5>Anti Pattern configurations</h5>
