@@ -23,6 +23,19 @@
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
 
+<!-- Container for show error message -->
+<div class="container">
+    <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
+    </div>
+</div>
+<!-- ./Container for show error message -->
+<!-- Container for show success message -->
+<div class="container">
+    <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert">
+    </div>
+</div>
+<!-- ./Container for show success message -->
+
 <!-- Card for anti pattern details-->
 <div class="card">
     <!-- Card header -->
@@ -68,14 +81,25 @@
 
         <!-- Anti pattern configuration form -->
         <h5>Anti Pattern configurations</h5>
-        <div th:each="config : ${antiPattern.configurations}" class="form-group">
-            <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"></label>
-            <input disabled type="text" class="form-control" th:id="${config.value.name}"
-                   th:value="${config.value.value}">
-            <small th:text="${config.value.description}" th:value="${config.value.name}"
-                   class="form-text text-muted"></small>
-        </div>
-        <!-- ./Anti pattern configuration form -->
+
+        <!-- Form for configuration values -->
+        <form action="#" th:action="@{/anti-patterns/} + ${antiPattern.id}" th:object="${antiPattern}" method="post">
+            <div th:each="config : ${antiPattern.configurations}" class="form-group">
+                <label th:text="${config.value.printName} + ':'"
+                       th:for="${config.value.name}"></label>
+                <input th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
+                       name="configValues">
+                <input th:value="${config.value.name}" style="display: none" class="form-control"
+                       name="configNames">
+                <small th:text="${config.value.description}" th:value="${config.value.name}"
+                       class="form-text text-muted"></small>
+            </div>
+            <div class="analyze-button-container">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Save configuration</button>
+            </div>
+            <!-- ./Anti pattern configuration form -->
+        </form>
+        <!-- ./Form for configuration values -->
     </div>
 </div>
 <!-- ./Card for anti pattern details-->
