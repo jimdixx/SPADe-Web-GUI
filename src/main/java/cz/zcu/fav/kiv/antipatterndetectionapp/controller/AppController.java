@@ -4,6 +4,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.controller;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.AntiPatternManager;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -74,8 +77,47 @@ public class AppController {
             return "index";
         }
 
-        model.addAttribute("queryResults", antiPatternManager.analyze(selectedProjects, selectedAntiPatterns));
+        List<QueryResult> results = antiPatternManager.analyze(selectedProjects, selectedAntiPatterns);
+        antiPatternService.saveAnalyzedProjects(selectedProjects, selectedAntiPatterns);
+        antiPatternService.saveResults(results);
+        antiPatternService.setConfigurationChanged(false);
 
+        model.addAttribute("queryResults", results);
+        model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
+
+        return "result";
+    }
+
+
+    @GetMapping("/analyze")
+    public String analyzeGet(Model model) {
+        if (antiPatternService.isConfigurationChanged()) {
+            model.addAttribute("isConfigurationChanged", true);
+        }
+        antiPatternService.setConfigurationChanged(false);
+
+        model.addAttribute("queryResults", antiPatternService.getResults());
+        model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
+
+        return "result";
+    }
+
+    @GetMapping("/recalculate")
+    public String recalculateGet(Model model) {
+        return analyzeGet(model);
+    }
+
+    @PostMapping("/recalculate")
+    public String resultRecalculate(Model model) {
+
+        List<QueryResult> results = antiPatternManager.analyze(antiPatternService.getAnalyzedProjects(),
+                antiPatternService.getAnalyzedAntiPatterns());
+
+        antiPatternService.saveResults(results);
+        antiPatternService.setConfigurationChanged(false);
+
+        model.addAttribute("queryResults", results);
+        model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
         return "result";
     }
 

@@ -21,6 +21,10 @@
         .icon-style {
             border-radius: 30px;
         }
+
+        input, button, submit {
+            border: none;
+        }
     </style>
 
 </head>
@@ -31,6 +35,20 @@
 
 <!-- Result table container -->
 <div class="container">
+    <!-- Container for show success message -->
+    <div class="container">
+        <div th:if="${isConfigurationChanged}" class="alert alert-warning" role="alert">
+            Configuration values have changed! Would you like to
+            <form action="#" th:action="@{/recalculate}" method="post" style="display: inline-block">
+                <button type="submit"
+                        style="display: inline-block;background-color: #FEF3CD; color: #167AF6; text-decoration: underline;">
+                    recalculate
+                </button>
+            </form>
+            the results?
+        </div>
+    </div>
+    <!-- ./Container for show success message -->
     <h1>Results</h1>
     <table class="table table-bordered table-hover">
         <!-- Result table header -->
@@ -91,6 +109,7 @@
         </tbody>
         <!-- ./Result table content -->
     </table>
+    <p><small th:text="@{Last recalculated at &#160;} + ${ recalculationTime}"></small></p>
 
     <!-- Table legend -->
     <h6>Legend:</h6>
@@ -114,13 +133,34 @@
 </div>
 <!-- ./Result table container -->
 
-<!-- Script to popover -->
+<!-- Scripts -->
 <script>
+    // script to popover
     $(document).ready(function () {
         $('[data-toggle="popover"]').popover();
     });
+
+    // this code handling back browser button to result page
+    window.onload = function () {
+        if (typeof history.pushState === "function") {
+            history.pushState("jibberish", null, null);
+            window.onpopstate = function () {
+                history.pushState('newjibberish', null, null);
+            };
+        } else {
+            var ignoreHashChange = true;
+            window.onhashchange = function () {
+                if (!ignoreHashChange) {
+                    ignoreHashChange = true;
+                    window.location.hash = Math.random();
+                } else {
+                    ignoreHashChange = false;
+                }
+            };
+        }
+    }
 </script>
-<!-- ./Script to popover -->
+<!-- ./Scripts -->
 
 </body>
 </html>

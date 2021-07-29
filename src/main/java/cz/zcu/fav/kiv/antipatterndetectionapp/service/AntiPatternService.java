@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 
 import java.util.List;
 
@@ -18,4 +19,19 @@ public interface AntiPatternService {
     List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids);
 
     boolean saveNewConfiguration(String[] configNames, String[] configValues);
+
+    void saveAnalyzedProjects(String[] selectedProjects, String[] selectedAntiPatterns);
+
+    String[] getAnalyzedProjects();
+
+    String[] getAnalyzedAntiPatterns();
+
+    boolean isConfigurationChanged();
+
+    void setConfigurationChanged(boolean configurationChanged);
+
+    void saveResults(List<QueryResult> results);
+
+    List<QueryResult> getResults();
+
 }
