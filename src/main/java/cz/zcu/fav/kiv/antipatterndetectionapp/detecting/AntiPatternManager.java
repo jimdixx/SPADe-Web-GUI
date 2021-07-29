@@ -1,7 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting;
 
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 
 import java.util.List;
