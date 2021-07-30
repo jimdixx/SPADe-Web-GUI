@@ -61,12 +61,12 @@
                     <a th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
                        id="antiPatternCatalogueUrl"
                        target="_blank"
-                       style="color: grey">&nbsp;View in catalogue
+                       style="color: grey; margin-left:5px">View in catalogue
                     </a>
                 </del>
             </div>
             <small th:unless="${antiPattern ne null and antiPattern.catalogueFileName ne null}"
-                   style="color: grey"> This anti pattern is not occur in catalogue or anti pattern file name is it not
+                   style="color: grey"> This anti-pattern is not occur in catalogue or anti-pattern file name is it not
                 filled in model class </small>
             <!-- ./Anti pattern catalogue file name is NOT filled -->
         </div>
