@@ -13,6 +13,10 @@
         .analyze-button-container {
             margin: 20px 40% 40px;
         }
+
+        .container {
+            margin-top: 20px;
+        }
     </style>
 
 </head>
@@ -23,6 +27,20 @@
 
 <!-- Page body -->
 <div class="container">
+
+    <!-- Container for show error message -->
+    <div class="container">
+        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
+        </div>
+    </div>
+    <!-- ./Container for show error message -->
+    <!-- Container for show success message -->
+    <div class="container">
+        <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert">
+        </div>
+    </div>
+    <!-- ./Container for show success message -->
+
     <h1>Configuration</h1>
 
     <!-- Form for configuration values -->
@@ -45,21 +63,12 @@
 
             </div>
         </div>
-        <!-- Container for show error message -->
-        <div class="container">
-            <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
-            </div>
-        </div>
-        <!-- ./Container for show error message -->
-        <!-- Container for show success message -->
-        <div class="container">
-            <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success" role="alert">
-            </div>
-        </div>
-        <!-- ./Container for show success message -->
+
+        <!-- Submit button to save configuration -->
         <div class="analyze-button-container">
             <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
         </div>
+        <!-- ./Submit button to save configuration -->
     </form>
     <!-- ./Form for configuration values -->
 </div>
