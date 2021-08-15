@@ -6,12 +6,21 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.spring.SpringApplicationContext;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * A class that takes care of database connections and running queries.
+ */
 public class DatabaseConnection {
 
     private Connection databaseConnection;
 
+    /**
+     * Constructor that takes application properties from configuration file name application.properties
+     * and creating new database connection with given parameters.
+     */
     public DatabaseConnection() {
         ApplicationProperties applicationProperties = ((ApplicationProperties) SpringApplicationContext.getContext()
                 .getBean("applicationProperties"));
@@ -21,6 +30,14 @@ public class DatabaseConnection {
         this.databaseConnection = createConnection(connectionUrl, dataSourceUsername, dataSourcePassword);
     }
 
+    /**
+     * Method for creating database connection with given parameters.
+     *
+     * @param connectionUrl      database url to connect
+     * @param dataSourceUsername database username
+     * @param dataSourcePassword database user password
+     * @return new database connection
+     */
     private Connection createConnection(String connectionUrl, String dataSourceUsername, String dataSourcePassword) {
         Connection conn = null;
         try {
@@ -32,7 +49,12 @@ public class DatabaseConnection {
         return conn;
     }
 
-    public void closeConnection() {
+    /**
+     * Method for closing database connection. It is necessary to close the database
+     * connection when the database connection is not used due to the accumulation
+     * of unused connections.
+     */
+    void closeConnection() {
         try {
             this.databaseConnection.close();
         } catch (SQLException e) {
@@ -40,10 +62,23 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Simple getter for getting the database connection.
+     *
+     * @return database connection
+     */
     public Connection getDatabaseConnection() {
         return databaseConnection;
     }
 
+    /**
+     * Method for analyzing a given project. These methods are intended
+     * for queries that have a single select output (for example Road To Nowhere).
+     *
+     * @param project analyzed project
+     * @param queries list of queries
+     * @return result set of results
+     */
     public ResultSet executeQueries(Project project, List<String> queries) {
         Statement stmt;
         ResultSet resultSet = null;
@@ -51,8 +86,8 @@ public class DatabaseConnection {
             stmt = this.getDatabaseConnection().createStatement();
 
             for (String query : queries) {
-                if(queries.indexOf(query) != queries.size()-1){
-                    if(query.contains("?"))
+                if (queries.indexOf(query) != queries.size() - 1) {
+                    if (query.contains("?"))
                         query = query.replace("?", project.getId().toString());
                     stmt.executeQuery(query);
                 } else {
@@ -66,16 +101,16 @@ public class DatabaseConnection {
         return resultSet;
     }
 
-    public List<List<Map<String,Object>>> executeQueriesWithMultipleResults(Project project, List<String> queries) {
+    public List<List<Map<String, Object>>> executeQueriesWithMultipleResults(Project project, List<String> queries) {
         Statement stmt;
-        List<List<Map<String,Object>>> allResults = new ArrayList<>();
+        List<List<Map<String, Object>>> allResults = new ArrayList<>();
         ResultSet resultSet = null;
         try {
             stmt = this.getDatabaseConnection().createStatement();
 
             for (String query : queries) {
-                if(queries.indexOf(query) != queries.size()-1){
-                    if(query.contains("?"))
+                if (queries.indexOf(query) != queries.size() - 1) {
+                    if (query.contains("?"))
                         query = query.replace("?", project.getId().toString());
                     resultSet = stmt.executeQuery(query);
                 } else {
@@ -83,7 +118,7 @@ public class DatabaseConnection {
                 }
 
                 if (query.toLowerCase().startsWith("select")) {
-                    allResults.add(resultSetToArrayList(resultSet));
+                    allResults.add(Utils.resultSetToArrayList(resultSet));
                 }
 
             }
@@ -92,20 +127,5 @@ public class DatabaseConnection {
         }
 
         return allResults;
-    }
-
-    private List<Map<String,Object>> resultSetToArrayList(ResultSet rs) throws SQLException {
-        ResultSetMetaData md = rs.getMetaData();
-        int columns = md.getColumnCount();
-        List<Map<String, Object>> list = new ArrayList<>();
-        while (rs.next()) {
-            Map<String, Object> row = new HashMap<>(columns);
-            for (int i = 1; i <= columns; ++i) {
-                row.put(md.getColumnName(i), rs.getObject(i));
-            }
-            list.add(row);
-        }
-
-        return list;
     }
 }

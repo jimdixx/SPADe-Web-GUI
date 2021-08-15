@@ -1,15 +1,15 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
@@ -30,6 +30,14 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
                 put("minAvgLengthOfActivityDescription", new Configuration<Integer>("minAvgLengthOfActivityDescription",
                         "Minimum average length of activity description",
                         "Minimum average number of character of activity description", 150));
+                put("searchSubstringsWithProjectSpecification", new Configuration<String>("searchSubstringsWithProjectSpecification",
+                        "Search substrings with project specification",
+                        "Substring that will be search in wikipages and activities",
+                        "%dsp%" + Constants.SUBSTRING_DELIMITER +
+                                "%specifikace%" + Constants.SUBSTRING_DELIMITER +
+                                "%specification%" + Constants.SUBSTRING_DELIMITER +
+                                "%vize%proj%" + Constants.SUBSTRING_DELIMITER +
+                                "%vize%produ%"));
             }},
             "Specify_Nothing.md");
 
@@ -47,6 +55,10 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
     private int getMinAvgLengthOfActivityDescription() {
         return (int) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue();
+    }
+
+    private List<String> getSearchSubstringsWithProjectSpecification() {
+        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
     }
 
     @Override
@@ -86,7 +98,8 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
         double averageLengthOfIssueDescription = 0;
 
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
+            ResultSet rs = databaseConnection.executeQueries(project,
+                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectSpecification()));
             if (rs != null) {
                 while (rs.next()) {
                     numberOfWikiPages = rs.getInt("numberOfWikiPages");
