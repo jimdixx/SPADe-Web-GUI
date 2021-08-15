@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,15 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
             "Absence of a retrospective after individual " +
                     "iterations or after the completion project.",
             new HashMap<>() {{
-                put("divisionOfIterationsWithRetrospective", new Configuration<Float>("divisionOfIterationsWithRetrospective",
+                put("divisionOfIterationsWithRetrospective", new Configuration<Percentage>("divisionOfIterationsWithRetrospective",
                         "Division of iterations with retrospective",
-                        "Minimum percentage of the total number of iterations with a retrospective (0,1)", 0.66666f));
+                        "Minimum percentage of the total number of iterations with a retrospective (0,100)",
+                        "Percentage must be between 0 and 100",
+                        new Percentage(66)));
                 put("searchSubstringsWithRetrospective", new Configuration<String>("searchSubstringsWithRetrospective",
                         "Search substrings with retrospective",
                         "Substring that will be search in wikipages and activities",
+                        "Maximum number of substrings is ten and must not starts and ends with characters || ",
                         "%retr%" + Constants.SUBSTRING_DELIMITER +
                                 "%revi%" + Constants.SUBSTRING_DELIMITER +
                                 "%week%scrum%"));
@@ -37,7 +41,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
     
     private float getDivisionOfIterationsWithRetrospective() {
-        return (float) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue();
+        return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
 
     private List<String> getSearchSubstringsWithRetrospective() {

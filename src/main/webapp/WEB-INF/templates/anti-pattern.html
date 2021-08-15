@@ -91,12 +91,17 @@
             <div th:each="config : ${antiPattern.configurations}" class="form-group">
                 <label th:text="${config.value.printName} + ':'"
                        th:for="${config.value.name}"></label>
-                <input th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
+                <small th:text="${config.value.description}" th:value="${config.value.name}"
+                       class="form-text text-muted"></small>
+                <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control is-invalid" th:id="${config.value.name}"
+                       name="configValues">
+                <input th:unless="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
                        name="configValues">
                 <input th:value="${config.value.name}" style="display: none" class="form-control"
                        name="configNames">
-                <small th:text="${config.value.description}" th:value="${config.value.name}"
-                       class="form-text text-muted"></small>
+                <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}" th:value="${config.value.errorMessage}"
+                       class="form-text text-danger"></small>
+
             </div>
             <div class="analyze-button-container">
                 <button type="submit" class="btn btn-primary btn-lg btn-block">Save configuration</button>

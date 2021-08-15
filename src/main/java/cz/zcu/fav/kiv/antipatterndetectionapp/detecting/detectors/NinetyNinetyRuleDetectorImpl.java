@@ -2,6 +2,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +22,16 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
                     "The functionality is almost done, some number is already closed and is only waiting " +
                     "for one activity to close, but it has been open for a long time.",
             new HashMap<>() {{
-                put("maxDivisionRange", new Configuration<Double>("maxDivisionRange",
+                put("maxDivisionRange", new Configuration<PositiveFloat>("maxDivisionRange",
                         "Maximum ration value",
-                        "Maximum ratio value of spent and estimated time", 1.25));
-                put("maxBadDivisionLimit", new Configuration<Integer>("maxBadDivisionLimit",
+                        "Maximum ratio value of spent and estimated time",
+                        "Ration values must be positive float number",
+                        new PositiveFloat(1.25f)));
+                put("maxBadDivisionLimit", new Configuration<PositiveInteger>("maxBadDivisionLimit",
                         "Maximum iterations thresholds",
-                        "Maximum number of consecutive iterations where the thresholds were exceeded", 2));
+                        "Maximum number of consecutive iterations where the thresholds were exceeded",
+                        "Maximum number of consecutive iterations must be positive integer number",
+                        new PositiveInteger(2)));
             }});
 
     private final String sqlFileName = "ninety_ninety_rule.sql";

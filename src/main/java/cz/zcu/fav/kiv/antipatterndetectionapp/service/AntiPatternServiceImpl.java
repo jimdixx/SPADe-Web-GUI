@@ -3,14 +3,20 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.CacheablesValues;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -36,14 +42,25 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     public List<AntiPattern> antiPatternsToModel(List<AntiPatternDetector> antiPatternDetectors) {
         List<AntiPattern> antiPatterns = new LinkedList<>();
         for (AntiPatternDetector antiPatternDetector : antiPatternDetectors) {
-            antiPatterns.add(antiPatternDetector.getAntiPatternModel());
+            AntiPattern antiPattern = antiPatternDetector.getAntiPatternModel();
+
+            // set to default value
+            for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
+                config.getValue().setErrorMessageShown(false);
+            }
+            antiPatterns.add(antiPattern);
         }
         return antiPatterns;
     }
 
     @Override
     public AntiPattern antiPatternToModel(AntiPatternDetector antiPatternDetector) {
-        return antiPatternDetector.getAntiPatternModel();
+        AntiPattern antiPattern = antiPatternDetector.getAntiPatternModel();
+        // set to default value
+        for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
+            config.getValue().setErrorMessageShown(false);
+        }
+        return antiPattern;
     }
 
     @Override
@@ -56,9 +73,9 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         return antiPatternDetectors;
     }
 
-    @Override
-    public boolean saveNewConfiguration(String[] configNames, String[] configValues) {
+    public List<String> saveNewConfiguration(String[] configNames, String[] configValues) {
         List<AntiPatternDetector> antiPatternDetectors = antiPatternRepository.getAllAntiPatterns();
+        List<String> incorrectParameters = new ArrayList<>();
 
         for (AntiPatternDetector antiPatternDetector : antiPatternDetectors) {
             // not every anti-pattern should have configuration
@@ -73,31 +90,57 @@ public class AntiPatternServiceImpl implements AntiPatternService {
                             antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Integer.parseInt(configValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            return false;
+                            incorrectParameters.add(configNames[i]);
                         }
 
+                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Percentage.class) {
+                        try {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Percentage.parsePercentage(configValues[i])));
+                            setConfigurationChanged(true);
+                        } catch (NumberFormatException e) {
+                            incorrectParameters.add(configNames[i]);
+                        }
+                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == PositiveInteger.class) {
+                        try {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((PositiveInteger.parsePositiveInteger(configValues[i])));
+                            setConfigurationChanged(true);
+                        } catch (NumberFormatException e) {
+                            incorrectParameters.add(configNames[i]);
+                        }
+                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == PositiveFloat.class) {
+                        try {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((PositiveFloat.parsePositiveFloat(configValues[i])));
+                            setConfigurationChanged(true);
+                        } catch (NumberFormatException e) {
+                            incorrectParameters.add(configNames[i]);
+                        }
                     } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Float.class) {
                         try {
                             antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Float.parseFloat(configValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            return false;
+                            incorrectParameters.add(configNames[i]);
                         }
                     } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Double.class) {
                         try {
                             antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Double.parseDouble(configValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            return false;
+                            incorrectParameters.add(configNames[i]);
                         }
                     } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == String.class) {
+                        if (Utils.checkStringSubstrings(configValues[i])) {
                             antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((configValues[i]));
                             setConfigurationChanged(true);
+
+                        } else {
+                            incorrectParameters.add(configNames[i]);
+                        }
                     }
                 }
             }
         }
-        return true;
+        return incorrectParameters;
     }
 
     @Override
@@ -117,13 +160,13 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     }
 
     @Override
-    public void setConfigurationChanged(boolean configurationChanged) {
-        this.cacheablesValues.setConfigurationChanged(configurationChanged);
+    public boolean isConfigurationChanged() {
+        return this.cacheablesValues.isConfigurationChanged();
     }
 
     @Override
-    public boolean isConfigurationChanged() {
-        return this.cacheablesValues.isConfigurationChanged();
+    public void setConfigurationChanged(boolean configurationChanged) {
+        this.cacheablesValues.setConfigurationChanged(configurationChanged);
     }
 
     @Override
@@ -134,5 +177,26 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     @Override
     public List<QueryResult> getResults() {
         return this.cacheablesValues.getResults();
+    }
+
+    @Override
+    public List<AntiPattern> setErrorMessages(List<AntiPattern> antiPatterns, List<String> wrongParameters) {
+        for (AntiPattern antiPattern : antiPatterns) {
+            for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
+                if (wrongParameters.contains(config.getKey())) {
+                    config.getValue().setErrorMessageShown(true);
+                } else {
+                    config.getValue().setErrorMessageShown(false);
+                }
+            }
+        }
+        return antiPatterns;
+    }
+
+    @Override
+    public AntiPattern setErrorMessages(AntiPattern antiPattern, List<String> wrongParameters) {
+        List<AntiPattern> antiPatterns = new ArrayList<>();
+        antiPatterns.add(antiPattern);
+        return setErrorMessages(antiPatterns, wrongParameters).get(0);
     }
 }

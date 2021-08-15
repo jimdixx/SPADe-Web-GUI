@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,12 +24,16 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
                     "beginning and at the end of the project, but it should not " +
                     "change in the already started project).",
             new HashMap<>() {{
-                put("maxIterationLength", new Configuration<Integer>("maxIterationLength",
+                put("maxIterationLength", new Configuration<PositiveInteger>("maxIterationLength",
                         "Max Iteration Length",
-                        "Maximum iteration length in days", 21));
-                put("maxNumberOfTooLongIterations", new Configuration<Integer>("maxNumberOfTooLongIterations",
+                        "Maximum iteration length in days",
+                        "Max iteration length must be positive integer",
+                        new PositiveInteger(21)));
+                put("maxNumberOfTooLongIterations", new Configuration<PositiveInteger>("maxNumberOfTooLongIterations",
                         "Max number of foo long iterations",
-                        "Maximum number of too long iterations in project", 0));
+                        "Maximum number of too long iterations in project",
+                        "Max number of too long iterations must be positive integer",
+                        new PositiveInteger(0)));
             }}
     );
 

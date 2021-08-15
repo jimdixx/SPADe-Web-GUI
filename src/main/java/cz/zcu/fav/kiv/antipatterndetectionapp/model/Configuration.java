@@ -4,6 +4,8 @@ public class Configuration<T> {
     private String name;
     private String printName;
     private String description;
+    private String errorMessage;
+    private boolean isErrorMessageShown;
     private T value;
 
     public Configuration(String name, String printName, String description, T value) {
@@ -11,6 +13,16 @@ public class Configuration<T> {
         this.printName = printName;
         this.description = description;
         this.value = value;
+        this.isErrorMessageShown = false;
+    }
+
+    public Configuration(String name, String printName, String description, String errorMessage, T value) {
+        this.name = name;
+        this.printName = printName;
+        this.description = description;
+        this.errorMessage = errorMessage;
+        this.value = value;
+        this.isErrorMessageShown = false;
     }
 
     public String getName() {
@@ -43,5 +55,21 @@ public class Configuration<T> {
 
     public void setValue(T value) {
         this.value = value;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public boolean isErrorMessageShown() {
+        return isErrorMessageShown;
+    }
+
+    public void setErrorMessageShown(boolean errorMessageShown) {
+        isErrorMessageShown = errorMessageShown;
     }
 }

@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,18 +22,25 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
             "The specification is not done intentionally. Programmers are " +
                     "expected to work better without written specifications.",
             new HashMap<>() {{
-                put("minNumberOfWikiPagesWithSpecification", new Configuration<Integer>("minNumberOfWikiPagesWithSpecification",
+                put("minNumberOfWikiPagesWithSpecification", new Configuration<PositiveInteger>("minNumberOfWikiPagesWithSpecification",
                         "Minimum number of wiki pages with project specification",
-                        "Number of wiki pages", 1));
-                put("minNumberOfActivitiesWithSpecification", new Configuration<Integer>("minNumberOfActivitiesWithSpecification",
+                        "Number of wiki pages",
+                        "Minimum number of wikipages must be positive integer number",
+                        new PositiveInteger(1)));
+                put("minNumberOfActivitiesWithSpecification", new Configuration<PositiveInteger>("minNumberOfActivitiesWithSpecification",
                         "Minimum number of activities with project specification",
-                        "Number of activities", 1));
-                put("minAvgLengthOfActivityDescription", new Configuration<Integer>("minAvgLengthOfActivityDescription",
+                        "Number of activities",
+                        "Minimum number of activities with project specification must be positive integer number",
+                        new PositiveInteger(1)));
+                put("minAvgLengthOfActivityDescription", new Configuration<PositiveInteger>("minAvgLengthOfActivityDescription",
                         "Minimum average length of activity description",
-                        "Minimum average number of character of activity description", 150));
+                        "Minimum average number of character of activity description",
+                        "Minimum average length of activity description must be positive integer number",
+                        new PositiveInteger(150)));
                 put("searchSubstringsWithProjectSpecification", new Configuration<String>("searchSubstringsWithProjectSpecification",
                         "Search substrings with project specification",
                         "Substring that will be search in wikipages and activities",
+                        "Maximum number of substrings is ten and must not starts and ends with characters ||",
                         "%dsp%" + Constants.SUBSTRING_DELIMITER +
                                 "%specifikace%" + Constants.SUBSTRING_DELIMITER +
                                 "%specification%" + Constants.SUBSTRING_DELIMITER +

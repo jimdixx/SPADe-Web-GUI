@@ -18,7 +18,7 @@ public interface AntiPatternService {
 
     List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids);
 
-    boolean saveNewConfiguration(String[] configNames, String[] configValues);
+    List<String> saveNewConfiguration(String[] configNames, String[] configValues);
 
     void saveAnalyzedProjects(String[] selectedProjects, String[] selectedAntiPatterns);
 
@@ -34,4 +34,7 @@ public interface AntiPatternService {
 
     List<QueryResult> getResults();
 
+    List<AntiPattern> setErrorMessages(List<AntiPattern> antiPatterns, List<String> wrongParameters);
+
+    AntiPattern setErrorMessages(AntiPattern antiPattern, List<String> wrongParameters);
 }

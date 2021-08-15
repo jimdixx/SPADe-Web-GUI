@@ -137,14 +137,17 @@ public class AppController {
                                     @RequestParam(value = "configValues", required = false) String[] configValues,
                                     @RequestParam(value = "configNames", required = false) String[] configNames) {
 
-        if (antiPatternService.saveNewConfiguration(configNames, configValues)) {
+        List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+        List<String> wrongParameters = antiPatternService.saveNewConfiguration(configNames, configValues);
+
+        if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "All configuration values has been successfully saved.");
         } else {
-            model.addAttribute("errorMessage", "One or more configuration values are not in correct format");
+            model.addAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
+            antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
         }
 
-        model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
-
+        model.addAttribute("antiPatterns", antiPatterns);
         return "configuration";
     }
 
@@ -155,13 +158,17 @@ public class AppController {
                                    @RequestParam(value = "configNames", required = false) String[] configNames,
                                    RedirectAttributes redirectAttrs) {
 
-        if (antiPatternService.saveNewConfiguration(configNames, configValues)) {
+        AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
+        List<String> wrongParameters = antiPatternService.saveNewConfiguration(configNames, configValues);
+
+        if (wrongParameters.isEmpty()) {
             redirectAttrs.addFlashAttribute("successMessage", "All threshold values has been successfully saved.");
         } else {
-            redirectAttrs.addFlashAttribute("errorMessage", "One or more configuration values are not in correct format");
+            redirectAttrs.addFlashAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
+            antiPatternService.setErrorMessages(antiPattern, wrongParameters);
         }
 
-        model.addAttribute("antiPatterns", antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id)));
+        model.addAttribute("antiPatterns", antiPattern);
 
         return "redirect:/anti-patterns/{id}";
     }
