@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.utils;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,5 +73,21 @@ public class Utils {
         }
 
         return preparedQueries;
+    }
+
+    public static boolean checkStringSubstrings(String substrings) {
+        if (substrings.startsWith(Constants.SUBSTRING_DELIMITER)) {
+            return false;
+        }
+
+        if (substrings.endsWith(Constants.SUBSTRING_DELIMITER)) {
+            return false;
+        }
+
+        if (substrings.split("\\|\\|").length > 10) {
+            return false;
+        }
+
+        return true;
     }
 }

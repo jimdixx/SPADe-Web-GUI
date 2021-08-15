@@ -3,6 +3,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +26,21 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                     "some misunderstood functionality can be created and we have to spend " +
                     "a lot of effort and time to redo it. ",
             new HashMap<>() {{
-                put("divisionOfIterationsWithFeedbackLoop", new Configuration<Float>("divisionOfIterationsWithFeedbackLoop",
+                put("divisionOfIterationsWithFeedbackLoop", new Configuration<Percentage>("divisionOfIterationsWithFeedbackLoop",
                         "Division of iterations with feedback loop",
-                        "Minimum percentage of the total number of iterations with feedback loop (0,1)", 0.5f));
-                put("maxGapBetweenFeedbackLoopRate", new Configuration<Float>("maxGapBetweenFeedbackLoopRate",
+                        "Minimum percentage of the total number of iterations with feedback loop (0,1)",
+                        "Percentage must be between 0 and 100",
+                        new Percentage(50)));
+                put("maxGapBetweenFeedbackLoopRate", new Configuration<PositiveFloat>("maxGapBetweenFeedbackLoopRate",
                         "Maximum gap between feedback loop rate",
                         "Value that multiplies average iteration length for given project. Result" +
-                                " is maximum threshold value for gap between feedback loops in days.", 2f));
+                                " is maximum threshold value for gap between feedback loops in days.",
+                        "Maximum gap between feedback loop rate must be positive float number",
+                        new PositiveFloat(2f)));
                 put("searchSubstringsWithFeedbackLoop", new Configuration<String>("searchSubstringsWithFeedbackLoop",
                         "Search substrings with feedback loop",
                         "Substring that will be search in wikipages and activities",
+                        "Maximum number of substrings is ten and must not starts and ends with characters ||",
                         "%schůz%zákazník%" + Constants.SUBSTRING_DELIMITER +
                                 "%předvedení%zákazník%" + Constants.SUBSTRING_DELIMITER +
                                 "%zákazn%demo%" + Constants.SUBSTRING_DELIMITER +
@@ -49,7 +56,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithFeedbackLoop() {
-        return (float) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue();
+        return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
     }
 
     private float getMaxGapBetweenFeedbackLoopRate() {

@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +25,16 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                     "but the length of the sprint should not change " +
                     "during the project.",
             new HashMap<>() {{
-                put("maxDaysDifference", new Configuration<Integer>("maxDaysDifference",
+                put("maxDaysDifference", new Configuration<PositiveInteger>("maxDaysDifference",
                         "Max days difference",
-                        "Maximum distance of two consecutive iterations in days", 7));
-                put("maxIterationChanged", new Configuration<Integer>("maxIterationChanged",
+                        "Maximum distance of two consecutive iterations in days",
+                        "Maximum distance must be positive integer number",
+                        new PositiveInteger(7)));
+                put("maxIterationChanged", new Configuration<PositiveInteger>("maxIterationChanged",
                         "Max number of iteration changed",
-                        "Maximum allowed number of significant changes in iteration lengths", 1));
+                        "Maximum allowed number of significant changes in iteration lengths",
+                        "Maximum number of iterations changed must be positive integer number",
+                        new PositiveInteger(1)));
             }});
 
     private final String sqlFileName = "varying_sprint_length.sql";
