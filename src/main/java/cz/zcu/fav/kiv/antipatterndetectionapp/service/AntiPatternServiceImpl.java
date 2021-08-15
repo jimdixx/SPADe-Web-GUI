@@ -90,6 +90,9 @@ public class AntiPatternServiceImpl implements AntiPatternService {
                         } catch (NumberFormatException e) {
                             return false;
                         }
+                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == String.class) {
+                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((configValues[i]));
+                            setConfigurationChanged(true);
                     }
                 }
             }

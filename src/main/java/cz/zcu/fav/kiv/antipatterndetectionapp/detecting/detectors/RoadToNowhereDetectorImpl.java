@@ -1,15 +1,15 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
@@ -28,6 +28,13 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
                 put("minNumberOfActivitiesWithProjectPlan", new Configuration<Integer>("minNumberOfActivitiesWithProjectPlan",
                         "Minimum number of activities with project plan",
                         "Number of activities", 1));
+                put("searchSubstringsWithProjectPlan", new Configuration<String>("searchSubstringsWithProjectPlan",
+                        "Search substrings with project plan",
+                        "Substring that will be search in wikipages and activities",
+                        "%plán projektu%" + Constants.SUBSTRING_DELIMITER +
+                                "%project plan%" + Constants.SUBSTRING_DELIMITER +
+                                "%plan project%" + Constants.SUBSTRING_DELIMITER +
+                                "%projektový plán%"));
             }},
             "Road_To_Nowhere.md");
 
@@ -41,6 +48,10 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
     private int getMinNumberOfActivitiesWithProjectPlan() {
         return (int) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue();
+    }
+
+    private List<String> getSearchSubstringsWithProjectPlan() {
+        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
     }
 
     @Override
@@ -60,9 +71,9 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
     /**
      * Postup detekce:
-     *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky s projektovým plánem
-     *      2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaký projektový plán
-     *      3) pokud nebude nalezena žádná aktivita nebo wiki stránka, tak je antivzor detekován
+     * 1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky s projektovým plánem
+     * 2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaký projektový plán
+     * 3) pokud nebude nalezena žádná aktivita nebo wiki stránka, tak je antivzor detekován
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení
@@ -77,7 +88,8 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
         int numberOfWikiPagesForProjectPlan = 0;
 
         try {
-            ResultSet rs = databaseConnection.executeQueries(project, this.sqlQueries);
+            ResultSet rs = databaseConnection.executeQueries(project,
+                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectPlan()));
             if (rs != null) {
                 while (rs.next()) {
                     numberOfIssuesForProjectPlan = rs.getInt("numberOfIssuesForProjectPlan");
@@ -94,7 +106,7 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Number of issues for creating project plan", String.valueOf(numberOfIssuesForProjectPlan)));
         resultDetails.add(new ResultDetail("Number of wiki pages for creating project plan", String.valueOf(numberOfWikiPagesForProjectPlan)));
 
-        if( numberOfIssuesForProjectPlan >= getMinNumberOfActivitiesWithProjectPlan() || numberOfWikiPagesForProjectPlan >= getMinNumberOfWikiPagesWithProjectPlan()) {
+        if (numberOfIssuesForProjectPlan >= getMinNumberOfActivitiesWithProjectPlan() || numberOfWikiPagesForProjectPlan >= getMinNumberOfWikiPagesWithProjectPlan()) {
             resultDetails.add(new ResultDetail("Conclusion", "Found some activities or wiki pages for project plan in first two iterations"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {

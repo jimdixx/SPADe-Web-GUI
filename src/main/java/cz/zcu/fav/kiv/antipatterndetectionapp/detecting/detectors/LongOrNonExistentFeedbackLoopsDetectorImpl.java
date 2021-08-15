@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
@@ -8,10 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDetector {
 
@@ -33,8 +31,18 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                         "Maximum gap between feedback loop rate",
                         "Value that multiplies average iteration length for given project. Result" +
                                 " is maximum threshold value for gap between feedback loops in days.", 2f));
+                put("searchSubstringsWithFeedbackLoop", new Configuration<String>("searchSubstringsWithFeedbackLoop",
+                        "Search substrings with feedback loop",
+                        "Substring that will be search in wikipages and activities",
+                        "%schůz%zákazník%" + Constants.SUBSTRING_DELIMITER +
+                                "%předvedení%zákazník%" + Constants.SUBSTRING_DELIMITER +
+                                "%zákazn%demo%" + Constants.SUBSTRING_DELIMITER +
+                                "%schůz%zadavat%" + Constants.SUBSTRING_DELIMITER +
+                                "%inform%schůz%" + Constants.SUBSTRING_DELIMITER +
+                                "%zákazn%" + Constants.SUBSTRING_DELIMITER +
+                                "%zadavatel%"));
             }}
-            );
+    );
 
     private final String SQL_FILE_NAME = "long_or_non_existent_feedback_loops.sql";
     // sql queries loaded from sql file
@@ -46,6 +54,10 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
     private float getMaxGapBetweenFeedbackLoopRate() {
         return (float) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue();
+    }
+
+    private List<String> getSearchSubstringsWithFeedbackLoop() {
+        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
     }
 
     @Override
@@ -91,7 +103,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
         Date projectStartDate = null;
         Date projectEndDate = null;
 
-        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, this.sqlQueries);
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project,
+                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithFeedbackLoop()));
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 

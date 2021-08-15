@@ -1,14 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
@@ -23,6 +22,12 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
                 put("divisionOfIterationsWithRetrospective", new Configuration<Float>("divisionOfIterationsWithRetrospective",
                         "Division of iterations with retrospective",
                         "Minimum percentage of the total number of iterations with a retrospective (0,1)", 0.66666f));
+                put("searchSubstringsWithRetrospective", new Configuration<String>("searchSubstringsWithRetrospective",
+                        "Search substrings with retrospective",
+                        "Substring that will be search in wikipages and activities",
+                        "%retr%" + Constants.SUBSTRING_DELIMITER +
+                                "%revi%" + Constants.SUBSTRING_DELIMITER +
+                                "%week%scrum%"));
             }},
             "Business_As_Usual.md");
 
@@ -33,6 +38,10 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     
     private float getDivisionOfIterationsWithRetrospective() {
         return (float) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue();
+    }
+
+    private List<String> getSearchSubstringsWithRetrospective() {
+        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
     }
 
     @Override
@@ -75,7 +84,8 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
         Map<String, Integer> iterationsResults = new HashMap<>();
 
         // projít výsledky dotazů a dát do jedné mapy => v této mapě by měly být všechny iterace
-        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, this.sqlQueries);
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project,
+                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithRetrospective()));
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 
