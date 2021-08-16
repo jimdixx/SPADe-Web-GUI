@@ -28,9 +28,9 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             new HashMap<>() {{
                 put("divisionOfIterationsWithFeedbackLoop", new Configuration<Percentage>("divisionOfIterationsWithFeedbackLoop",
                         "Division of iterations with feedback loop",
-                        "Minimum percentage of the total number of iterations with feedback loop (0,1)",
-                        "Percentage must be between 0 and 100",
-                        new Percentage(50)));
+                        "Minimum percentage of the total number of iterations with feedback loop (0,100)",
+                        "Percentage must be float number between 0 and 100",
+                        new Percentage(50.00f)));
                 put("maxGapBetweenFeedbackLoopRate", new Configuration<PositiveFloat>("maxGapBetweenFeedbackLoopRate",
                         "Maximum gap between feedback loop rate",
                         "Value that multiplies average iteration length for given project. Result" +

@@ -23,8 +23,8 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
                 put("divisionOfIterationsWithRetrospective", new Configuration<Percentage>("divisionOfIterationsWithRetrospective",
                         "Division of iterations with retrospective",
                         "Minimum percentage of the total number of iterations with a retrospective (0,100)",
-                        "Percentage must be between 0 and 100",
-                        new Percentage(66)));
+                        "Percentage must be float number between 0 and 100",
+                        new Percentage(66.66f)));
                 put("searchSubstringsWithRetrospective", new Configuration<String>("searchSubstringsWithRetrospective",
                         "Search substrings with retrospective",
                         "Substring that will be search in wikipages and activities",

@@ -5,9 +5,9 @@ public class Percentage extends Number {
     public static final float MAX_VALUE = 100;
     public static final float MIN_VALUE = 0;
 
-    private final int value;
+    private final float value;
 
-    public Percentage(int value) throws NumberFormatException {
+    public Percentage(float value) throws NumberFormatException {
         if (value > MAX_VALUE || value < MIN_VALUE) {
             throw new NumberFormatException("Percentage should be between 0 and 100");
         }
@@ -15,12 +15,12 @@ public class Percentage extends Number {
     }
 
     public static Percentage parsePercentage(String value) {
-        return new Percentage(Integer.parseInt(value));
+        return new Percentage(Float.parseFloat(value));
     }
 
     @Override
     public int intValue() {
-        return this.value;
+        return (int) this.value;
     }
 
     @Override
@@ -44,6 +44,6 @@ public class Percentage extends Number {
     }
 
     public float getValue() {
-        return (float) value/100;
+        return value /100;
     }
 }
