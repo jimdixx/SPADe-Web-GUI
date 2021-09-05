@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Model class for project. This is Entity class that is loaded from db.
+ */
 @Entity
 public class Project {
 

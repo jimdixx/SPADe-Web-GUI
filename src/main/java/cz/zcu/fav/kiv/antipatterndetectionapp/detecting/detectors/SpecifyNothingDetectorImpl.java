@@ -10,7 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
@@ -91,16 +94,16 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     }
 
     /**
-     * Postup detekce:
-     *      1) u každého projektu zkusit nalézt jestli obsahuje nějaké wiki stránky se specifikací projektu
-     *      2) dále zkusit najít aktivity, které by naznačovali, že vznikl nějaká specifikace projektu
-     *      3) dále vzít průměrnou délku textu, která je uvedena jako popis u aktivity
-     *      4) pokud nebude nalezena žádná aktivity ani wiki stránka, tak se zkontroluje průměrná délka popisku aktivity
-     *      5) pokud ani jedno nezabere, tak je anti-pattern detekován
+     * Detection procedure:
+     * 1) for each project, try to find out if it contains any wiki pages with the project specification
+     * 2) further try to find activities that would indicate that some project specification has arisen
+     * 3) further take the average length of the text, which is given as a description of the activity
+     * 4) if no activity or wiki page is found, the average length of the activity label is checked
+     * 5) if neither works, the anti-pattern is detected
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project            analyzed project
+     * @param databaseConnection database connection
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {

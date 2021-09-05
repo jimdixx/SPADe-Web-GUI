@@ -101,6 +101,12 @@ public class DatabaseConnection {
         return resultSet;
     }
 
+    /**
+     * The method sends several queries to the database and generates map results from them.
+     * @param project analyzed project
+     * @param queries list of queries
+     * @return object of results
+     */
     public List<List<Map<String, Object>>> executeQueriesWithMultipleResults(Project project, List<String> queries) {
         Statement stmt;
         List<List<Map<String, Object>>> allResults = new ArrayList<>();

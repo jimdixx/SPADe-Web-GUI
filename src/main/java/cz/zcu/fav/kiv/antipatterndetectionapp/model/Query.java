@@ -2,6 +2,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 import java.util.List;
 
+/**
+ * Model class for query.
+ */
 public class Query {
     private List<Project> projects;
     private List<AntiPattern> antiPatterns;

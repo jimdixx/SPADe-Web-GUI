@@ -17,6 +17,12 @@ public class Utils {
 
     private final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
+    /**
+     * Method for transforming array of string to array of longs.
+     *
+     * @param strings array of stings
+     * @return array of longs
+     */
     public static Long[] arrayOfStringsToArrayOfLongs(String[] strings) {
         Long[] longs = new Long[strings.length];
         for (int i = 0; i < strings.length; i++) {
@@ -25,6 +31,13 @@ public class Utils {
         return longs;
     }
 
+    /**
+     * Method for calculating the difference between two dates in days.
+     *
+     * @param firstDate first date
+     * @param secondDate second date
+     * @return number of days between
+     */
     public static long daysBetween(Date firstDate, Date secondDate) {
         //24-May-2017, change this to your desired Start Date
         LocalDate dateBefore = firstDate.toLocalDate();
@@ -33,6 +46,11 @@ public class Utils {
         return ChronoUnit.DAYS.between(dateBefore, dateAfter);
     }
 
+    /**
+     * Auxiliary method for creating a worksheet result details class.
+     * @param resultDetails multiple result details
+     * @return array of result details
+     */
     public static List<ResultDetail> createResultDetailsList(ResultDetail... resultDetails) {
         return new ArrayList<>(Arrays.asList(resultDetails));
     }
@@ -52,6 +70,13 @@ public class Utils {
         return list;
     }
 
+    /**
+     * Method for replacing all parameters in a sql query.
+     *
+     * @param queries list of queries that can contains replacements
+     * @param substrings substring to replace
+     * @return result queries
+     */
     public static List<String> fillQueryWithSearchSubstrings(List<String> queries, List<String> substrings) {
         List<String> preparedQueries = new ArrayList<>();
         for (String query : queries) {
@@ -75,6 +100,12 @@ public class Utils {
         return preparedQueries;
     }
 
+    /**
+     * Method for validating the correctness of substring settings.
+     *
+     * @param substrings substring to check
+     * @return is valid
+     */
     public static boolean checkStringSubstrings(String substrings) {
         if (substrings.startsWith(Constants.SUBSTRING_DELIMITER)) {
             return false;

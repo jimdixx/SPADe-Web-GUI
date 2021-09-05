@@ -1,0 +1,10 @@
+cz.zcu.fav.kiv.antipatterndetectionapp
+cz.zcu.fav.kiv.antipatterndetectionapp.controller
+cz.zcu.fav.kiv.antipatterndetectionapp.detecting
+cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors
+cz.zcu.fav.kiv.antipatterndetectionapp.model
+cz.zcu.fav.kiv.antipatterndetectionapp.model.types
+cz.zcu.fav.kiv.antipatterndetectionapp.repository
+cz.zcu.fav.kiv.antipatterndetectionapp.service
+cz.zcu.fav.kiv.antipatterndetectionapp.spring
+cz.zcu.fav.kiv.antipatterndetectionapp.utils

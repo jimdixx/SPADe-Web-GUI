@@ -1,5 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model.types;
 
+/**
+ * This class represents percentage as a positive float number between 0 an 100.
+ */
 public class Percentage extends Number {
 
     public static final float MAX_VALUE = 100;

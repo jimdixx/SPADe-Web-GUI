@@ -1,5 +1,9 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
+/**
+ * Model class for configuration.
+ * @param <T> configuration can have different data types
+ */
 public class Configuration<T> {
     private String name;
     private String printName;

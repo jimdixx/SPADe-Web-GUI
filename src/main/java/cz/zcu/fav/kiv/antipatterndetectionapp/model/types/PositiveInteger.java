@@ -1,5 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model.types;
 
+/**
+ * This class represents percentage as a positive int number between 0 and MAX_INT.
+ */
 public class PositiveInteger extends Number {
 
     public static final int MAX_VALUE = Integer.MAX_VALUE;

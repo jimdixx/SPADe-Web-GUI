@@ -59,25 +59,25 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         this.sqlQueries = queries;
     }
 
-    private Integer getMaxIterationLength(){
+    private Integer getMaxIterationLength() {
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationLength").getValue()).intValue();
     }
 
-    private Integer getMaxNumberOfTooLongIterations(){
+    private Integer getMaxNumberOfTooLongIterations() {
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 
     /**
-     * Postup detekce:
-     *      1) najít všechny iterace danného projektu
-     *      2) odebrat první a poslední iteraci ( ty mohou být z důvodu nastartování projektu dlouhé)
-     *      3) zjistit jejich délku (rozdíl mezi start date a end date)
-     *      4) pokud iterace přesháne délku 21 dní (nastavitelná prahová hodnota), tak jsou označeny jako moc dlouhé
-     *      5) pokud je nalezena jedna nebo více iterací jako dlouhé, tak je anti pattern detekován
+     * Detection procedure:
+     * 1) find all iterations of a given project
+     * 2) remove the first and last iteration (these can be long due to the start of the project)
+     * 3) find out their length (difference between start date and end date)
+     * 4) if the iterations exceed the length of 21 days (adjustable threshold value), they are marked as too long
+     * 5) if one or more iterations are found as long, then the anti pattern is detected
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project            analyzed project
+     * @param databaseConnection database connection
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {

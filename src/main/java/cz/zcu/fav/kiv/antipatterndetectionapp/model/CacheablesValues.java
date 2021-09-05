@@ -2,6 +2,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 import java.util.List;
 
+/**
+ * Model class for cacheables values.
+ */
 public class CacheablesValues {
 
     // these values ​​store information about currently processed projects and anti-patterns

@@ -4,6 +4,9 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 
 import java.util.Map;
 
+/**
+ * Model class for AP.
+ */
 public class AntiPattern {
 
     private Long id;
