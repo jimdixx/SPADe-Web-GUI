@@ -91,19 +91,24 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     }
 
     /**
-     * Postup detekce:
-     * 1) najít všechny aktivity, které by mohli představovat zákaznické demo (název bude obsahovat substring)
-     * 2) zjistit průměrnou délku iterací
-     * 3) zjistit počet iterací
-     * 4) nejprve porovnat s počtem iterací => iterace a nalezené aktivity by se měly ideálně rovnat (mohou být menší i větší ale né o moc menší)
-     * 5) u každých dvou po sobě jdoucích aktivitách udělat rozdíl datumů a porovnat s průměrnou délkou iterace => rozdíl by se neměl moc lišit od průěrné délky iterace
-     * 6) pokud u bodu 4) dojde k detekci máleho počtu nalezených aktivit (tým nedělá aktivity na schůzky a může zaznamenávat pouze do wiki)
-     * 7) najít všechny wiki stránky a udělat join kdy se měnily (může být použita jedná stránka pro více schůzek) s příslušným názvem
-     * 8) udělat group podle dne
+     * Detection procedure
+     * 1) find all activities that could represent a customer demo (the name will include substring)
+     * 2) find out the average length of iterations
+     * 3) find out the number of iterations
+     * 4) first compare with the number of iterations => iterations and the activities found
+     * should be ideally equal (they can be smaller or larger but not much smaller)
+     * 5) for every two consecutive activities, make a difference of dates and compare with
+     * the average length of the iteration => the difference should not differ much from t
+     * he average length of the iteration
+     * 6) if a small number of found activities is detected in point 4)
+     * (the team does not do activities for meetings and can only record to the wiki)
+     * 7) Find all wiki pages and make a join when they have changed
+     * (one page can be used for multiple meetings) with the appropriate name
+     * 8) do a group by day
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project analyzed project
+     * @param databaseConnection database connection
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
@@ -163,7 +168,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
         double halfNumberOfIterations = totalNumberIterations * getDivisionOfIterationsWithFeedbackLoop();
 
-        // pokud je počet iterací, které obsahují alespoň jednu aktivitu s feedbackem, tak je to ideální případ
+        // if the number of iterations that contain at least one feedback activity is the ideal case
         if (totalNumberIterations <= numberOfIterationsWhichContainsAtLeastOneActivityForFeedback) {
             List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                     new ResultDetail("Number of iterations", Long.toString(totalNumberIterations)),
@@ -173,7 +178,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
             return new QueryResultItem(this.antiPattern, false, resultDetails);
 
-            // pokud alespoň v polovině iteracích došlo ke kontaktu se zákazníkem => zkontrolovat rozestupy
+            // if there was contact with the customer in at least half of the iterations => check the spacing
         } else if (feedbackActivityEndDates.size() > halfNumberOfIterations) {
 
             Date firstDate = projectStartDate;
@@ -195,7 +200,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 }
             }
 
-            // rozestupy feedbacků jsou ok
+            // feedback spacing is ok
             List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                     new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
                     new ResultDetail("Conclusion", "Customer feedback has been detected and there is not too much gap between them"));
@@ -203,10 +208,10 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
             return new QueryResultItem(this.antiPattern, false, resultDetails);
 
-            // bylo nalezeno příliš málo aktivit => zkusit se podívat ve wiki stránkách
+            // too few activities found => try to look in wiki pages
         } else {
 
-            // pokud je v každé iteraci alespoň jeda wiki stránka naznačující schůzku => ideální případ
+            // if there is at least one wiki page in each iteration indicating a meeting => ideal case
             if (numberOfIterationsWhichContainsAtLeastOneWikiPageForFeedback >= totalNumberIterations) {
                 List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                         new ResultDetail("Number of iterations", Long.toString(totalNumberIterations)),
@@ -216,7 +221,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 return new QueryResultItem(this.antiPattern, false, resultDetails);
             }
 
-            // pokud alespoň v polovině iteracích došlo ke kontaktu se zákazníkem => zkontrolovat rozestupy
+            // if there was contact with the customer in at least half of the iterations => check the spacing
             Date firstDate = projectStartDate;
             Date secondDate = null;
 
@@ -235,7 +240,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                     return new QueryResultItem(this.antiPattern, true, resultDetails);
                 }
             }
-            // rozestupy feedbacků jsou ok
+            // feedback spacing is ok
             List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                     new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
                     new ResultDetail("Conclusion", "Customer feedback has been detected and there is not too much gap between them"));

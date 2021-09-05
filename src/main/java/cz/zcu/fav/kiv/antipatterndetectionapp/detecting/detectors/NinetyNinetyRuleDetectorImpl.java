@@ -65,16 +65,16 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     }
 
     /**
-     * Postup detekce:
-     * 1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
-     * 2) udělat podíl strávený čas / odhadovaný čas
-     * 3) pokud všechny výsledky podílů budou menší než 1.2 => vše ok
-     * 4) pokud předchozí bod nezabere, tak iterovat přes všechny podíly
-     * 5) pokud budou nalezeny tři iterace po sobě, kde se stále zhoršují odhady => detekováno
+     * Detection procedure
+     * 1) for each iteration, make the sum of time spent and estimated over all activities
+     * 2) Make a share of time spent / estimated time
+     * 3) if all share results are less than 1.2 => all ok
+     * 4) if the previous point does not work, then iterate over all shares
+     * 5) if three iterations are found in a row, where estimates keep getting worse => detected
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project            analyzed project
+     * @param databaseConnection database connection
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {

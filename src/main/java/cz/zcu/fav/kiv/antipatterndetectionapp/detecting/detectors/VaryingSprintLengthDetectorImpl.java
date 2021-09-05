@@ -47,11 +47,11 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private Integer getMaxDaysDifference(){
+    private Integer getMaxDaysDifference() {
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue()).intValue();
     }
 
-    private Integer getMaxIterationChanged(){
+    private Integer getMaxIterationChanged() {
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue()).intValue();
     }
 
@@ -71,19 +71,17 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     }
 
     /**
-     * Postup detekce:
-     *      1) najít všechny iterace pro danný projekt seřazené dle name (start date má divné hodnoty a nejdou iterace po sobě)
-     *      2) odebrání první a poslední iterace z důvodu možných výkyvů
-     *      3) zjistit jejich délku (rozdíl mezi start date a end date)
-     *      4) vždy porovnat dvě po sobě jdoucí iterace
-     *      5) pokud se délka porovnávaných iterací liší o více než 7 dní, tak je zvednut counter
-     *      6) pokud counter překročí hodnotu 2, tak je anti patern detekován
-     * <p>
-     * Alternativa (sledovat rozptyl délek jednotlivých iterací a pokud překročí nějakou hodnotu, tak detevat)
+     * Detection procedure:
+     * 1) find all iterations for a given project sorted by name (start date has strange values ​​and iterations do not follow each other)
+     * 2) removal of the first and last iteration due to possible fluctuations
+     * 3) find out their length (difference between start date and end date)
+     * 4) Always compare two consecutive iterations
+     * 5) if the length of the compared iterations differs by more than 7 days, the counter is raised
+     * 6) if the counter exceeds the value 2, then the anti patern is detected
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project            analyzed project
+     * @param databaseConnection database connection
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {

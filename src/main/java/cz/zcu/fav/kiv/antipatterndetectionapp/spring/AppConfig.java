@@ -12,6 +12,9 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
+/**
+ * A class that configures a web application and loads templates correctly.
+ */
 @Configuration
 @ComponentScan
 @EnableWebMvc

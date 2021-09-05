@@ -30,6 +30,12 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
                 antiPatternService.getAllAntiPatternsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedAntiPatterns)));
     }
 
+    /**
+     * This method iterate over each project and detecting all AP.
+     * @param projects analyzed projects
+     * @param antiPatternDetectors Ap detectoros
+     * @return List of results
+     */
     private List<QueryResult> analyze(List<Project> projects, List<AntiPatternDetector> antiPatternDetectors) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 

@@ -43,7 +43,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
-    
+
     private float getDivisionOfIterationsWithRetrospective() {
         return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
@@ -68,20 +68,20 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     }
 
     /**
-     * Postup detekce:
-     *      1) ke každé iteraci najít všechny aktivity které obsahují název "%retr%"=retrospektiva nebo "%revi%"=revize
-     *      (mohlo by se dále detekovat že si na této aktivitě logují všichni členové, tato aktivita by měla být bez commitu,
-     *      měla by být dokončena někdy ke konci iterace => pokud by se ale vzaly v úvahu všechny tyto atributy, tak nenajedem
-     *      žádnou aktivita => příliš přísná kritéria)
-     *      2) v každé iteraci by měla být alespoň jedna aktivita představující retrospektivu
-     *      3) dále nalézt všechny wiki stránky, které byly upravené nebo vytvořené v dané iteraci
-     *      4) zjistit jestli wiki stránka představuje nějaké poznámky z retrospektivy
-     *      5) výsledky wiki stránek a aktivit dát dohromady a u každé iterace by měl být alespoň jeden záznam
-     *      6) pokud nebude nalezen žádný záznam u více jak jedné třetiny iterací, tak je anti-pattern detekován
+     * Detection procedure
+     * 1) for each iteration find all activities that contain the name "% retr%" = retrospective or "% revi%" = revision
+     * (it could be further detected that all members log in to this activity, this activity should be without a commit,
+     * should be completed sometime at the end of the iteration => but if all these attributes are taken into account,
+     * then we will not eatno activity => too strict criteria)
+     * 2) there should be at least one retrospective activity in each iteration
+     * 3) also find all wiki pages that have been modified or created in the given iteration
+     * 4) find out if the wiki page presents any notes from the retrospective
+     * 5) put the results of wiki pages and activities together and there should be at least one entry for each iteration
+     * 6) if no record is found in more than one third of the iterations, the anti-pattern is detected
      *
-     * @param project            analyzovaný project
-     * @param databaseConnection databázové připojení
-     * @return výsledek detekce
+     * @param project            analyzed project
+     * @param databaseConnection db connection
+     * @return results of detection
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
@@ -91,7 +91,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
         Long totalNumberIterations = 0L;
         Map<String, Integer> iterationsResults = new HashMap<>();
 
-        // projít výsledky dotazů a dát do jedné mapy => v této mapě by měly být všechny iterace
+        // go through the results of the queries and put in one map => in this map should be all iterations
         List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project,
                 Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithRetrospective()));
         for (int i = 0; i < resultSets.size(); i++) {
@@ -119,14 +119,14 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
         }
 
-        int minRetrospectiveLimit =  Math.round(totalNumberIterations * getDivisionOfIterationsWithRetrospective());
+        int minRetrospectiveLimit = Math.round(totalNumberIterations * getDivisionOfIterationsWithRetrospective());
 
         resultDetails.add(new ResultDetail("Min retrospective limit", String.valueOf(minRetrospectiveLimit)));
         resultDetails.add(new ResultDetail("Found retrospectives", String.valueOf(iterationsResults.size())));
         resultDetails.add(new ResultDetail("Total number of iterations", String.valueOf(totalNumberIterations)));
 
 
-        if ( minRetrospectiveLimit > iterationsResults.size() ){
+        if (minRetrospectiveLimit > iterationsResults.size()) {
             resultDetails.add(new ResultDetail("Conclusion", "There is too low number of retrospectives"));
             return new QueryResultItem(this.antiPattern, true, resultDetails);
         } else {

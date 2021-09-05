@@ -15,6 +15,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * A class that takes care of working with AP.
+ */
 @Component
 public class AntiPatternRepository implements ServletContextAware {
 
@@ -23,6 +26,14 @@ public class AntiPatternRepository implements ServletContextAware {
     private ServletContext servletContext;
     private Map<Long, AntiPatternDetector> antiPatternDetectors = init();
 
+    /**
+     * The method that loads all available detectors that implement
+     * the AntiPatternDetector interface creates objects that the
+     * application continues to work with. Detection of all interface
+     * implementations is performed using reflection.
+     *
+     * @return map of all AP
+     */
     private Map<Long, AntiPatternDetector> init() {
         LOGGER.info("-------START CREATING DETECTORS WITH REFLECTION-------");
         Map<Long, AntiPatternDetector> antiPatterns = new HashMap<>();
@@ -42,14 +53,30 @@ public class AntiPatternRepository implements ServletContextAware {
         return antiPatterns;
     }
 
+    /**
+     * Get all loaded AP from global value.
+     *
+     * @return list of AP
+     */
     public List<AntiPatternDetector> getAllAntiPatterns() {
         return new ArrayList<>(this.antiPatternDetectors.values());
     }
 
+    /**
+     * Get AP by given ID.
+     *
+     * @param id AP ID
+     * @return AP
+     */
     public AntiPatternDetector getAntiPatternById(Long id) {
         return this.antiPatternDetectors.getOrDefault(id, null);
     }
 
+    /**
+     * This method load all queries from files for each AP.
+     *
+     * @param servletContext servlet context
+     */
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
@@ -64,6 +91,7 @@ public class AntiPatternRepository implements ServletContextAware {
 
     /**
      * Method for loading list of sql files from given list of files
+     *
      * @param fileNames list of files with sql queries
      * @return list of queries
      */

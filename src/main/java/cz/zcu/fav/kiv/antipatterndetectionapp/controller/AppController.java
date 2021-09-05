@@ -19,6 +19,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * This class contains all endpoints of the web application.
+ */
 @Controller
 public class AppController {
 
@@ -33,30 +36,63 @@ public class AppController {
     @Autowired
     private AntiPatternManager antiPatternManager;
 
+    /**
+     *  This method is called by the GET method and initializes
+     *  the main page of the application (index). Loads all projects
+     *  stored in the db and all implemented AP.
+     *
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         return "index";
     }
 
+    /**
+     *  Method for obtaining project by ID.
+     *
+     * @param id project ID
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/projects/{id}")
     public String getProjectById(@PathVariable Long id, Model model) {
         model.addAttribute("project", projectService.getProjectById(id));
         return "project";
     }
 
+    /**
+     * Method for obtaining all AP.
+     * @return list of AP
+     */
     @GetMapping("/anti-patterns")
-    public @ResponseBody
-    List<AntiPattern> getAllAntiPatterns() {
+    public @ResponseBody List<AntiPattern> getAllAntiPatterns() {
         return antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
     }
 
+    /**
+     * Method for obtaining AP by ID.
+     *
+     * @param id AP ID
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/anti-patterns/{id}")
     public String getAntiPatternById(@PathVariable Long id, Model model) {
         model.addAttribute("antiPattern", antiPatternService.getAntiPatternById(id).getAntiPatternModel());
         return "anti-pattern";
     }
 
+    /**
+     * Method that processes requirements for analyzing selected projects and AP.
+     *
+     * @param model object for passing data to the UI
+     * @param selectedProjects selected project to analyze
+     * @param selectedAntiPatterns selected AP to analyze
+     * @return html file name for thymeleaf template
+     */
     @PostMapping("/analyze")
     public String analyze(Model model,
                           @RequestParam(value = "selectedProjects", required = false) String[] selectedProjects,
@@ -88,7 +124,12 @@ public class AppController {
         return "result";
     }
 
-
+    /**
+     * Method for checking the change of configuration values ​​after pressing the back button in the browser.
+     *
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/analyze")
     public String analyzeGet(Model model) {
         if (antiPatternService.isConfigurationChanged()) {
@@ -102,11 +143,23 @@ public class AppController {
         return "result";
     }
 
+    /**
+     * Method for recalculating the results after a configuration change.
+     *
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/recalculate")
     public String recalculateGet(Model model) {
         return analyzeGet(model);
     }
 
+    /**
+     * Method for recalculating the results after a configuration change.
+     *
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @PostMapping("/recalculate")
     public String resultRecalculate(Model model) {
 
@@ -121,17 +174,36 @@ public class AppController {
         return "result";
     }
 
+    /**
+     * Method for showing about page.
+     *
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/about")
     public String about() {
         return "about";
     }
 
+    /**
+     * Method for getting all configuration from app and set it to the model class.
+     *
+     * @param model object for passing data to the UI
+     * @return html file name for thymeleaf template
+     */
     @GetMapping("/configuration")
     public String configuration(Model model) {
         model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
         return "configuration";
     }
 
+    /**
+     * Method of storing new configurations for individual AP.
+     *
+     * @param model object for passing data to the UI
+     * @param configValues changed configuration values
+     * @param configNames changed configuration names
+     * @return html file name for thymeleaf template
+     */
     @PostMapping("/configuration")
     public String configurationPost(Model model,
                                     @RequestParam(value = "configValues", required = false) String[] configValues,
@@ -151,6 +223,16 @@ public class AppController {
         return "configuration";
     }
 
+    /**
+     * Method for storing configuration values ​​for the respective AP.
+     *
+     * @param model object for passing data to the UI
+     * @param id id of AP
+     * @param configValues new config values
+     * @param configNames configuration names
+     * @param redirectAttrs attributes for redirection
+     * @return redirected html file name for thymeleaf template
+     */
     @PostMapping("/anti-patterns/{id}")
     public String antiPatternsPost(Model model,
                                    @PathVariable Long id,
