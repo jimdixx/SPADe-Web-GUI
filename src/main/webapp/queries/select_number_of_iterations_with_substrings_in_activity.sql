@@ -1,0 +1,2 @@
+/* Select number of iterations which with substring in activity */
+select count(*) over () as 'totalCountOfIterationsWithSubstringsInActivity' from workUnitView as wuv where wuv.projectId = @projectId and (wuv.name like '§0§' or wuv.name like '§1§' or wuv.name like '§2§' or wuv.name like '§3§' or wuv.name like '§4§' or wuv.name like '§5§' or wuv.name like '§6§' or wuv.name like '§7§' or wuv.name like '§8§' or wuv.name like '§9§') group by wuv.iterationName order by wuv.activityEndDate;

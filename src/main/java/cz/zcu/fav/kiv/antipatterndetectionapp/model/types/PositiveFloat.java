@@ -16,22 +16,22 @@ public class PositiveFloat extends Number {
 
     @Override
     public int intValue() {
-        return 0;
+        return (int) this.value;
     }
 
     @Override
     public long longValue() {
-        return 0;
+        return (long) this.value;
     }
 
     @Override
     public float floatValue() {
-        return 0;
+        return this.value;
     }
 
     @Override
     public double doubleValue() {
-        return 0;
+        return this.value;
     }
 
     public static PositiveFloat parsePositiveFloat(String value) {

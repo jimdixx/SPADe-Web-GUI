@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,16 +38,21 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                         new PositiveInteger(1)));
             }});
 
-    private final String sqlFileName = "varying_sprint_length.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "set_first_iteration_id.sql",
+            "set_last_iteration_id.sql",
+            "select_all_iterations_with_lengths_without_first_and_last.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
     private Integer getMaxDaysDifference(){
-        return (Integer) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue();
+        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue()).intValue();
     }
 
     private Integer getMaxIterationChanged(){
-        return (Integer) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue();
+        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue()).intValue();
     }
 
     @Override
@@ -55,8 +61,8 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override

@@ -18,12 +18,10 @@ import java.util.*;
 @Component
 public class AntiPatternRepository implements ServletContextAware {
 
+    private static final String QUERY_DIR = "/queries/";
     private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
-
     private ServletContext servletContext;
     private Map<Long, AntiPatternDetector> antiPatternDetectors = init();
-
-    private static final String QUERY_DIR = "/queries/" ;
 
     private Map<Long, AntiPatternDetector> init() {
         LOGGER.info("-------START CREATING DETECTORS WITH REFLECTION-------");
@@ -57,29 +55,39 @@ public class AntiPatternRepository implements ServletContextAware {
         this.servletContext = servletContext;
         LOGGER.info("-------START READING SQL FROM FILES-------");
         for (AntiPatternDetector antiPatternDetector : getAllAntiPatterns()) {
-            LOGGER.info("Reading sql from file " + antiPatternDetector.getAntiPatternSqlFileName());
-            antiPatternDetector.setSqlQueries(loadSqlFile(antiPatternDetector.getAntiPatternSqlFileName()));
+            LOGGER.info("Reading sql files for AP " + antiPatternDetector.getAntiPatternModel().getPrintName());
+            antiPatternDetector.setSqlQueries(loadSqlFile(antiPatternDetector.getSqlFileNames()));
+
         }
         LOGGER.info("-------FINISHED READING SQL FROM FILES-------");
     }
 
-    private List<String> loadSqlFile(String fileName) {
+    /**
+     * Method for loading list of sql files from given list of files
+     * @param fileNames list of files with sql queries
+     * @return list of queries
+     */
+    private List<String> loadSqlFile(List<String> fileNames) {
         List<String> queries = new ArrayList<>();
 
-        try {
-            URL test = servletContext.getResource(QUERY_DIR + fileName);
-            BufferedReader read = new BufferedReader(
-                    new InputStreamReader(test.openStream()));
-            String line;
-            while ((line = read.readLine()) != null) {
-                if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length()-1) == ';') {
-                    queries.add(line);
+        // walk through all sql filenames and load all sql queries
+        for (String fileName : fileNames) {
+            LOGGER.info("Reading sql query from file name " + fileName);
+            try {
+                URL test = servletContext.getResource(QUERY_DIR + fileName);
+                BufferedReader read = new BufferedReader(
+                        new InputStreamReader(test.openStream()));
+                String line;
+                while ((line = read.readLine()) != null) {
+                    if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length() - 1) == ';') {
+                        queries.add(line);
+                    }
                 }
+                read.close();
+            } catch (IOException e) {
+                LOGGER.warn("Cannot read sql from file " + fileName, e);
+                return queries;
             }
-            read.close();
-        } catch (IOException e) {
-            LOGGER.warn("Cannot read sql from file " + fileName, e);
-            return queries;
         }
         return queries;
     }

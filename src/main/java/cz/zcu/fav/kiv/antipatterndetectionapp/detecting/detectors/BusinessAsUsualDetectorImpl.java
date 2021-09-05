@@ -35,7 +35,11 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
             }},
             "Business_As_Usual.md");
 
-    private final String sqlFileName = "business_as_usual.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "select_number_of_iterations.sql",
+            "select_iterations_with_substrings.sql",
+            "select_all_wikipages_that_is_updated_in_iteration.sql");
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
@@ -54,8 +58,8 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override
