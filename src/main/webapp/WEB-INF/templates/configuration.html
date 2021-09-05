@@ -4,10 +4,10 @@
     <title>Anti Pattern Detector - Configuration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
         .analyze-button-container {
@@ -16,6 +16,20 @@
 
         .container {
             margin-top: 20px;
+        }
+
+        #wrapper {
+            width: 800px;
+            overflow: hidden;
+        }
+
+        #first {
+            width: 500px;
+            float: left;
+        }
+
+        #second {
+            overflow: hidden;
         }
     </style>
 
@@ -54,13 +68,37 @@
                     <div class="col-sm-5">
                         <small th:text="${config.value.description}" th:value="${config.value.name}"
                                class="form-text text-muted"></small>
-                        <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control is-invalid" th:id="${config.value.name}"
-                               name="configValues">
-                        <input th:unless="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
-                               name="configValues">
-                        <input th:value="${config.value.name}" style="display: none" class="form-control"
-                               name="configNames">
-                        <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}" th:value="${config.value.errorMessage}"
+                        <div id="wrapper">
+                            <div id="first">
+                                <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
+                                       class="form-control is-invalid" th:id="${config.value.name}"
+                                       name="configValues">
+                                <input th:unless="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
+                                       class="form-control" th:id="${config.value.name}"
+                                       name="configValues">
+                                <input th:value="${config.value.name}" style="display: none" class="form-control"
+                                       name="configNames">
+                            </div>
+                            <div th:if="${#strings.contains(config.value.name,'Substrings')}" id="second"
+                                 style="margin: 10px; padding-left: 10px">
+                                <svg style="display: inline-block"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     width="20" height="20"
+                                     fill="currentColor"
+                                     class="bi bi-info-circle"
+                                     viewBox="0 0 16 16"
+                                     data-container="body"
+                                     data-toggle="popover"
+                                     data-placement="right"
+                                     data-content="Insert search substrings separated by characters ||, you can enter substrings in sql regex syntax and maximum number of search substrings is ten.">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}"
+                               th:value="${config.value.errorMessage}"
                                class="form-text text-danger"></small>
 
                     </div>
@@ -78,6 +116,17 @@
     <!-- ./Form for configuration values -->
 </div>
 <!-- ./Page body -->
+
+
+<!-- Scripts -->
+<script>
+    // script to popover
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
+
+</script>
+<!-- ./Scripts -->
 
 </body>
 </html>
