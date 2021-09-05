@@ -6,10 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
@@ -37,7 +34,12 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
             }}
     );
 
-    private final String SQL_FILE_NAME = "too_long_sprint.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "set_first_iteration_id.sql",
+            "set_last_iteration_id.sql",
+            "select_all_iterations_with_lengths_without_first_and_last.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
@@ -47,9 +49,10 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.SQL_FILE_NAME;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
+
 
     @Override
     public void setSqlQueries(List<String> queries) {
@@ -57,11 +60,11 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     private Integer getMaxIterationLength(){
-        return (Integer) this.antiPattern.getConfigurations().get("maxIterationLength").getValue();
+        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationLength").getValue()).intValue();
     }
 
     private Integer getMaxNumberOfTooLongIterations(){
-        return (Integer) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue();
+        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 
     /**

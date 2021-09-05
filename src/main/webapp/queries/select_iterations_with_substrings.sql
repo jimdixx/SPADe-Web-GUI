@@ -1,0 +1,2 @@
+/* Select all iteration with detected retrospective activities */
+select iterationName as 'iterationName', count(name) as 'numberOfIssues' from workUnitView where projectId = @projectId and (lower(name) like lower('§0§') or lower(name) like lower('§1§') or lower(name) like lower('§2§') or lower(name) like lower('§3§') or lower(name) like lower('§4§') or lower(name) like lower('§5§') or lower(name) like lower('§6§') or lower(name) like lower('§7§') or lower(name) like lower('§8§') or lower(name) like lower('§9§')) group by iterationName;

@@ -17,22 +17,22 @@ public class PositiveInteger extends Number {
 
     @Override
     public int intValue() {
-        return 0;
+        return this.value;
     }
 
     @Override
     public long longValue() {
-        return 0;
+        return this.value;
     }
 
     @Override
     public float floatValue() {
-        return 0;
+        return this.value;
     }
 
     @Override
     public double doubleValue() {
-        return 0;
+        return this.value;
     }
 
     public static PositiveInteger parsePositiveInteger(String value) {

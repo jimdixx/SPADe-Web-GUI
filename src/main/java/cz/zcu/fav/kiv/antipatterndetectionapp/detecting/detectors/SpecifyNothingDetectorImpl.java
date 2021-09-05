@@ -49,20 +49,26 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
             }},
             "Specify_Nothing.md");
 
-    private final String sqlFileName = "specify_nothing.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "set_number_of_wiki_pages_with_substrings.sql",
+            "set_number_of_activities_with_substrings.sql",
+            "set_average_length_of_activities_description.sql",
+            "select_statistics_for_given_project.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithSpecification() {
-        return (int) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithSpecification() {
-        return (int) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
     }
 
     private int getMinAvgLengthOfActivityDescription() {
-        return (int) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectSpecification() {
@@ -75,8 +81,8 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override
@@ -110,8 +116,8 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
                     Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectSpecification()));
             if (rs != null) {
                 while (rs.next()) {
-                    numberOfWikiPages = rs.getInt("numberOfWikiPages");
-                    numberOfActivitiesForSpecification = rs.getInt("numberOfActivitiesForSpecification");
+                    numberOfWikiPages = rs.getInt("numberOfWikiPagesWithSubstrings");
+                    numberOfActivitiesForSpecification = rs.getInt("numberOfActivitiesWithSubstrings");
                     averageLengthOfIssueDescription = rs.getDouble("averageLengthOfIssueDescription");
                 }
             }

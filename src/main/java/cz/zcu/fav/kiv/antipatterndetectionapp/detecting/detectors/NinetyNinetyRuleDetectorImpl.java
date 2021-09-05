@@ -34,16 +34,19 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
                         new PositiveInteger(2)));
             }});
 
-    private final String sqlFileName = "ninety_ninety_rule.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "select_all_iterations_with_sum_estimated_and_spent_time.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
     private double getMaxDivisionRange() {
-        return (Double) antiPattern.getConfigurations().get("maxDivisionRange").getValue();
+        return ((PositiveFloat) antiPattern.getConfigurations().get("maxDivisionRange").getValue()).doubleValue();
     }
 
     private int getMaxBadDivisionLimit() {
-        return (int) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue()).intValue();
     }
 
     @Override
@@ -52,8 +55,8 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override
@@ -63,11 +66,11 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
 
     /**
      * Postup detekce:
-     *      1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
-     *      2) udělat podíl strávený čas / odhadovaný čas
-     *      3) pokud všechny výsledky podílů budou menší než 1.2 => vše ok
-     *      4) pokud předchozí bod nezabere, tak iterovat přes všechny podíly
-     *      5) pokud budou nalezeny tři iterace po sobě, kde se stále zhoršují odhady => detekováno
+     * 1) pro každou iteraci udělat součet stráveného a odhadovaného času přes všechny aktivity
+     * 2) udělat podíl strávený čas / odhadovaný čas
+     * 3) pokud všechny výsledky podílů budou menší než 1.2 => vše ok
+     * 4) pokud předchozí bod nezabere, tak iterovat přes všechny podíly
+     * 5) pokud budou nalezeny tři iterace po sobě, kde se stále zhoršují odhady => detekováno
      *
      * @param project            analyzovaný project
      * @param databaseConnection databázové připojení

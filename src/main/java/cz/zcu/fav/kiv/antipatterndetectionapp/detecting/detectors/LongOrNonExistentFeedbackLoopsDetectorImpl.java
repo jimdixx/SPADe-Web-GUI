@@ -51,7 +51,16 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             }}
     );
 
-    private final String SQL_FILE_NAME = "long_or_non_existent_feedback_loops.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "select_number_of_iterations.sql",
+            "select_average_iterations_length.sql",
+            "select_number_of_iterations_with_substrings_in_activity.sql",
+            "select_all_activities_with_substrings_and_last_modified_date_as_end_date.sql",
+            "select_project_start_date.sql",
+            "select_project_end_date.sql",
+            "select_all_iterations_that_contains_wikipages_with_substrings.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
@@ -60,7 +69,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     }
 
     private float getMaxGapBetweenFeedbackLoopRate() {
-        return (float) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue();
+        return ((PositiveFloat) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
     }
 
     private List<String> getSearchSubstringsWithFeedbackLoop() {
@@ -72,9 +81,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
         return this.antiPattern;
     }
 
-    @Override
-    public String getAntiPatternSqlFileName() {
-        return this.SQL_FILE_NAME;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override
@@ -124,7 +132,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                     break;
                 case 2:
                     if (rs.size() != 0) {
-                        numberOfIterationsWhichContainsAtLeastOneActivityForFeedback = ((Long) rs.get(0).get("totalCountOfIterationsWithFeedbackActivity")).intValue();
+                        numberOfIterationsWhichContainsAtLeastOneActivityForFeedback = ((Long) rs.get(0).get("totalCountOfIterationsWithSubstringsInActivity")).intValue();
                     }
                     break;
                 case 3:

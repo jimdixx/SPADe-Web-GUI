@@ -44,16 +44,23 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
             }},
             "Road_To_Nowhere.md");
 
-    private final String sqlFileName = "road_to_nowhere.sql";
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "set_first_iteration_start_date.sql",
+            "set_second_iteration_start_date.sql",
+            "set_number_of_activities_with_substrings.sql",
+            "set_number_of_wiki_pages_with_substrings.sql",
+            "select_number_of_activities_and_wiki_pages_with_substrings.sql");
+
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithProjectPlan() {
-        return (int) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithProjectPlan").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithProjectPlan() {
-        return (int) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue();
+        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectPlan() {
@@ -66,8 +73,8 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
     }
 
     @Override
-    public String getAntiPatternSqlFileName() {
-        return this.sqlFileName;
+    public List<String> getSqlFileNames() {
+        return this.SQL_FILE_NAMES;
     }
 
     @Override
@@ -98,8 +105,8 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
                     Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectPlan()));
             if (rs != null) {
                 while (rs.next()) {
-                    numberOfIssuesForProjectPlan = rs.getInt("numberOfIssuesForProjectPlan");
-                    numberOfWikiPagesForProjectPlan = rs.getInt("numberOfWikiPagesForProjectPlan");
+                    numberOfIssuesForProjectPlan = rs.getInt("numberOfActivitiesWithSubstrings");
+                    numberOfWikiPagesForProjectPlan = rs.getInt("numberOfWikiPagesWithSubstrings");
                 }
             }
 

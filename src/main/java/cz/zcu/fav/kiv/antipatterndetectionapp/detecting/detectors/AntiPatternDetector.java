@@ -12,7 +12,7 @@ public interface AntiPatternDetector {
 
     AntiPattern getAntiPatternModel();
 
-    String getAntiPatternSqlFileName();
+    List<String> getSqlFileNames();
 
     void setSqlQueries(List<String> queries);
 
