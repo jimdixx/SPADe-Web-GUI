@@ -97,7 +97,8 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
             totalCountOfIteration++;
             if (!iterationLengths.containsKey("iterationLength") || iterationLengths.get("iterationLength") == null)
                 continue;
-            int iterationLength = (int) iterationLengths.get("iterationLength");
+            int iterationLength = ((Long) iterationLengths.get("iterationLength")).intValue();
+
             if (iterationLength > maxIterationLength) {
                 numberOfLongIterations++;
             }
