@@ -2,7 +2,11 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import org.jsoup.Jsoup;
+import org.springframework.core.io.FileSystemResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -131,6 +135,18 @@ public class AntiPattern {
         } while(tmpIndex < body.length() - 1);
 
         return resultDescription.trim();
+    }
+
+    public String getOperationalizationText() {
+        String myPath = new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\" + this.getName() + ".html";
+        String content = null;
+        try {
+            content = new String ( Files.readAllBytes(Paths.get(myPath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return content;
     }
 
     @Override

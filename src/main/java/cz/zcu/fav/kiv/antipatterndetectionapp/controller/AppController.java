@@ -10,11 +10,19 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Files;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -253,6 +261,71 @@ public class AppController {
         model.addAttribute("antiPatterns", antiPattern);
 
         return "redirect:/anti-patterns/{id}";
+    }
+
+    /**
+     * Method for storing operationalization detail for individual AP
+     *
+     * @param model object for passing data to the UI
+     * @param id id of AP
+     * @param innerText operationalization text (HTML)
+     * @param redirectAttrs attributes for redirection
+     * @return redirected html file name for thymeleaf template
+     */
+    @PostMapping("/anti-patterns/{id}/operationalization")
+    public String antiPatternsPost(Model model,
+                                   @PathVariable Long id,
+                                   @RequestParam(value = "contentTextArea", required = false) String innerText,
+                                   RedirectAttributes redirectAttrs) {
+
+        AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
+
+        String thePath = new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\" + antiPattern.getName() + ".html";
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(thePath));
+            writer.write(innerText);
+            writer.close();
+            redirectAttrs.addFlashAttribute("successMessage", "Operationalization detail has been successfully saved.");
+        } catch (Exception e) {
+        }
+        return "redirect:/anti-patterns/{id}";
+    }
+
+    /**
+     * Method for getting image from operationalization images folder
+     *
+     * @param imageName Name of the image
+     * @return image as a byte array
+     * @throws Exception If image is not in the folder
+     */
+    @GetMapping("/operationalizations/images/{imageName}")
+    public @ResponseBody byte[] imageTestGet(@PathVariable String imageName) throws Exception {
+        File f = new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + imageName);
+        return Files.readAllBytes(f.toPath());
+    }
+
+    /**
+     * Method for uploading an image to the operationalization images folder
+     *
+     * @param file image to upload
+     * @return result
+     */
+    @PostMapping("/uploadImage")
+    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file ) {
+
+        String fileName = file.getOriginalFilename();
+
+        if(new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + fileName).isFile()){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        try {
+            file.transferTo( new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + fileName));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.ok("File uploaded successfully.");
     }
 
 

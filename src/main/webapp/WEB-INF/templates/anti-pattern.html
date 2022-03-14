@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<body>
+<body onload="makeEditorNotEditable()">
 <!-- Navigation bar imported -->
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
@@ -66,14 +67,80 @@
 
         <!-- Anti pattern description -->
         <div class="form-group">
-            <label for="antiPatternDescription">Anti Pattern description:</label>
+            <h5 for="antiPatternDescription">Anti Pattern Description</h5>
             <textarea disabled class="form-control" id="antiPatternDescription" rows="5"
                       th:text="${antiPattern.getDescriptionFromCatalogue()}"></textarea>
         </div>
         <!-- ./Anti pattern description -->
 
+        <hr>
+
+        <!-- Anti pattern operationalization -->
+        <div class="operationalization-detail">
+            <h5 style="display: inline-block">Anti Pattern Operationalization Detail</h5>
+            <button type="button" class="btn edit-button" onclick="enableEdit()">
+                <i class="fa fa-pen-to-square fa-lg"></i>
+            </button>
+            <div class="main-content" id="antiPatternOperationalization">
+                <div class="text-editor-header" id="editorHeader">
+                    <button type="button" class="btn rt" data-element="bold">
+                        <i class="fa fa-bold"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="italic">
+                        <i class="fa fa-italic"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="underline">
+                        <i class="fa fa-underline"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="justifyLeft">
+                        <i class="fa fa-align-left"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="justifyCenter">
+                        <i class="fa fa-align-center"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="justifyRight">
+                        <i class="fa fa-align-right"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="header1">
+                        <i class="fa fa-heading fa-sm">1</i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="header2">
+                        <i class="fa fa-heading fa-sm">2</i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="header3">
+                        <i class="fa fa-heading fa-sm">3</i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="insertUnorderedList">
+                        <i class="fa fa-list-ul"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="insertOrderedList">
+                        <i class="fa fa-list-ol"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="createLink">
+                        <i class="fa fa-link"></i>
+                    </button>
+                    <button type="button" class="btn rt" data-element="insertImage">
+                        <i class="fa fa-image"></i>
+                    </button>
+                    <input type="file" id="imageInput" name="fileupload" hidden>
+                    <button id="upload-button" onclick="uploadFile()" hidden></button>
+                </div>
+                <div class="content form-control" id="content-area" onload="getContent()" th:utext="${antiPattern.getOperationalizationText()}"></div>
+            </div>
+            <form id="operationalization-form" action="#" th:action="@{/anti-patterns/} + ${antiPattern.id} + @{/operationalization}" th:object="${antiPattern}" method="post">
+                <div class="save-operationalization-button-container">
+                    <textarea style="display:none" id="contentTextArea" name="contentTextArea"></textarea>
+                    <button type="submit" class="btn btn-primary custom-button" id="op_save_button">Save changes</button>
+                </div>
+            </form>
+
+        </div>
+        <!-- ./Anti pattern operationalization -->
+
+        <hr>
+
         <!-- Anti pattern configuration form -->
-        <h5>Anti Pattern configurations</h5>
+        <h5>Anti Pattern Configurations</h5>
 
         <!-- Form for configuration values -->
         <form action="#" th:action="@{/anti-patterns/} + ${antiPattern.id}" th:object="${antiPattern}" method="post">
@@ -101,6 +168,10 @@
     </div>
 </div>
 <!-- ./Card for anti pattern details-->
+
+<!-- Scripts -->
+<script th:src="@{/resources/js/rt-editor.js}"></script>
+<!-- ./Scripts -->
 
 </body>
 </html>
