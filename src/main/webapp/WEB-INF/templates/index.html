@@ -4,45 +4,12 @@
     <title>Anti Pattern Detector</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <style>
-        tbody tr:hover {
-            background-color: #F8F9FA;
-        }
-
-        .analyze-button-container {
-            margin: 20px 40% 40px;
-        }
-    </style>
-
-    <script>
-        function checkAllProjects(checkBox) {
-            var projects = document.querySelectorAll('*[id^="project_"]');
-            var i;
-            for (i = 0; i < projects.length; i++) {
-                projects[i].checked = !!checkBox.checked;
-            }
-        }
-
-        function checkAllAntiPatterns(checkBox) {
-            var antiPatterns = document.querySelectorAll('*[id^="anti-pattern"]');
-            var i;
-            for (i = 0; i < antiPatterns.length; i++) {
-                antiPatterns[i].checked = !!checkBox.checked;
-            }
-        }
-
-        function showProgressBar() {
-            $('#progressBar').css('display', '');
-            var analyzeButton = $('#analyzeButton');
-            analyzeButton.addClass('disabled');
-            analyzeButton.text('Analyzing...');
-        }
-    </script>
+    <script th:src="@{/resources/js/core.js}"></script>
 </head>
 <body>
 <!-- Navigation bar imported -->

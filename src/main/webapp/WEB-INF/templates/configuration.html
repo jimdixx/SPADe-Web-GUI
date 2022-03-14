@@ -4,35 +4,11 @@
     <title>Anti Pattern Detector - Configuration</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <style>
-        .analyze-button-container {
-            margin: 20px 40% 40px;
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-
-        #wrapper {
-            width: 800px;
-            overflow: hidden;
-        }
-
-        #first {
-            width: 500px;
-            float: left;
-        }
-
-        #second {
-            overflow: hidden;
-        }
-    </style>
-
 </head>
 <body>
 <!-- Navigation bar imported -->
@@ -119,13 +95,7 @@
 
 
 <!-- Scripts -->
-<script>
-    // script to popover
-    $(document).ready(function () {
-        $('[data-toggle="popover"]').popover();
-    });
-
-</script>
+<script th:src="@{/resources/js/core.js}"></script>
 <!-- ./Scripts -->
 
 </body>

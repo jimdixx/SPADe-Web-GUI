@@ -4,33 +4,11 @@
     <title>Anti Pattern Detector - Results</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <style>
-        .not-found-bg {
-            background-color: #D4EDDA;
-        }
-
-        .found-bg {
-            background-color: #F8D7DA;
-        }
-
-        .icon-style {
-            border-radius: 30px;
-        }
-
-        input, button, submit {
-            border: none;
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-    </style>
-
 </head>
 <body>
 <!-- Navigation bar imported -->
@@ -138,32 +116,8 @@
 <!-- ./Result table container -->
 
 <!-- Scripts -->
-<script>
-    // script to popover
-    $(document).ready(function () {
-        $('[data-toggle="popover"]').popover();
-    });
-
-    // this code handling back browser button to result page
-    window.onload = function () {
-        if (typeof history.pushState === "function") {
-            history.pushState("jibberish", null, null);
-            window.onpopstate = function () {
-                history.pushState('newjibberish', null, null);
-            };
-        } else {
-            var ignoreHashChange = true;
-            window.onhashchange = function () {
-                if (!ignoreHashChange) {
-                    ignoreHashChange = true;
-                    window.location.hash = Math.random();
-                } else {
-                    ignoreHashChange = false;
-                }
-            };
-        }
-    }
-</script>
+<script th:src="@{/resources/js/core.js}"></script>
+<script th:src="@{/resources/js/result.js}"></script>
 <!-- ./Scripts -->
 
 </body>
