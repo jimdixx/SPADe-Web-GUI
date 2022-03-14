@@ -68,7 +68,7 @@
         <div class="form-group">
             <label for="antiPatternDescription">Anti Pattern description:</label>
             <textarea disabled class="form-control" id="antiPatternDescription" rows="5"
-                      th:text="${antiPattern.description}"></textarea>
+                      th:text="${antiPattern.getDescriptionFromCatalogue()}"></textarea>
         </div>
         <!-- ./Anti pattern description -->
 

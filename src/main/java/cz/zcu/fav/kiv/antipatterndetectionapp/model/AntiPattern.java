@@ -1,6 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
+import org.jsoup.Jsoup;
 
 import java.util.Map;
 
@@ -94,6 +95,42 @@ public class AntiPattern {
 
     public String getFullCatalogueUrl() {
         return Constants.ANTI_PATTERN_CATALOGUE_URL + this.catalogueFileName;
+    }
+
+    public String getDescriptionFromCatalogue() {
+        String descriptionHeader = "## Summary ";
+        String url = Constants.ANTI_PATTERN_CATALOGUE_URL_RAW + this.getCatalogueFileName();
+        String html;
+
+        try {
+            html = Jsoup.connect(url).get().html();
+        }
+        catch (Exception e){
+            /* If html from catalogue is not extracted, the description from anti-pattern configuration is returned */
+            return this.getDescription();
+        }
+
+        String body = Jsoup.parse(html).body().text();
+
+        /* Description parsing */
+        int startIndex = body.indexOf(descriptionHeader);
+        String resultDescription = "";
+
+        if(startIndex == 0)
+            return this.getDescription();
+
+        int tmpIndex = startIndex + descriptionHeader.length(); // starting index position
+
+        do {
+            resultDescription += body.charAt(tmpIndex);
+            tmpIndex ++;
+
+            /* If the next headline is reached, the loop is exited */
+            if(body.substring(tmpIndex, tmpIndex + 2).equals("##"))
+                break;
+        } while(tmpIndex < body.length() - 1);
+
+        return resultDescription.trim();
     }
 
     @Override
