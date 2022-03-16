@@ -1,0 +1,53 @@
+{
+    "id": "4",
+    "printName": "Specify Nothing",
+    "name": "SpecifyNothing",
+    "description": "The specification is not done intentionally. Programmers are expected to work better without written specifications.",
+    "configurations": [
+        {
+            "configName": "minNumberOfWikiPagesWithSpecification",
+            "configType": "PositiveInteger",
+            "configuration": {
+                "configName": "minNumberOfWikiPagesWithSpecification",
+                "configPrintName": "Minimum number of wiki pages with project specification",
+                "configDescription": "Number of wiki pages",
+                "configErrorMess": "Minimum number of wikipages must be positive integer number",
+                "configValue": "1"
+            }
+        },
+        {
+            "configName": "minNumberOfActivitiesWithSpecification",
+            "configType": "PositiveInteger",
+            "configuration": {
+                "configName": "minNumberOfActivitiesWithSpecification",
+                "configPrintName": "Minimum number of activities with project specification",
+                "configDescription": "Number of activities",
+                "configErrorMess": "Minimum number of activities with project specification must be positive integer number",
+                "configValue": "1"
+            }
+        },
+        {
+            "configName": "minAvgLengthOfActivityDescription",
+            "configType": "PositiveInteger",
+            "configuration": {
+                "configName": "minAvgLengthOfActivityDescription",
+                "configPrintName": "Minimum average length of activity description",
+                "configDescription": "Minimum average number of character of activity description",
+                "configErrorMess": "Minimum average length of activity description must be positive integer number",
+                "configValue": "150"
+            }
+        },
+        {
+            "configName": "searchSubstringsWithProjectSpecification",
+            "configType": "String",
+            "configuration": {
+                "configName": "searchSubstringsWithProjectSpecification",
+                "configPrintName": "Search substrings with project specification",
+                "configDescription": "Substring that will be search in wikipages and activities",
+                "configErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||",
+                "configValue": "%dsp%||%specifikace%||%specification%||%vize%proj%||%vize%produ%"
+            }
+        }
+    ],
+    "catalogueFileName": "Specify_Nothing.md"
+}

@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.CacheablesValues;
@@ -9,14 +10,16 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 @Service
@@ -199,4 +202,69 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         antiPatterns.add(antiPattern);
         return setErrorMessages(antiPatterns, wrongParameters).get(0);
     }
+
+    @Override
+    public AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
+        String json = "";   // json configuration file
+        JsonNode node = null;
+        try {
+            json = new String(Files.readAllBytes(Paths.get(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\antipatterns\\" + jsonFileName)));
+            node = JsonParser.parse(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Long APid = Long.parseLong(node.get("id").asText());
+        String APPrintName = node.get("printName").asText();
+        String APName = node.get("name").asText();
+        String APDescription = node.get("description").asText();
+        String APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null;
+
+        Map<String, Configuration> APMap = new HashMap<>();
+        
+        JsonNode array = node.get("configurations");
+        Configuration<?> tmpConfig = null;
+
+        for(int i = 0; i < array.size(); i++){
+            JsonNode tmpNode = array.get(i);
+
+            String configName = tmpNode.get("configName").asText();
+            String configType = tmpNode.get("configType").asText();
+
+            JsonNode configNode = tmpNode.get("configuration");
+
+            String CConfigName = configNode.get("configName").asText();
+            String CConfigPrintName = configNode.get("configPrintName").asText();
+            String CConfigDescription = configNode.get("configDescription").asText();
+            String CConfigErrorMess = configNode.get("configErrorMess").asText();
+            String CConfigValue = configNode.get("configValue").asText();
+
+            tmpConfig = getConfiguration(configType, CConfigName, CConfigPrintName, CConfigDescription, CConfigErrorMess, CConfigValue);
+
+            APMap.put(configName, tmpConfig);
+        }
+
+        AntiPattern newAP = new AntiPattern(APid, APPrintName, APName, APDescription, APMap, APCatalogueFileName);
+
+        return newAP;
+    }
+
+    private Configuration<?> getConfiguration(String configType, String name, String printName, String description, String errorMessage, String value){
+
+        if(configType.equals("Percentage")){
+            return new Configuration<>(name, printName, description, errorMessage, new Percentage(Float.parseFloat(value)));
+        }
+        else if(configType.equals("PositiveFloat")){
+            return new Configuration<>(name, printName, description, errorMessage, new PositiveFloat(Float.parseFloat(value)));
+        }
+        else if(configType.equals("PositiveInteger")){
+            return new Configuration<>(name, printName, description, errorMessage, new PositiveInteger(Integer.parseInt(value)));
+        }
+        else if(configType.equals("String")){
+            return new Configuration<>(name, printName, description, errorMessage, value);
+        }
+
+        return null;
+    }
+
 }

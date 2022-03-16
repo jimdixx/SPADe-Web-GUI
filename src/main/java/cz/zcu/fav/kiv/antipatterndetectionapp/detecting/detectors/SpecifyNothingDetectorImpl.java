@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,38 +21,11 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SpecifyNothingDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(4L,
-            "Specify Nothing",
-            "SpecifyNothing",
-            "The specification is not done intentionally. Programmers are " +
-                    "expected to work better without written specifications.",
-            new HashMap<>() {{
-                put("minNumberOfWikiPagesWithSpecification", new Configuration<PositiveInteger>("minNumberOfWikiPagesWithSpecification",
-                        "Minimum number of wiki pages with project specification",
-                        "Number of wiki pages",
-                        "Minimum number of wikipages must be positive integer number",
-                        new PositiveInteger(1)));
-                put("minNumberOfActivitiesWithSpecification", new Configuration<PositiveInteger>("minNumberOfActivitiesWithSpecification",
-                        "Minimum number of activities with project specification",
-                        "Number of activities",
-                        "Minimum number of activities with project specification must be positive integer number",
-                        new PositiveInteger(1)));
-                put("minAvgLengthOfActivityDescription", new Configuration<PositiveInteger>("minAvgLengthOfActivityDescription",
-                        "Minimum average length of activity description",
-                        "Minimum average number of character of activity description",
-                        "Minimum average length of activity description must be positive integer number",
-                        new PositiveInteger(150)));
-                put("searchSubstringsWithProjectSpecification", new Configuration<String>("searchSubstringsWithProjectSpecification",
-                        "Search substrings with project specification",
-                        "Substring that will be search in wikipages and activities",
-                        "Maximum number of substrings is ten and must not starts and ends with characters ||",
-                        "%dsp%" + Constants.SUBSTRING_DELIMITER +
-                                "%specifikace%" + Constants.SUBSTRING_DELIMITER +
-                                "%specification%" + Constants.SUBSTRING_DELIMITER +
-                                "%vize%proj%" + Constants.SUBSTRING_DELIMITER +
-                                "%vize%produ%"));
-            }},
-            "Specify_Nothing.md");
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "SpecifyNothing.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -63,23 +38,28 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithSpecification() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithSpecification() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
     }
 
     private int getMinAvgLengthOfActivityDescription() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectSpecification() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

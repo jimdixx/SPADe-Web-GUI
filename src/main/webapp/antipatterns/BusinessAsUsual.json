@@ -1,0 +1,31 @@
+{
+    "id": "3",
+    "printName": "Business As Usual",
+    "name": "BusinessAsUsual",
+    "description": "Absence of a retrospective after individual iterations or after the completion project.",
+    "configurations": [
+        {
+            "configName": "divisionOfIterationsWithRetrospective",
+            "configType": "Percentage",
+            "configuration": {
+                "configName": "divisionOfIterationsWithRetrospective",
+                "configPrintName": "Division of iterations with retrospective",
+                "configDescription": "Minimum percentage of the total number of iterations with a retrospective (0,100)",
+                "configErrorMess": "Percentage must be float number between 0 and 100",
+                "configValue": "66.66f"
+            }
+        },
+        {
+            "configName": "searchSubstringsWithRetrospective",
+            "configType": "String",
+            "configuration": {
+                "configName": "searchSubstringsWithRetrospective",
+                "configPrintName": "Search substrings with retrospective",
+                "configDescription": "Substring that will be search in wikipages and activities",
+                "configErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || ",
+                "configValue": "%retr%||%revi%||%week%scrum%"
+            }
+        }
+    ],
+    "catalogueFileName": "Business_As_Usual.md"
+}

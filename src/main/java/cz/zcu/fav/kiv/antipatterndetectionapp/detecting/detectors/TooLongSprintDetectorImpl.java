@@ -3,6 +3,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,27 +14,11 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TooLongSprintDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(1L,
-            "Too Long Sprint",
-            "TooLongSprint",
-            "Iterations too long. (ideal iteration length is about 1-2 weeks, " +
-                    "maximum 3 weeks). It could also be detected here if the length " +
-                    "of the iteration does not change often (It can change at the " +
-                    "beginning and at the end of the project, but it should not " +
-                    "change in the already started project).",
-            new HashMap<>() {{
-                put("maxIterationLength", new Configuration<PositiveInteger>("maxIterationLength",
-                        "Max Iteration Length",
-                        "Maximum iteration length in days",
-                        "Max iteration length must be positive integer",
-                        new PositiveInteger(21)));
-                put("maxNumberOfTooLongIterations", new Configuration<PositiveInteger>("maxNumberOfTooLongIterations",
-                        "Max number of foo long iterations",
-                        "Maximum number of too long iterations in project",
-                        "Max number of too long iterations must be positive integer",
-                        new PositiveInteger(0)));
-            }}
-    );
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "TooLongSprint.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -45,6 +31,7 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 
@@ -60,10 +47,12 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     private Integer getMaxIterationLength() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationLength").getValue()).intValue();
     }
 
     private Integer getMaxNumberOfTooLongIterations() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 

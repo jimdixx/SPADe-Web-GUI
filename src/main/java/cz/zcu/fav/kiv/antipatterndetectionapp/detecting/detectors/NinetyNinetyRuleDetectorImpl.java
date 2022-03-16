@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,26 +15,11 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BusinessAsUsualDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(7L,
-            "Ninety Ninety Rule",
-            "NinetyNinetyRule",
-            "The first 90 percent of the code represents the first 90 percent of development time. The " +
-                    "remaining 10 percent of the code represents another 90 percent of development time. " +
-                    "Then decide on a long delay of the project compared to the original estimate. " +
-                    "The functionality is almost done, some number is already closed and is only waiting " +
-                    "for one activity to close, but it has been open for a long time.",
-            new HashMap<>() {{
-                put("maxDivisionRange", new Configuration<PositiveFloat>("maxDivisionRange",
-                        "Maximum ration value",
-                        "Maximum ratio value of spent and estimated time",
-                        "Ration values must be positive float number",
-                        new PositiveFloat(1.25f)));
-                put("maxBadDivisionLimit", new Configuration<PositiveInteger>("maxBadDivisionLimit",
-                        "Maximum iterations thresholds",
-                        "Maximum number of consecutive iterations where the thresholds were exceeded",
-                        "Maximum number of consecutive iterations must be positive integer number",
-                        new PositiveInteger(2)));
-            }});
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "NinetyNinetyRule.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -42,15 +29,18 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private double getMaxDivisionRange() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveFloat) antiPattern.getConfigurations().get("maxDivisionRange").getValue()).doubleValue();
     }
 
     private int getMaxBadDivisionLimit() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue()).intValue();
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

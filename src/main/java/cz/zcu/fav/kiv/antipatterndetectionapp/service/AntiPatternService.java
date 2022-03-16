@@ -37,4 +37,6 @@ public interface AntiPatternService {
     List<AntiPattern> setErrorMessages(List<AntiPattern> antiPatterns, List<String> wrongParameters);
 
     AntiPattern setErrorMessages(AntiPattern antiPattern, List<String> wrongParameters);
+
+    AntiPattern getAntiPatternFromJsonFile(String fileName);
 }

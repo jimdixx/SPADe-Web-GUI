@@ -5,35 +5,23 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+
 
 public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BusinessAsUsualDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(3L,
-            "Business As Usual",
-            "BusinessAsUsual",
-            "Absence of a retrospective after individual " +
-                    "iterations or after the completion project.",
-            new HashMap<>() {{
-                put("divisionOfIterationsWithRetrospective", new Configuration<Percentage>("divisionOfIterationsWithRetrospective",
-                        "Division of iterations with retrospective",
-                        "Minimum percentage of the total number of iterations with a retrospective (0,100)",
-                        "Percentage must be float number between 0 and 100",
-                        new Percentage(66.66f)));
-                put("searchSubstringsWithRetrospective", new Configuration<String>("searchSubstringsWithRetrospective",
-                        "Search substrings with retrospective",
-                        "Substring that will be search in wikipages and activities",
-                        "Maximum number of substrings is ten and must not starts and ends with characters || ",
-                        "%retr%" + Constants.SUBSTRING_DELIMITER +
-                                "%revi%" + Constants.SUBSTRING_DELIMITER +
-                                "%week%scrum%"));
-            }},
-            "Business_As_Usual.md");
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "BusinessAsUsual.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -45,15 +33,18 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithRetrospective() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
 
     private List<String> getSearchSubstringsWithRetrospective() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

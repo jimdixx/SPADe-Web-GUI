@@ -5,6 +5,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,39 +19,11 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
     private final Logger LOGGER = LoggerFactory.getLogger(LongOrNonExistentFeedbackLoopsDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(6L,
-            "Long Or Non Existent Feedback Loops",
-            "LongOrNonExistentFeedbackLoops",
-            "Long spacings between customer feedback or no feedback. The customer " +
-                    "enters the project and sees the final result. In the end, the customer " +
-                    "may not get what he really wanted. With long intervals of feedback, " +
-                    "some misunderstood functionality can be created and we have to spend " +
-                    "a lot of effort and time to redo it. ",
-            new HashMap<>() {{
-                put("divisionOfIterationsWithFeedbackLoop", new Configuration<Percentage>("divisionOfIterationsWithFeedbackLoop",
-                        "Division of iterations with feedback loop",
-                        "Minimum percentage of the total number of iterations with feedback loop (0,100)",
-                        "Percentage must be float number between 0 and 100",
-                        new Percentage(50.00f)));
-                put("maxGapBetweenFeedbackLoopRate", new Configuration<PositiveFloat>("maxGapBetweenFeedbackLoopRate",
-                        "Maximum gap between feedback loop rate",
-                        "Value that multiplies average iteration length for given project. Result" +
-                                " is maximum threshold value for gap between feedback loops in days.",
-                        "Maximum gap between feedback loop rate must be positive float number",
-                        new PositiveFloat(2f)));
-                put("searchSubstringsWithFeedbackLoop", new Configuration<String>("searchSubstringsWithFeedbackLoop",
-                        "Search substrings with feedback loop",
-                        "Substring that will be search in wikipages and activities",
-                        "Maximum number of substrings is ten and must not starts and ends with characters ||",
-                        "%schůz%zákazník%" + Constants.SUBSTRING_DELIMITER +
-                                "%předvedení%zákazník%" + Constants.SUBSTRING_DELIMITER +
-                                "%zákazn%demo%" + Constants.SUBSTRING_DELIMITER +
-                                "%schůz%zadavat%" + Constants.SUBSTRING_DELIMITER +
-                                "%inform%schůz%" + Constants.SUBSTRING_DELIMITER +
-                                "%zákazn%" + Constants.SUBSTRING_DELIMITER +
-                                "%zadavatel%"));
-            }}
-    );
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "LongOrNonExistentFeedbackLoops.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -65,19 +39,23 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithFeedbackLoop() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
     }
 
     private float getMaxGapBetweenFeedbackLoopRate() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveFloat) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
     }
 
     private List<String> getSearchSubstringsWithFeedbackLoop() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

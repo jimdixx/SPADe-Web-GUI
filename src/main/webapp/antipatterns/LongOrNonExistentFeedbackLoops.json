@@ -1,0 +1,41 @@
+{
+    "id": "6",
+    "printName": "Long Or Non Existent Feedback Loops",
+    "name": "LongOrNonExistentFeedbackLoops",
+    "description": "Long spacings between customer feedback or no feedback. The customer enters the project and sees the final result. In the end, the customer may not get what he really wanted. With long intervals of feedback, some misunderstood functionality can be created and we have to spend a lot of effort and time to redo it. ",
+    "configurations": [
+        {
+            "configName": "divisionOfIterationsWithFeedbackLoop",
+            "configType": "Percentage",
+            "configuration": {
+                "configName": "divisionOfIterationsWithFeedbackLoop",
+                "configPrintName": "Division of iterations with feedback loop",
+                "configDescription": "Minimum percentage of the total number of iterations with feedback loop (0,100)",
+                "configErrorMess": "Percentage must be float number between 0 and 100",
+                "configValue": "50.00f"
+            }
+        },
+        {
+            "configName": "maxGapBetweenFeedbackLoopRate",
+            "configType": "PositiveFloat",
+            "configuration": {
+                "configName": "maxGapBetweenFeedbackLoopRate",
+                "configPrintName": "Maximum gap between feedback loop rate",
+                "configDescription": "Value that multiplies average iteration length for given project. Result is maximum threshold value for gap between feedback loops in days.",
+                "configErrorMess": "Maximum gap between feedback loop rate must be positive float number",
+                "configValue": "2f"
+            }
+        },
+        {
+            "configName": "searchSubstringsWithFeedbackLoop",
+            "configType": "String",
+            "configuration": {
+                "configName": "searchSubstringsWithFeedbackLoop",
+                "configPrintName": "Search substrings with feedback loop",
+                "configDescription": "Substring that will be search in wikipages and activities",
+                "configErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||",
+                "configValue": "%schůz%zákazník%||%předvedení%zákazník%||%zákazn%demo%||%schůz%zadavat%||%inform%schůz%||%zákazn%||%zadavatel%"
+            }
+        }
+    ]
+}

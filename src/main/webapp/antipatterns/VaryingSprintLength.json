@@ -1,0 +1,30 @@
+{
+    "id": "2",
+    "printName": "Varying Sprint Length",
+    "name": "VaryingSprintLength",
+    "description": "The length of the sprint changes very often. It is clear that iterations will be different lengths at the beginning and end of the project, but the length of the sprint should not change during the project.",
+    "configurations": [
+        {
+            "configName": "maxDaysDifference",
+            "configType": "PositiveInteger",
+            "configuration": {
+                "configName": "maxDaysDifference",
+                "configPrintName": "Max days difference",
+                "configDescription": "Maximum distance of two consecutive iterations in days",
+                "configErrorMess": "Maximum distance must be positive integer number",
+                "configValue": "7"
+            }
+        },
+        {
+            "configName": "maxIterationChanged",
+            "configType": "PositiveInteger",
+            "configuration": {
+                "configName": "maxIterationChanged",
+                "configPrintName": "Max number of iteration changed",
+                "configDescription": "Maximum allowed number of significant changes in iteration lengths",
+                "configErrorMess": "Maximum number of iterations changed must be positive integer number",
+                "configValue": "1"
+            }
+        }
+    ]
+}

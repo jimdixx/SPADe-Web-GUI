@@ -3,6 +3,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,26 +19,11 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VaryingSprintLengthDetectorImpl.class);
 
-    private final AntiPattern antiPattern = new AntiPattern(2L,
-            "Varying Sprint Length",
-            "VaryingSprintLength",
-            "The length of the sprint changes very often. " +
-                    "It is clear that iterations will be different " +
-                    "lengths at the beginning and end of the project, " +
-                    "but the length of the sprint should not change " +
-                    "during the project.",
-            new HashMap<>() {{
-                put("maxDaysDifference", new Configuration<PositiveInteger>("maxDaysDifference",
-                        "Max days difference",
-                        "Maximum distance of two consecutive iterations in days",
-                        "Maximum distance must be positive integer number",
-                        new PositiveInteger(7)));
-                put("maxIterationChanged", new Configuration<PositiveInteger>("maxIterationChanged",
-                        "Max number of iteration changed",
-                        "Maximum allowed number of significant changes in iteration lengths",
-                        "Maximum number of iterations changed must be positive integer number",
-                        new PositiveInteger(1)));
-            }});
+    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
+
+    public final String configJsonFileName = "VaryingSprintLength.json";
+
+    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -48,15 +35,18 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private Integer getMaxDaysDifference() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue()).intValue();
     }
 
     private Integer getMaxIterationChanged() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue()).intValue();
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
+        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 
