@@ -221,7 +221,7 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         String APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null;
 
         Map<String, Configuration> APMap = new HashMap<>();
-        
+
         JsonNode array = node.get("configurations");
         Configuration<?> tmpConfig = null;
 

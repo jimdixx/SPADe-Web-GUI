@@ -328,5 +328,15 @@ public class AppController {
         return ResponseEntity.ok("File uploaded successfully.");
     }
 
+    /**
+     * Method for showing login page.
+     *
+     * @return html file name for thymeleaf template
+     */
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
 
 }
