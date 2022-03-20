@@ -7,6 +7,13 @@ $('#operationalization-form').submit(function() {
 });
 
 /**
+ * Make editor not editable when page is loaded
+ */
+window.addEventListener("load",function(event) {
+    makeEditorNotEditable();
+},false);
+
+/**
  * Set operationalization editor not editable
  */
 function makeEditorNotEditable(){

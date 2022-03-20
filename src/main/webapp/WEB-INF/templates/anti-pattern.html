@@ -12,7 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-<body onload="makeEditorNotEditable()">
+<body>
 <!-- Navigation bar imported -->
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
@@ -159,7 +159,7 @@
                        class="form-text text-danger"></small>
 
             </div>
-            <div class="save-configuration-button-container">
+            <div class="save-individual-configuration-button-container">
                 <button type="submit" class="btn btn-primary custom-button">Save configuration</button>
             </div>
             <!-- ./Anti pattern configuration form -->
@@ -170,7 +170,8 @@
 <!-- ./Card for anti pattern details-->
 
 <!-- Scripts -->
-<script th:src="@{/resources/js/rt-editor.js}"></script>
+<script th:src="@{/resources/js/richtext-editor.js}"></script>
+<script th:src="@{/resources/js/login.js}"></script>
 <!-- ./Scripts -->
 
 </body>

@@ -15,18 +15,34 @@
 <!-- Navigation bar imported -->
 <div th:replace="fragments/navbar :: navBar"></div>
 <!-- ./Navigation bar imported -->
+
+<!-- Container for show error message -->
+<div class="container">
+    <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-danger" role="alert">
+    </div>
+</div>
+<!-- ./Container for show error message -->
+
 <div class="container">
     <h1>Log In</h1>
-    <form id="login-form">
+
+    <form id="login-form" th:action="@{/login}" method="post">
         <div class="form-group">
             <label for="nameInput">Username</label>
-            <input type="text" id="nameInput" class="form-control" placeholder="Enter username">
+            <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Enter username" required>
         </div>
-        <div class="form-group"><label for="passInput">Password</label>
-            <input type="password" id="passInput" class="form-control" placeholder="Password"></div>
+        <div class="form-group">
+            <label for="passInput">Password</label>
+            <input type="password" id="passInput" name="passInput" class="form-control" placeholder="Enter password" required>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
 </div>
+
+<!-- Scripts -->
+<script th:src="@{/resources/js/login.js}"></script>
+<!-- ./Scripts -->
+
 </body>
 </html>

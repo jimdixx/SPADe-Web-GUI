@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -188,9 +190,7 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/about")
-    public String about() {
-        return "about";
-    }
+    public String about() {return "about";}
 
     /**
      * Method for getting all configuration from app and set it to the model class.
@@ -334,8 +334,56 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/login")
-    public String login() {
+    public String login(){
         return "login";
+    }
+
+    /**
+     * Processing login details
+     * @param session current session
+     * @param nameInput input field for name
+     * @param passInput input field for password
+     * @param redirectAttrs redirect attributes for adding flash message
+     * @return html file name for thymeleaf template
+     */
+    @PostMapping("/login")
+    public String loginProcess(HttpSession session,
+                               @RequestParam(value = "nameInput", required = false) String nameInput,
+                               @RequestParam(value = "passInput", required = false) String passInput,
+                               RedirectAttributes redirectAttrs) {
+
+        if(nameInput.equals("admin") && passInput.equals("test")){
+            session.setAttribute("user", "admin");
+            return "redirect:/";
+        }
+
+        redirectAttrs.addFlashAttribute("errorMessage", "Invalid details");
+        return "redirect:/login";
+    }
+
+    /**
+     * Getting the name of the logged user from the session
+     * @param model object for passing data to the UI
+     * @param session current session
+     * @return html file name for thymeleaf template
+     */
+    @GetMapping("/userLogged")
+    public String userLogged(Model model, HttpSession session){
+        String user = (String) session.getAttribute("user");
+        model.addAttribute("user", user);
+        return "redirect:/";
+    }
+
+    /**
+     * Processing logout, removing user from session
+     * @param model object for passing data to the UI
+     * @param session current session
+     * @return html file name for thymeleaf template
+     */
+    @GetMapping("/logout")
+    public String userLogout(Model model, HttpSession session){
+        session.removeAttribute("user");
+        return "redirect:/";
     }
 
 

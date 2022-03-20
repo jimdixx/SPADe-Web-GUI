@@ -132,6 +132,18 @@ input, button, submit {
     overflow: hidden;
 }
 
+#configuration-select-row{
+    width: 50%;
+    margin: 40px auto;
+}
+
+.save-configuration-button-container {
+    width: 30%;
+    margin: 60px auto;
+    display: flex;
+    justify-content: space-between;
+}
+
 /* ==========================================================================
    login.html
    ========================================================================== */

@@ -33,70 +33,89 @@
 
     <h1>Configuration</h1>
 
-    <!-- Form for configuration values -->
-    <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
-        <div th:each="antiPattern : ${antiPatterns}">
-            <h3 th:text="${antiPattern.printName}"></h3>
-            <div th:each="config : ${antiPattern.configurations}">
-                <div class="form-group row">
-                    <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"
-                           class="col-sm-5 col-form-label"></label>
-                    <div class="col-sm-5">
-                        <small th:text="${config.value.description}" th:value="${config.value.name}"
-                               class="form-text text-muted"></small>
-                        <div id="wrapper">
-                            <div id="first">
-                                <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
-                                       class="form-control is-invalid" th:id="${config.value.name}"
-                                       name="configValues">
-                                <input th:unless="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
-                                       class="form-control" th:id="${config.value.name}"
-                                       name="configValues">
-                                <input th:value="${config.value.name}" style="display: none" class="form-control"
-                                       name="configNames">
-                            </div>
-                            <div th:if="${#strings.contains(config.value.name,'Substrings')}" id="second"
-                                 style="margin: 10px; padding-left: 10px">
-                                <svg style="display: inline-block"
-                                     xmlns="http://www.w3.org/2000/svg"
-                                     width="20" height="20"
-                                     fill="currentColor"
-                                     class="bi bi-info-circle"
-                                     viewBox="0 0 16 16"
-                                     data-container="body"
-                                     data-toggle="popover"
-                                     data-placement="right"
-                                     data-content="Insert search substrings separated by characters ||, you can enter substrings in sql regex syntax and maximum number of search substrings is ten.">
-                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}"
-                               th:value="${config.value.errorMessage}"
-                               class="form-text text-danger"></small>
-
-                    </div>
-                </div>
-
+    <!-- Configurations dropdown menu -->
+    <div class="container">
+        <div class="row" id="configuration-select-row">
+            <div class="col text-right"><label>Select from saved configurations:</label></div>
+            <div class="col"><select class="form-control" aria-label="Default select example">
+                <option value="1">Default</option>
+                <option value="2">test-config-1</option>
+                <option value="3">test-config-2</option>
+            </select>
             </div>
         </div>
+    </div>
 
-        <!-- Submit button to save configuration -->
-        <div class="analyze-button-container">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Save</button>
-        </div>
-        <!-- ./Submit button to save configuration -->
-    </form>
-    <!-- ./Form for configuration values -->
-</div>
-<!-- ./Page body -->
+    <hr>
 
 
-<!-- Scripts -->
-<script th:src="@{/resources/js/core.js}"></script>
-<!-- ./Scripts -->
+        <!-- Form for configuration values -->
+        <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
+            <div th:each="antiPattern : ${antiPatterns}">
+                <h3 th:text="${antiPattern.printName}"></h3>
+                <div th:each="config : ${antiPattern.configurations}">
+                    <div class="form-group row">
+                        <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"
+                               class="col-sm-5 col-form-label"></label>
+                        <div class="col-sm-5">
+                            <small th:text="${config.value.description}" th:value="${config.value.name}"
+                                   class="form-text text-muted"></small>
+                            <div id="wrapper">
+                                <div id="first">
+                                    <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
+                                           class="form-control is-invalid" th:id="${config.value.name}"
+                                           name="configValues">
+                                    <input th:unless="${config.value.isErrorMessageShown}"
+                                           th:value="${config.value.value}"
+                                           class="form-control" th:id="${config.value.name}"
+                                           name="configValues">
+                                    <input th:value="${config.value.name}" style="display: none" class="form-control"
+                                           name="configNames">
+                                </div>
+                                <div th:if="${#strings.contains(config.value.name,'Substrings')}" id="second"
+                                     style="margin: 10px; padding-left: 10px">
+                                    <svg style="display: inline-block"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         width="20" height="20"
+                                         fill="currentColor"
+                                         class="bi bi-info-circle"
+                                         viewBox="0 0 16 16"
+                                         data-container="body"
+                                         data-toggle="popover"
+                                         data-placement="right"
+                                         data-content="Insert search substrings separated by characters ||, you can enter substrings in sql regex syntax and maximum number of search substrings is ten.">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}"
+                                   th:value="${config.value.errorMessage}"
+                                   class="form-text text-danger"></small>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Submit button to save configuration -->
+            <div class="save-configuration-button-container">
+                <button type="submit" class="btn btn-primary btn-lg custom-button">Save</button>
+                <button type="submit" class="btn btn-outline-primary btn-lg custom-button">Save as</button>
+            </div>
+            <!-- ./Submit button to save configuration -->
+        </form>
+        <!-- ./Form for configuration values -->
+    </div>
+    <!-- ./Page body -->
+
+
+    <!-- Scripts -->
+    <script th:src="@{/resources/js/core.js}"></script>
+    <script th:src="@{/resources/js/login.js}"></script>
+    <!-- ./Scripts -->
 
 </body>
 </html>
