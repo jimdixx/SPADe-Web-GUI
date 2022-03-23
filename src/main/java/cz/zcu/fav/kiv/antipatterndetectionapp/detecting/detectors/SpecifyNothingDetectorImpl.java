@@ -38,28 +38,23 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithSpecification() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithSpecification() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
     }
 
     private int getMinAvgLengthOfActivityDescription() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectSpecification() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

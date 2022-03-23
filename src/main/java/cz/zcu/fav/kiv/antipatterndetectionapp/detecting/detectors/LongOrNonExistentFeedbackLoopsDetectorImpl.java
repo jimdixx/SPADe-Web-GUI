@@ -39,23 +39,19 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithFeedbackLoop() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
     }
 
     private float getMaxGapBetweenFeedbackLoopRate() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveFloat) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
     }
 
     private List<String> getSearchSubstringsWithFeedbackLoop() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

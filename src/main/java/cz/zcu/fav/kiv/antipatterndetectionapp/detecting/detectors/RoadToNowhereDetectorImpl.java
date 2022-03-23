@@ -39,23 +39,19 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithProjectPlan() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithProjectPlan() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectPlan() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

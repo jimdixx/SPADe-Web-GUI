@@ -31,7 +31,6 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 
@@ -47,12 +46,10 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     private Integer getMaxIterationLength() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationLength").getValue()).intValue();
     }
 
     private Integer getMaxNumberOfTooLongIterations() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 

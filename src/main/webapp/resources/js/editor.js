@@ -75,6 +75,9 @@ elements.forEach(element => {
         else if(command == 'header3'){
             headerH3();
         }
+        else if(command = 'codeFormat'){
+            codeFormat();
+        }
         else{
             document.execCommand(command, false, null);
         }
@@ -168,5 +171,19 @@ function headerH3() {
     else{
         document.execCommand('delete',false,'');
         document.execCommand('insertHTML',false,'<h3>'+S+'</h3>');
+    }
+}
+
+function codeFormat() {
+    let S=window.getSelection().toString();
+    if(S.length == 0)
+        return;
+    if(window.getSelection().anchorNode.parentNode.nodeName.toLowerCase() ===  'pre'){
+        document.execCommand('formatBlock', false, 'div');
+        document.execCommand('insertHTML',false, S);
+    }
+    else{
+        document.execCommand('delete',false,'');
+        document.execCommand('insertHTML',false, '<pre>test</pre>');
     }
 }

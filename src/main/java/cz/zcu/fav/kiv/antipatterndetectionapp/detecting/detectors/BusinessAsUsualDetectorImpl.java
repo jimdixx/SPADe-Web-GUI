@@ -33,18 +33,15 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithRetrospective() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
 
     private List<String> getSearchSubstringsWithRetrospective() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

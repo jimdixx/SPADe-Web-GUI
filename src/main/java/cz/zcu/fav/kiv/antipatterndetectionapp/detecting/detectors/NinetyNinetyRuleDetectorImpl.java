@@ -29,18 +29,15 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private double getMaxDivisionRange() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveFloat) antiPattern.getConfigurations().get("maxDivisionRange").getValue()).doubleValue();
     }
 
     private int getMaxBadDivisionLimit() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue()).intValue();
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 

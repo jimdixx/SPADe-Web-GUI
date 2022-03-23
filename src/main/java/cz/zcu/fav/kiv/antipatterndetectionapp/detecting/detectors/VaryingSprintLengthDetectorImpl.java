@@ -35,18 +35,15 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private Integer getMaxDaysDifference() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue()).intValue();
     }
 
     private Integer getMaxIterationChanged() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue()).intValue();
     }
 
     @Override
     public AntiPattern getAntiPatternModel() {
-        this.antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
         return this.antiPattern;
     }
 
