@@ -33,22 +33,6 @@
 
     <h1>Configuration</h1>
 
-    <!-- Configurations dropdown menu -->
-    <div class="container">
-        <div class="row" id="configuration-select-row">
-            <div class="col text-right"><label>Select from saved configurations:</label></div>
-            <div class="col"><select class="form-control" aria-label="Default select example">
-                <option value="1">Default</option>
-                <option value="2">test-config-1</option>
-                <option value="3">test-config-2</option>
-            </select>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-
         <!-- Form for configuration values -->
         <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
             <div th:each="antiPattern : ${antiPatterns}">
