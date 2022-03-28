@@ -7,6 +7,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,9 @@ public class AppController {
 
     @Autowired
     private AntiPatternManager antiPatternManager;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     /**
      *  This method is called by the GET method and initializes
@@ -352,8 +356,8 @@ public class AppController {
                                @RequestParam(value = "passInput", required = false) String passInput,
                                RedirectAttributes redirectAttrs) {
 
-        if(nameInput.equals("admin") && passInput.equals("test")){
-            session.setAttribute("user", "admin");
+        if(userAccountService.checkCredentials(nameInput, passInput)){
+            session.setAttribute("user", nameInput);
             return "redirect:/";
         }
 
