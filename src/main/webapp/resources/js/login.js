@@ -11,7 +11,6 @@ window.addEventListener("load",function(event) {
 function checkIfUserIsLogged() {
     fetch( '/userLogged' )
         .then( response => {
-            console.log(response.url);
             var url = new URL(response.url);
             var c = url.searchParams.get("user");
             if(c == null)
