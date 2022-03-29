@@ -1,0 +1,90 @@
+{
+    "name" : "Default",
+    "default" : "1",
+    "TooLongSprint": [
+        {
+            "thresholdName": "maxIterationLength",
+            "value": "21"
+        },
+        {
+            "thresholdName": "maxNumberOfTooLongIterations",
+            "value": "0"
+        }
+    ],
+    "VaryingSprintLength": [
+        {
+            "thresholdName": "maxDaysDifference",
+            "value": "7"
+        },
+        {
+            "thresholdName": "maxIterationChanged",
+            "value": "1"
+        }
+    ],
+    "BusinessAsUsual": [
+        {
+            "thresholdName": "divisionOfIterationsWithRetrospective",
+            "value": "66.66f"
+        },
+        {
+           "thresholdName": "searchSubstringsWithRetrospective",
+            "value": "%retr%||%revi%||%week%scrum%"
+        }
+    ],
+    "SpecifyNothing": [
+        {
+            "thresholdName": "minNumberOfWikiPagesWithSpecification",
+            "value": "1"
+        },
+        {
+            "thresholdName": "minNumberOfActivitiesWithSpecification",
+            "value": "1"
+        },
+        {
+            "thresholdName": "minAvgLengthOfActivityDescription",
+            "value": "150"
+        },
+        {
+            "thresholdName": "searchSubstringsWithProjectSpecification",
+            "value": "%dsp%||%specifikace%||%specification%||%vize%proj%||%vize%produ%"
+        }
+    ],
+    "RoadToNowhere": [
+        {
+            "thresholdName": "minNumberOfWikiPagesWithProjectPlan",
+            "value": "1"
+        },
+        {
+            "thresholdName": "minNumberOfActivitiesWithProjectPlan",
+            "value": "1"
+        },
+        {
+            "thresholdName": "searchSubstringsWithProjectPlan",
+            "value": "%plán projektu%||%project plan%||%plan project%||%projektový plán%"
+        }
+    ],
+    "LongOrNonExistentFeedbackLoops": [
+        {
+            "thresholdName": "divisionOfIterationsWithFeedbackLoop",
+            "value": "50.00f"
+        },
+        {
+            "thresholdName": "maxGapBetweenFeedbackLoopRate",
+            "value": "2f"
+        },
+        {
+            "thresholdName": "searchSubstringsWithFeedbackLoop",
+            "value": "%schůz%zákazník%||%předvedení%zákazník%||%zákazn%demo%||%schůz%zadavat%||%inform%schůz%||%zákazn%||%zadavatel%"
+        }
+    ],
+    "NinetyNinetyRule": [
+        {
+            "thresholdName": "maxDivisionRange",
+            "value": "1.25f"
+        },
+        {
+            "thresholdName": "maxBadDivisionLimit",
+            "value": "2"
+        }
+    ]
+}

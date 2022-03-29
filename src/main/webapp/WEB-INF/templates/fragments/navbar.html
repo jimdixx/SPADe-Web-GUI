@@ -1,4 +1,4 @@
-<div th:fragment="navBar" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:fragment="navBar" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
         <a class="navbar-brand">Anti Pattern Detector</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,9 +22,7 @@
                 </li>
                 <li class="nav-item active" id="current-configuration-box">
                     <select class="form-control">
-                        <option value="1">Default</option>
-                        <option value="2">test-config-1</option>
-                        <option value="3">test-config-2</option>
+                        <option th:each="config : ${configList}" th:value = ${config} th:text = ${config}></option>
                     </select>
                 </li>
                 <li class="nav-item active">

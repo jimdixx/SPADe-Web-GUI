@@ -6,6 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.ConfigurationService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.UserAccountService;
 import org.slf4j.Logger;
@@ -28,7 +29,10 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class contains all endpoints of the web application.
@@ -49,6 +53,9 @@ public class AppController {
 
     @Autowired
     private UserAccountService userAccountService;
+
+    @Autowired
+    private ConfigurationService configurationService;
 
     /**
      *  This method is called by the GET method and initializes
@@ -388,6 +395,18 @@ public class AppController {
     public String userLogout(Model model, HttpSession session){
         session.removeAttribute("user");
         return "redirect:/";
+    }
+
+    @ModelAttribute("configList")
+    public List<String> configurationsGetList(HttpSession session){
+        List<String> configList;
+
+        if(session.getAttribute("user") != null)
+            configList = configurationService.getAllConfigurationNames();
+        else
+            configList = configurationService.getDefaultConfigurationNames();
+
+        return configList;
     }
 
 

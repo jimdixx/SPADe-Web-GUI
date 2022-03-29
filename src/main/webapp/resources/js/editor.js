@@ -178,7 +178,7 @@ function codeFormat() {
     let S=window.getSelection().toString();
     if(S.length == 0)
         return;
-    if(window.getSelection().anchorNode.parentNode.nodeName.toLowerCase() ===  'code'){
+    if(window.getSelection().anchorNode.parentNode.nodeName.toLowerCase() ===  'pre'){
         document.execCommand('formatBlock', false, 'div');
         document.execCommand('insertHTML',false, S);
     }
