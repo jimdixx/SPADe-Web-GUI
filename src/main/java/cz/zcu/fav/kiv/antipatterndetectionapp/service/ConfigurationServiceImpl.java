@@ -11,10 +11,12 @@ import java.util.List;
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
 
+    private static final String configurationsLocation = "\\src\\main\\webapp\\configurations";
+
     @Override
     public List<String> getAllConfigurationNames() {
         List<String> configList = new ArrayList<String>();
-        File folder = new File(String.valueOf(Paths.get(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\configurations")));
+        File folder = new File(String.valueOf(Paths.get(new FileSystemResource("").getFile().getAbsolutePath() + configurationsLocation)));
         for (final File fileEntry : folder.listFiles()) {
             configList.add(fileEntry.getName().split("\\.")[0]);
         }
@@ -27,4 +29,5 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         configList.add("Default");
         return configList;
     }
+
 }

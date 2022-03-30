@@ -86,8 +86,8 @@
 
             <!-- Submit button to save configuration -->
             <div class="save-configuration-button-container">
-                <button type="submit" class="btn btn-primary btn-lg custom-button">Save</button>
-                <button type="submit" class="btn btn-outline-primary btn-lg custom-button">Save as</button>
+                <button type="submit" class="btn btn-primary btn-lg custom-button" id="configuration-save-button" hidden>Save</button>
+                <button type="submit" class="btn btn-outline-primary btn-lg custom-button" id="configuration-save-as-button" hidden>Save as</button>
             </div>
             <!-- ./Submit button to save configuration -->
         </form>
@@ -99,6 +99,7 @@
     <!-- Scripts -->
     <script th:src="@{/resources/js/core.js}"></script>
     <script th:src="@{/resources/js/login.js}"></script>
+    <script th:src="@{/resources/js/config-edit.js}"></script>
     <!-- ./Scripts -->
 
 </body>

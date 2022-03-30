@@ -1,4 +1,4 @@
-<div th:fragment="navBar" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
+<div th:fragment="navBar" xmlns:th="http://www.w3.org/1999/xhtml">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
         <a class="navbar-brand">Anti Pattern Detector</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,9 +21,11 @@
                     <span class="nav-link">Configuration:</span>
                 </li>
                 <li class="nav-item active" id="current-configuration-box">
-                    <select class="form-control">
-                        <option th:each="config : ${configList}" th:value = ${config} th:text = ${config}></option>
-                    </select>
+                    <form id="configuration-form" th:action="@{/setSelectedConfiguration}" method="post">
+                        <select class="form-control" id="current-configuration-select" name="current-configuration-select" onchange="this.form.submit()">
+                            <option th:each="configuration : ${configurationList}" th:value = ${configuration} th:text = ${configuration} th:selected="${#strings.equals(configuration, selectedConfiguration)}"></option>
+                        </select>
+                    </form>
                 </li>
                 <li class="nav-item active">
                     <span class="nav-link" id="user-name-container" hidden></span>

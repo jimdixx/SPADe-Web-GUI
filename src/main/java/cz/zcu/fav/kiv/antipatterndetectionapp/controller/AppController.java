@@ -392,21 +392,84 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/logout")
-    public String userLogout(Model model, HttpSession session){
+    public String userLogout(Model model, HttpSession session, RedirectAttributes redirectAttrs){
         session.removeAttribute("user");
+        session.removeAttribute("configuration");
         return "redirect:/";
     }
 
-    @ModelAttribute("configList")
+    /**
+     * Model attribute for getting list of configurations
+     * @param session current session
+     * @return list of configurations
+     */
+    @ModelAttribute("configurationList")
     public List<String> configurationsGetList(HttpSession session){
-        List<String> configList;
+        List<String> configurationList;
 
         if(session.getAttribute("user") != null)
-            configList = configurationService.getAllConfigurationNames();
+            configurationList = configurationService.getAllConfigurationNames();
         else
-            configList = configurationService.getDefaultConfigurationNames();
+            configurationList = configurationService.getDefaultConfigurationNames();
 
-        return configList;
+        return configurationList;
+    }
+
+    /**
+     * Model attribute for getting current configuration
+     * @param session current session
+     * @return name of current configuration
+     */
+    @ModelAttribute("selectedConfiguration")
+    public String configurationGetFromSession(HttpSession session){
+        if(session.getAttribute("configuration") != null)
+            return session.getAttribute("configuration").toString(); // return configuration stored in session
+        else{
+            List<String> configurationList = configurationService.getAllConfigurationNames();
+            if(configurationList.size() == 0)
+                return null;
+
+            return configurationList.get(0); // return first item from the list of default configurations
+        }
+    }
+
+    /**
+     * Processing select of configuration from select box
+     * @param session current session
+     * @param selectedConfigName name of selected configuration
+     * @param redirectAttrs attributes for redirection
+     * @return html page for redirect
+     */
+    @PostMapping("/setSelectedConfiguration")
+    public String setSelectedConfiguration(HttpSession session,
+                                           @RequestParam(value = "current-configuration-select", required = false) String selectedConfigName,
+                                           RedirectAttributes redirectAttrs){
+
+        session.setAttribute("configuration", selectedConfigName); // storing selected configuration to session
+
+        return "redirect:/configuration";
+    }
+
+    /**
+     * Checking if configuration is default and editable by user
+     * @param model object for passing data to the UI
+     * @param session current session
+     * @param configurationName name of the curren configuration
+     * @return html template
+     */
+    @GetMapping("/isConfigEditable/{configurationName}")
+    public String isConfigEditableForUser(Model model, HttpSession session, @PathVariable String configurationName){
+       List<String> defaultConfigurationNames = configurationService.getDefaultConfigurationNames();
+
+        for(int i = 0; i < defaultConfigurationNames.size(); i++){
+            if(defaultConfigurationNames.get(i).equals(configurationName))
+                model.addAttribute("default", "true"); // configuration is default
+        }
+
+        String user = (String) session.getAttribute("user");
+        model.addAttribute("user", user); // user is logged
+
+        return "redirect:/configuration";
     }
 
 
