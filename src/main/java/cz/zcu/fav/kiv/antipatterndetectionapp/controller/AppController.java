@@ -103,6 +103,7 @@ public class AppController {
     @GetMapping("/anti-patterns/{id}")
     public String getAntiPatternById(@PathVariable Long id, Model model) {
         model.addAttribute("antiPattern", antiPatternService.getAntiPatternById(id).getAntiPatternModel());
+        model.addAttribute("description", antiPatternService.getDescriptionFromCatalogue(id));
         return "anti-pattern";
     }
 

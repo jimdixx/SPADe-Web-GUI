@@ -1,6 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.CacheablesValues;
@@ -12,6 +13,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -267,4 +269,42 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         return null;
     }
 
+    @Override
+    public String getDescriptionFromCatalogue(long id) {
+        AntiPattern ap = this.getAntiPatternById(id).getAntiPatternModel();
+
+        String descriptionHeader = "## Summary ";
+        String url = Constants.ANTI_PATTERN_CATALOGUE_URL_RAW + ap.getCatalogueFileName();
+        String html;
+
+        try {
+            html = Jsoup.connect(url).get().html();
+        }
+        catch (Exception e){
+            /* If html from catalogue is not extracted, the description from anti-pattern configuration is returned */
+            return ap.getDescription();
+        }
+
+        String body = Jsoup.parse(html).body().text();
+
+        /* Description parsing */
+        int startIndex = body.indexOf(descriptionHeader);
+        String resultDescription = "";
+
+        if(startIndex == 0)
+            return ap.getDescription();
+
+        int tmpIndex = startIndex + descriptionHeader.length(); // starting index position
+
+        do {
+            resultDescription += body.charAt(tmpIndex);
+            tmpIndex ++;
+
+            /* If the next headline is reached, the loop is exited */
+            if(body.substring(tmpIndex, tmpIndex + 2).equals("##"))
+                break;
+        } while(tmpIndex < body.length() - 1);
+
+        return resultDescription.trim();
+    }
 }

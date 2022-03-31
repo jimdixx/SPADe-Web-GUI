@@ -39,4 +39,6 @@ public interface AntiPatternService {
     AntiPattern setErrorMessages(AntiPattern antiPattern, List<String> wrongParameters);
 
     AntiPattern getAntiPatternFromJsonFile(String fileName);
+
+    String getDescriptionFromCatalogue(long id);
 }
