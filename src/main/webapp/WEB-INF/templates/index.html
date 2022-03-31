@@ -44,7 +44,7 @@
                     <tr th:each="project : ${query.projects}">
                         <td th:text="${project.id}"></td>
                         <td th:text="${project.name}"></td>
-                        <td><a th:href="@{/projects/} + ${project.id}">Show</a></td>
+                        <td><a th:href="@{'/projects/' + ${project.id}}">Show</a></td>
                         <td style="text-align: center">
                             <input checked type="checkbox" class="form-check-input" name="selectedProjects"
                                    th:value="${project.id}" th:id="@{project_} + ${project.id}">
@@ -79,7 +79,7 @@
                     <tr th:each="antiPattern : ${query.antiPatterns}">
                         <td th:text="${antiPattern.id}"></td>
                         <td th:text="${antiPattern.printName}"></td>
-                        <td><a th:href="@{/anti-patterns/} + ${antiPattern.id}">Show</a></td>
+                        <td><a th:href="@{'/anti-patterns/' + ${antiPattern.id}}">Show</a></td>
                         <td style="text-align: center">
                             <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns"
                                    th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">

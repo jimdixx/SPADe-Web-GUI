@@ -8,4 +8,5 @@ public interface ConfigurationService {
 
     List<String> getDefaultConfigurationNames();
 
+
 }
