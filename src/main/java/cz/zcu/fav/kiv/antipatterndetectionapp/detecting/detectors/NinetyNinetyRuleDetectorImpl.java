@@ -29,11 +29,11 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private double getMaxDivisionRange() {
-        return ((PositiveFloat) antiPattern.getConfigurations().get("maxDivisionRange").getValue()).doubleValue();
+        return ((PositiveFloat) antiPattern.getThresholds().get("maxDivisionRange").getValue()).doubleValue();
     }
 
     private int getMaxBadDivisionLimit() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("maxBadDivisionLimit").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("maxBadDivisionLimit").getValue()).intValue();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
@@ -39,15 +38,15 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithFeedbackLoop() {
-        return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
+        return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
     }
 
     private float getMaxGapBetweenFeedbackLoopRate() {
-        return ((PositiveFloat) antiPattern.getConfigurations().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
+        return ((PositiveFloat) antiPattern.getThresholds().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
     }
 
     private List<String> getSearchSubstringsWithFeedbackLoop() {
-        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
+        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
     }
 
     @Override

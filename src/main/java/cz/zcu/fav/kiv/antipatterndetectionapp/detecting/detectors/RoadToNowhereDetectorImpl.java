@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
@@ -39,15 +37,15 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithProjectPlan() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithProjectPlan() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectPlan() {
-        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
+        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
     }
 
     @Override

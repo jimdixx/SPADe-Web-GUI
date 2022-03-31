@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
@@ -8,7 +7,6 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -33,11 +31,11 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithRetrospective() {
-        return ((Percentage) antiPattern.getConfigurations().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
+        return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
 
     private List<String> getSearchSubstringsWithRetrospective() {
-        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
+        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
     }
 
     @Override

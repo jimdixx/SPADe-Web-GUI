@@ -46,11 +46,11 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
     }
 
     private Integer getMaxIterationLength() {
-        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationLength").getValue()).intValue();
+        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationLength").getValue()).intValue();
     }
 
     private Integer getMaxNumberOfTooLongIterations() {
-        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxNumberOfTooLongIterations").getValue()).intValue();
+        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 
     /**

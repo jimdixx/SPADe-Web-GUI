@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
@@ -35,11 +34,11 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private Integer getMaxDaysDifference() {
-        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxDaysDifference").getValue()).intValue();
+        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxDaysDifference").getValue()).intValue();
     }
 
     private Integer getMaxIterationChanged() {
-        return ((PositiveInteger) this.antiPattern.getConfigurations().get("maxIterationChanged").getValue()).intValue();
+        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationChanged").getValue()).intValue();
     }
 
     @Override

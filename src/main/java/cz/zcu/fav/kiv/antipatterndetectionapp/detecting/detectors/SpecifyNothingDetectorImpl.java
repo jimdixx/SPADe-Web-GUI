@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
@@ -38,19 +36,19 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithSpecification() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
     }
 
     private int getMinNumberOfActivitiesWithSpecification() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
     }
 
     private int getMinAvgLengthOfActivityDescription() {
-        return ((PositiveInteger) antiPattern.getConfigurations().get("minAvgLengthOfActivityDescription").getValue()).intValue();
+        return ((PositiveInteger) antiPattern.getThresholds().get("minAvgLengthOfActivityDescription").getValue()).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectSpecification() {
-        return Arrays.asList(((String) antiPattern.getConfigurations().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
+        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
     }
 
     @Override
