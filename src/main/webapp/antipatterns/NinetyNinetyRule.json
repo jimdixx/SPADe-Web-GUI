@@ -3,27 +3,27 @@
     "printName": "Ninety Ninety Rule",
     "name": "NinetyNinetyRule",
     "description": "The first 90 percent of the code represents the first 90 percent of development time. The remaining 10 percent of the code represents another 90 percent of development time. Then decide on a long delay of the project compared to the original estimate. The functionality is almost done, some number is already closed and is only waiting for one activity to close, but it has been open for a long time.",
-    "configurations": [
+    "thresholds": [
         {
-            "configName": "maxDivisionRange",
-            "configType": "PositiveFloat",
-            "configuration": {
-                "configName": "maxDivisionRange",
-                "configPrintName": "Maximum ration value",
-                "configDescription": "Maximum ratio value of spent and estimated time",
-                "configErrorMess": "Ration values must be positive float number",
-                "configValue": "1.25f"
+            "thresholdName": "maxDivisionRange",
+            "thresholdType": "PositiveFloat",
+            "threshold": {
+                "thresholdName": "maxDivisionRange",
+                "thresholdPrintName": "Maximum ration value",
+                "thresholdDescription": "Maximum ratio value of spent and estimated time",
+                "thresholdErrorMess": "Ration values must be positive float number",
+                "thresholdValue": "1.25f"
             }
         },
         {
-            "configName": "maxBadDivisionLimit",
-            "configType": "PositiveInteger",
-            "configuration": {
-                "configName": "maxBadDivisionLimit",
-                "configPrintName": "Maximum iterations thresholds",
-                "configDescription": "Maximum number of consecutive iterations where the thresholds were exceeded",
-                "configErrorMess": "Maximum number of consecutive iterations must be positive integer number",
-                "configValue": "2"
+            "thresholdName": "maxBadDivisionLimit",
+            "thresholdType": "PositiveInteger",
+            "threshold": {
+                "thresholdName": "maxBadDivisionLimit",
+                "thresholdPrintName": "Maximum iterations thresholds",
+                "thresholdDescription": "Maximum number of consecutive iterations where the thresholds were exceeded",
+                "thresholdErrorMess": "Maximum number of consecutive iterations must be positive integer number",
+                "thresholdValue": "2"
             }
         }
     ]

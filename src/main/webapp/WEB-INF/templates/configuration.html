@@ -37,26 +37,26 @@
         <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
             <div th:each="antiPattern : ${antiPatterns}">
                 <h3 th:text="${antiPattern.printName}"></h3>
-                <div th:each="config : ${antiPattern.configurations}">
+                <div th:each="threshold : ${antiPattern.thresholds}">
                     <div class="form-group row">
-                        <label th:text="${config.value.printName} + ':'" th:for="${config.value.name}"
+                        <label th:text="${threshold.value.printName} + ':'" th:for="${threshold.value.name}"
                                class="col-sm-5 col-form-label"></label>
                         <div class="col-sm-5">
-                            <small th:text="${config.value.description}" th:value="${config.value.name}"
+                            <small th:text="${threshold.value.description}" th:value="${threshold.value.name}"
                                    class="form-text text-muted"></small>
                             <div id="wrapper">
                                 <div id="first">
-                                    <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}"
-                                           class="form-control is-invalid" th:id="${config.value.name}"
-                                           name="configValues">
-                                    <input th:unless="${config.value.isErrorMessageShown}"
-                                           th:value="${config.value.value}"
-                                           class="form-control" th:id="${config.value.name}"
-                                           name="configValues">
-                                    <input th:value="${config.value.name}" style="display: none" class="form-control"
-                                           name="configNames">
+                                    <input th:if="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}"
+                                           class="form-control is-invalid" th:id="${threshold.value.name}"
+                                           name="thresholdValues">
+                                    <input th:unless="${threshold.value.isErrorMessageShown}"
+                                           th:value="${threshold.value.value}"
+                                           class="form-control" th:id="${threshold.value.name}"
+                                           name="thresholdValues">
+                                    <input th:value="${threshold.value.name}" style="display: none" class="form-control"
+                                           name="thresholdNames">
                                 </div>
-                                <div th:if="${#strings.contains(config.value.name,'Substrings')}" id="second"
+                                <div th:if="${#strings.contains(threshold.value.name,'Substrings')}" id="second"
                                      style="margin: 10px; padding-left: 10px">
                                     <svg style="display: inline-block"
                                          xmlns="http://www.w3.org/2000/svg"
@@ -74,8 +74,8 @@
                                 </div>
                             </div>
 
-                            <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}"
-                                   th:value="${config.value.errorMessage}"
+                            <small th:if="${threshold.value.isErrorMessageShown}" th:text="${threshold.value.errorMessage}"
+                                   th:value="${threshold.value.errorMessage}"
                                    class="form-text text-danger"></small>
 
                         </div>

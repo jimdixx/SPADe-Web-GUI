@@ -147,18 +147,18 @@
 
         <!-- Form for configuration values -->
         <form action="#" th:action="@{/anti-patterns/} + ${antiPattern.id}" th:object="${antiPattern}" method="post">
-            <div th:each="config : ${antiPattern.configurations}" class="form-group">
-                <label th:text="${config.value.printName} + ':'"
-                       th:for="${config.value.name}"></label>
-                <small th:text="${config.value.description}" th:value="${config.value.name}"
+            <div th:each="threshold : ${antiPattern.thresholds}" class="form-group">
+                <label th:text="${threshold.value.printName} + ':'"
+                       th:for="${threshold.value.name}"></label>
+                <small th:text="${threshold.value.description}" th:value="${threshold.value.name}"
                        class="form-text text-muted"></small>
-                <input th:if="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control is-invalid" th:id="${config.value.name}"
-                       name="configValues">
-                <input th:unless="${config.value.isErrorMessageShown}" th:value="${config.value.value}" class="form-control" th:id="${config.value.name}"
-                       name="configValues">
-                <input th:value="${config.value.name}" style="display: none" class="form-control"
-                       name="configNames">
-                <small th:if="${config.value.isErrorMessageShown}" th:text="${config.value.errorMessage}" th:value="${config.value.errorMessage}"
+                <input th:if="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}" class="form-control is-invalid" th:id="${threshold.value.name}"
+                       name="thresholdValues">
+                <input th:unless="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}" class="form-control" th:id="${threshold.value.name}"
+                       name="thresholdValues">
+                <input th:value="${threshold.value.name}" style="display: none" class="form-control"
+                       name="thresholdNames">
+                <small th:if="${threshold.value.isErrorMessageShown}" th:text="${threshold.value.errorMessage}" th:value="${threshold.value.errorMessage}"
                        class="form-text text-danger"></small>
 
             </div>

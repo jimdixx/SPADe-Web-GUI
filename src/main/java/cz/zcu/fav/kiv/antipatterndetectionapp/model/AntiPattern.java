@@ -18,7 +18,7 @@ public class AntiPattern {
     private String printName;
     private String name;
     private String description;
-    private Map<String, Configuration> configurations;
+    private Map<String, Threshold> thresholds;
     private String catalogueFileName;
 
     public AntiPattern(Long id, String printName, String name, String description) {
@@ -28,20 +28,20 @@ public class AntiPattern {
         this.description = description;
     }
 
-    public AntiPattern(Long id, String printName, String name, String description, Map<String, Configuration> configurations) {
+    public AntiPattern(Long id, String printName, String name, String description, Map<String, Threshold> thresholds) {
         this.id = id;
         this.printName = printName;
         this.name = name;
         this.description = description;
-        this.configurations = configurations;
+        this.thresholds = thresholds;
     }
 
-    public AntiPattern(Long id, String printName, String name, String description, Map<String, Configuration> configurations, String catalogueFileName) {
+    public AntiPattern(Long id, String printName, String name, String description, Map<String, Threshold> thresholds, String catalogueFileName) {
         this.id = id;
         this.printName = printName;
         this.name = name;
         this.description = description;
-        this.configurations = configurations;
+        this.thresholds = thresholds;
         this.catalogueFileName = catalogueFileName;
     }
 
@@ -77,12 +77,12 @@ public class AntiPattern {
         this.description = description;
     }
 
-    public Map<String, Configuration> getConfigurations() {
-        return configurations;
+    public Map<String, Threshold> getThresholds() {
+        return thresholds;
     }
 
-    public void setConfigurations(Map<String, Configuration> configurations) {
-        this.configurations = configurations;
+    public void setThresholds(Map<String, Threshold> thresholds) {
+        this.thresholds = thresholds;
     }
 
     public String getUrl() {
@@ -156,7 +156,7 @@ public class AntiPattern {
                 ", printName='" + printName + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", configurations=" + configurations +
+                ", thresholds=" + thresholds +
                 ", catalogueFileName='" + catalogueFileName + '\'' +
                 '}';
     }

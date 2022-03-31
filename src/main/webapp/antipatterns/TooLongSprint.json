@@ -3,27 +3,27 @@
     "printName": "Too Long Sprint",
     "name": "TooLongSprint",
     "description": "Iterations too long. (ideal iteration length is about 1-2 weeks, maximum 3 weeks). It could also be detected here if the length of the iteration does not change often (It can change at the beginning and at the end of the project, but it should not change in the already started project).",
-    "configurations": [
+    "thresholds": [
         {
-            "configName": "maxIterationLength",
-            "configType": "PositiveInteger",
-            "configuration": {
-                "configName": "maxIterationLength",
-                "configPrintName": "Max Iteration Length",
-                "configDescription": "Maximum iteration length in days",
-                "configErrorMess": "Max iteration length must be positive integer",
-                "configValue": "21"
+            "thresholdName": "maxIterationLength",
+            "thresholdType": "PositiveInteger",
+            "threshold": {
+                "thresholdName": "maxIterationLength",
+                "thresholdPrintName": "Max Iteration Length",
+                "thresholdDescription": "Maximum iteration length in days",
+                "thresholdErrorMess": "Max iteration length must be positive integer",
+                "thresholdValue": "21"
             }
         },
         {
-            "configName": "maxNumberOfTooLongIterations",
-            "configType": "PositiveInteger",
-            "configuration": {
-                "configName": "maxNumberOfTooLongIterations",
-                "configPrintName": "Max number of foo long iterations",
-                "configDescription": "Maximum number of too long iterations in project",
-                "configErrorMess": "Max number of too long iterations must be positive integer",
-                "configValue": "0"
+            "thresholdName": "maxNumberOfTooLongIterations",
+            "thresholdType": "PositiveInteger",
+            "threshold": {
+                "thresholdName": "maxNumberOfTooLongIterations",
+                "thresholdPrintName": "Max number of foo long iterations",
+                "thresholdDescription": "Maximum number of too long iterations in project",
+                "thresholdErrorMess": "Max number of too long iterations must be positive integer",
+                "thresholdValue": "0"
             }
         }
     ]

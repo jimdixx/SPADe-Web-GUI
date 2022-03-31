@@ -1,10 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model;
 
 /**
- * Model class for configuration.
- * @param <T> configuration can have different data types
+ * Model class for threshold.
+ * @param <T> threshold can have different data types
  */
-public class Configuration<T> {
+public class Threshold<T> {
     private String name;
     private String printName;
     private String description;
@@ -12,7 +12,7 @@ public class Configuration<T> {
     private boolean isErrorMessageShown;
     private T value;
 
-    public Configuration(String name, String printName, String description, T value) {
+    public Threshold(String name, String printName, String description, T value) {
         this.name = name;
         this.printName = printName;
         this.description = description;
@@ -20,7 +20,7 @@ public class Configuration<T> {
         this.isErrorMessageShown = false;
     }
 
-    public Configuration(String name, String printName, String description, String errorMessage, T value) {
+    public Threshold(String name, String printName, String description, String errorMessage, T value) {
         this.name = name;
         this.printName = printName;
         this.description = description;

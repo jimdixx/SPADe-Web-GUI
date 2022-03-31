@@ -219,17 +219,17 @@ public class AppController {
      * Method of storing new configurations for individual AP.
      *
      * @param model object for passing data to the UI
-     * @param configValues changed configuration values
-     * @param configNames changed configuration names
+     * @param thresholdValues changed configuration values
+     * @param thresholdNames changed configuration names
      * @return html file name for thymeleaf template
      */
     @PostMapping("/configuration")
     public String configurationPost(Model model,
-                                    @RequestParam(value = "configValues", required = false) String[] configValues,
-                                    @RequestParam(value = "configNames", required = false) String[] configNames) {
+                                    @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
+                                    @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames) {
 
         List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
-        List<String> wrongParameters = antiPatternService.saveNewConfiguration(configNames, configValues);
+        List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "All configuration values has been successfully saved.");
@@ -247,20 +247,20 @@ public class AppController {
      *
      * @param model object for passing data to the UI
      * @param id id of AP
-     * @param configValues new config values
-     * @param configNames configuration names
+     * @param thresholdValues new config values
+     * @param thresholdNames configuration names
      * @param redirectAttrs attributes for redirection
      * @return redirected html file name for thymeleaf template
      */
     @PostMapping("/anti-patterns/{id}")
     public String antiPatternsPost(Model model,
                                    @PathVariable Long id,
-                                   @RequestParam(value = "configValues", required = false) String[] configValues,
-                                   @RequestParam(value = "configNames", required = false) String[] configNames,
+                                   @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
+                                   @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
                                    RedirectAttributes redirectAttrs) {
 
         AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
-        List<String> wrongParameters = antiPatternService.saveNewConfiguration(configNames, configValues);
+        List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
 
         if (wrongParameters.isEmpty()) {
             redirectAttrs.addFlashAttribute("successMessage", "All threshold values has been successfully saved.");

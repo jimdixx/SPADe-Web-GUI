@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.CacheablesValues;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Configuration;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
@@ -48,8 +48,8 @@ public class AntiPatternServiceImpl implements AntiPatternService {
             AntiPattern antiPattern = antiPatternDetector.getAntiPatternModel();
 
             // set to default value
-            for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
-                config.getValue().setErrorMessageShown(false);
+            for (Map.Entry<String, Threshold> threshold : antiPattern.getThresholds().entrySet()) {
+                threshold.getValue().setErrorMessageShown(false);
             }
             antiPatterns.add(antiPattern);
         }
@@ -60,8 +60,8 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     public AntiPattern antiPatternToModel(AntiPatternDetector antiPatternDetector) {
         AntiPattern antiPattern = antiPatternDetector.getAntiPatternModel();
         // set to default value
-        for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
-            config.getValue().setErrorMessageShown(false);
+        for (Map.Entry<String, Threshold> threshold : antiPattern.getThresholds().entrySet()) {
+            threshold.getValue().setErrorMessageShown(false);
         }
         return antiPattern;
     }
@@ -76,68 +76,68 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         return antiPatternDetectors;
     }
 
-    public List<String> saveNewConfiguration(String[] configNames, String[] configValues) {
+    public List<String> saveNewConfiguration(String[] thresholdNames, String[] thresholdValues) {
         List<AntiPatternDetector> antiPatternDetectors = antiPatternRepository.getAllAntiPatterns();
         List<String> incorrectParameters = new ArrayList<>();
 
         for (AntiPatternDetector antiPatternDetector : antiPatternDetectors) {
-            // not every anti-pattern should have configuration
-            if (antiPatternDetector.getAntiPatternModel().getConfigurations() == null) {
+            // not every anti-pattern should have thresholds
+            if (antiPatternDetector.getAntiPatternModel().getThresholds() == null) {
                 continue;
             }
-            for (int i = 0; i < configNames.length; i++) {
-                if (antiPatternDetector.getAntiPatternModel().getConfigurations().containsKey(configNames[i])) {
+            for (int i = 0; i < thresholdNames.length; i++) {
+                if (antiPatternDetector.getAntiPatternModel().getThresholds().containsKey(thresholdNames[i])) {
 
-                    if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Integer.class) {
+                    if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == Integer.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Integer.parseInt(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((Integer.parseInt(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
 
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Percentage.class) {
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == Percentage.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Percentage.parsePercentage(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((Percentage.parsePercentage(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == PositiveInteger.class) {
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == PositiveInteger.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((PositiveInteger.parsePositiveInteger(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((PositiveInteger.parsePositiveInteger(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == PositiveFloat.class) {
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == PositiveFloat.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((PositiveFloat.parsePositiveFloat(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((PositiveFloat.parsePositiveFloat(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Float.class) {
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == Float.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Float.parseFloat(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((Float.parseFloat(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == Double.class) {
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == Double.class) {
                         try {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((Double.parseDouble(configValues[i])));
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((Double.parseDouble(thresholdValues[i])));
                             setConfigurationChanged(true);
                         } catch (NumberFormatException e) {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
-                    } else if (antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).getValue().getClass() == String.class) {
-                        if (Utils.checkStringSubstrings(configValues[i])) {
-                            antiPatternDetector.getAntiPatternModel().getConfigurations().get(configNames[i]).setValue((configValues[i]));
+                    } else if (antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).getValue().getClass() == String.class) {
+                        if (Utils.checkStringSubstrings(thresholdValues[i])) {
+                            antiPatternDetector.getAntiPatternModel().getThresholds().get(thresholdNames[i]).setValue((thresholdValues[i]));
                             setConfigurationChanged(true);
 
                         } else {
-                            incorrectParameters.add(configNames[i]);
+                            incorrectParameters.add(thresholdNames[i]);
                         }
                     }
                 }
@@ -185,11 +185,11 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     @Override
     public List<AntiPattern> setErrorMessages(List<AntiPattern> antiPatterns, List<String> wrongParameters) {
         for (AntiPattern antiPattern : antiPatterns) {
-            for (Map.Entry<String, Configuration> config : antiPattern.getConfigurations().entrySet()) {
-                if (wrongParameters.contains(config.getKey())) {
-                    config.getValue().setErrorMessageShown(true);
+            for (Map.Entry<String, Threshold> threshold : antiPattern.getThresholds().entrySet()) {
+                if (wrongParameters.contains(threshold.getKey())) {
+                    threshold.getValue().setErrorMessageShown(true);
                 } else {
-                    config.getValue().setErrorMessageShown(false);
+                    threshold.getValue().setErrorMessageShown(false);
                 }
             }
         }
@@ -220,28 +220,28 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         String APDescription = node.get("description").asText();
         String APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null;
 
-        Map<String, Configuration> APMap = new HashMap<>();
+        Map<String, Threshold> APMap = new HashMap<>();
 
-        JsonNode array = node.get("configurations");
-        Configuration<?> tmpConfig = null;
+        JsonNode array = node.get("thresholds");
+        Threshold<?> tmpThreshold = null;
 
         for(int i = 0; i < array.size(); i++){
             JsonNode tmpNode = array.get(i);
 
-            String configName = tmpNode.get("configName").asText();
-            String configType = tmpNode.get("configType").asText();
+            String thresholdName = tmpNode.get("thresholdName").asText();
+            String thresholdType = tmpNode.get("thresholdType").asText();
 
-            JsonNode configNode = tmpNode.get("configuration");
+            JsonNode thresholdNode = tmpNode.get("threshold");
 
-            String CConfigName = configNode.get("configName").asText();
-            String CConfigPrintName = configNode.get("configPrintName").asText();
-            String CConfigDescription = configNode.get("configDescription").asText();
-            String CConfigErrorMess = configNode.get("configErrorMess").asText();
-            String CConfigValue = configNode.get("configValue").asText();
+            String tThresholdName = thresholdNode.get("thresholdName").asText();
+            String tThresholdPrintName = thresholdNode.get("thresholdPrintName").asText();
+            String tThresholdDescription = thresholdNode.get("thresholdDescription").asText();
+            String tThresholdErrorMess = thresholdNode.get("thresholdErrorMess").asText();
+            String tThresholdValue = thresholdNode.get("thresholdValue").asText();
 
-            tmpConfig = getConfiguration(configType, CConfigName, CConfigPrintName, CConfigDescription, CConfigErrorMess, CConfigValue);
+            tmpThreshold = getThreshold(thresholdType, tThresholdName, tThresholdPrintName, tThresholdDescription, tThresholdErrorMess, tThresholdValue);
 
-            APMap.put(configName, tmpConfig);
+            APMap.put(thresholdName, tmpThreshold);
         }
 
         AntiPattern newAP = new AntiPattern(APid, APPrintName, APName, APDescription, APMap, APCatalogueFileName);
@@ -249,19 +249,19 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         return newAP;
     }
 
-    private Configuration<?> getConfiguration(String configType, String name, String printName, String description, String errorMessage, String value){
+    private Threshold<?> getThreshold(String thresholdType, String name, String printName, String description, String errorMessage, String value){
 
-        if(configType.equals("Percentage")){
-            return new Configuration<>(name, printName, description, errorMessage, new Percentage(Float.parseFloat(value)));
+        if(thresholdType.equals("Percentage")){
+            return new Threshold<>(name, printName, description, errorMessage, new Percentage(Float.parseFloat(value)));
         }
-        else if(configType.equals("PositiveFloat")){
-            return new Configuration<>(name, printName, description, errorMessage, new PositiveFloat(Float.parseFloat(value)));
+        else if(thresholdType.equals("PositiveFloat")){
+            return new Threshold<>(name, printName, description, errorMessage, new PositiveFloat(Float.parseFloat(value)));
         }
-        else if(configType.equals("PositiveInteger")){
-            return new Configuration<>(name, printName, description, errorMessage, new PositiveInteger(Integer.parseInt(value)));
+        else if(thresholdType.equals("PositiveInteger")){
+            return new Threshold<>(name, printName, description, errorMessage, new PositiveInteger(Integer.parseInt(value)));
         }
-        else if(configType.equals("String")){
-            return new Configuration<>(name, printName, description, errorMessage, value);
+        else if(thresholdType.equals("String")){
+            return new Threshold<>(name, printName, description, errorMessage, value);
         }
 
         return null;
