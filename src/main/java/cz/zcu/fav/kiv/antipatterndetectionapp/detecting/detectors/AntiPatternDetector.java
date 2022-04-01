@@ -13,6 +13,19 @@ import java.util.List;
  * you should implements all method correctly, see example TooLongSprintDetector.java
  */
 public interface AntiPatternDetector {
+    /**
+     * Method for setting anti-pattern to the detector
+     *
+     * @param antiPattern ap to set
+     */
+    void setAntiPattern(AntiPattern antiPattern);
+
+    /**
+     * Method for getting name of the json file with anti-pattern details
+     *
+     * @return json file name
+     */
+    String getJsonFileName();
 
     /**
      * Method for getting AP like model class for manipulating on UI.

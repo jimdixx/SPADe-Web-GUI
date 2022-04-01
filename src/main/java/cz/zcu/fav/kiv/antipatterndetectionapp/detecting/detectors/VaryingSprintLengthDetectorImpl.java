@@ -18,11 +18,9 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VaryingSprintLengthDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "VaryingSprintLength.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -39,6 +37,16 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
     private Integer getMaxIterationChanged() {
         return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationChanged").getValue()).intValue();
+    }
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
     }
 
     @Override

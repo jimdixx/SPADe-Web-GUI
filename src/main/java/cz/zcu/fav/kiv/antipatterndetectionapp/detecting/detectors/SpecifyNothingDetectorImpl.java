@@ -19,11 +19,9 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SpecifyNothingDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "SpecifyNothing.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -49,6 +47,16 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
     private List<String> getSearchSubstringsWithProjectSpecification() {
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
+    }
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
     }
 
     @Override

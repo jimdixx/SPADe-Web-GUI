@@ -18,11 +18,9 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
     private final Logger LOGGER = LoggerFactory.getLogger(LongOrNonExistentFeedbackLoopsDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "LongOrNonExistentFeedbackLoops.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -47,6 +45,16 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
 
     private List<String> getSearchSubstringsWithFeedbackLoop() {
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
+    }
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
     }
 
     @Override

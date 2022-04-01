@@ -15,11 +15,9 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BusinessAsUsualDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "BusinessAsUsual.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -36,6 +34,16 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
     private List<String> getSearchSubstringsWithRetrospective() {
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
+    }
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
     }
 
     @Override

@@ -19,11 +19,9 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SpecifyNothingDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "RoadToNowhere.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -46,6 +44,16 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
     private List<String> getSearchSubstringsWithProjectPlan() {
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
+    }
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
     }
 
     @Override

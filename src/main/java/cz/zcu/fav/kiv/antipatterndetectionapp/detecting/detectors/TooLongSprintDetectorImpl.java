@@ -14,11 +14,9 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     private final Logger LOGGER = LoggerFactory.getLogger(TooLongSprintDetectorImpl.class);
 
-    private AntiPatternService antiPatternService = new AntiPatternServiceImpl();
-
     public final String configJsonFileName = "TooLongSprint.json";
 
-    private AntiPattern antiPattern = antiPatternService.getAntiPatternFromJsonFile(configJsonFileName);
+    private AntiPattern antiPattern;
 
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
@@ -28,6 +26,16 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
+
+    @Override
+    public String getJsonFileName(){
+        return this.configJsonFileName;
+    }
+
+    @Override
+    public void setAntiPattern(AntiPattern antiPattern) {
+        this.antiPattern = antiPattern;
+    }
 
     @Override
     public AntiPattern getAntiPatternModel() {

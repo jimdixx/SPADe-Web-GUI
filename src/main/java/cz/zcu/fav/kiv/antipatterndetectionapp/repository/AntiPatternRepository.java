@@ -1,6 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +29,27 @@ import java.util.*;
 public class AntiPatternRepository implements ServletContextAware {
 
     private static final String QUERY_DIR = "/queries/";
+    private static final String AP_DIR = "/antipatterns/";
     private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
     private ServletContext servletContext;
-    private Map<Long, AntiPatternDetector> antiPatternDetectors = init();
+    private Map<Long, AntiPatternDetector> antiPatternDetectors;
+
+    /**
+     * This method load all queries from files for each AP.
+     *
+     * @param servletContext servlet context
+     */
+    @Override
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+
+        // initialize all detectors
+        this.antiPatternDetectors = initDetectors();
+
+        // initialize sql queries
+        initSqlQueries();
+    }
+
 
     /**
      * The method that loads all available detectors that implement
@@ -34,14 +59,19 @@ public class AntiPatternRepository implements ServletContextAware {
      *
      * @return map of all AP
      */
-    private Map<Long, AntiPatternDetector> init() {
+    private Map<Long, AntiPatternDetector> initDetectors() {
         LOGGER.info("-------START CREATING DETECTORS WITH REFLECTION-------");
+
         Map<Long, AntiPatternDetector> antiPatterns = new HashMap<>();
         try {
             Reflections reflections = new Reflections("cz.zcu.fav.kiv.antipatterndetectionapp");
             Set<Class<? extends AntiPatternDetector>> subTypes = reflections.getSubTypesOf(AntiPatternDetector.class);
             for (Class<? extends AntiPatternDetector> subType : subTypes) {
                 AntiPatternDetector antiPatternDetector = subType.getDeclaredConstructor().newInstance();
+
+                // loading anti-pattern from json file and linking it to the detector file
+                antiPatternDetector.setAntiPattern(getAntiPatternFromJsonFile(antiPatternDetector.getJsonFileName()));
+
                 antiPatterns.putIfAbsent(antiPatternDetector.getAntiPatternModel().getId(), antiPatternDetector);
                 LOGGER.info("Creating detector " + antiPatternDetector.getAntiPatternModel().getPrintName());
             }
@@ -49,8 +79,119 @@ public class AntiPatternRepository implements ServletContextAware {
             e.printStackTrace();
             LOGGER.error("Cannot get all detectors with reflection", e);
         }
+
         LOGGER.info("-------FINISHED CREATING DETECTORS WITH REFLECTION-------");
+
         return antiPatterns;
+    }
+
+    /**
+     *
+     */
+    private void initSqlQueries(){
+        LOGGER.info("-------START READING SQL FROM FILES-------");
+
+        for (AntiPatternDetector antiPatternDetector : getAllAntiPatterns()) {
+            LOGGER.info("Reading sql files for AP " + antiPatternDetector.getAntiPatternModel().getPrintName());
+            antiPatternDetector.setSqlQueries(loadSqlFile(antiPatternDetector.getSqlFileNames()));
+        }
+
+        LOGGER.info("-------FINISHED READING SQL FROM FILES-------");
+    }
+
+
+    /**
+     * Method for loading list of sql files from given list of files
+     *
+     * @param fileNames list of files with sql queries
+     * @return list of queries
+     */
+    private List<String> loadSqlFile(List<String> fileNames) {
+        List<String> queries = new ArrayList<>();
+
+        // walk through all sql filenames and load all sql queries
+        for (String fileName : fileNames) {
+
+            LOGGER.info("Reading sql query from file " + fileName);
+
+            try {
+                URL test = servletContext.getResource(QUERY_DIR + fileName);
+                BufferedReader read = new BufferedReader(
+                        new InputStreamReader(test.openStream()));
+                String line;
+                while ((line = read.readLine()) != null) {
+                    if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length() - 1) == ';') {
+                        queries.add(line);
+                    }
+                }
+                read.close();
+            } catch (IOException e) {
+                LOGGER.error("Cannot read sql from file " + fileName);
+                return queries;
+            }
+        }
+        return queries;
+    }
+
+    /**
+     *
+     * @param jsonFileName
+     * @return
+     */
+    public AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
+        String json = "";   // json configuration file
+        JsonNode node = null;
+
+        LOGGER.info("Reading anti-pattern from json file " + jsonFileName);
+
+        try {
+            URL url = servletContext.getResource(AP_DIR + jsonFileName);
+            BufferedReader read = new BufferedReader(
+                    new InputStreamReader(url.openStream()));
+
+            String line;
+            while ((line = read.readLine()) != null) {
+                json += line;
+            }
+            node = JsonParser.parse(json);
+        } catch (IOException e) {
+            LOGGER.warn("Cannot read anti-pattern from json file " + jsonFileName);
+            return null;
+        }
+
+        Long APid = Long.parseLong(node.get("id").asText());
+        String APPrintName = node.get("printName").asText();
+        String APName = node.get("name").asText();
+        String APDescription = node.get("description").asText();
+        String APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null;
+
+        Map<String, Threshold> APMap = new HashMap<>();
+
+        JsonNode array = node.get("thresholds");
+        Threshold<?> tmpThreshold = null;
+
+        for(int i = 0; i < array.size(); i++){
+            JsonNode tmpNode = array.get(i);
+
+            String thresholdName = tmpNode.get("thresholdName").asText();
+            String thresholdType = tmpNode.get("thresholdType").asText();
+
+            JsonNode thresholdNode = tmpNode.get("threshold");
+
+            String tThresholdName = thresholdNode.get("thresholdName").asText();
+            String tThresholdPrintName = thresholdNode.get("thresholdPrintName").asText();
+            String tThresholdDescription = thresholdNode.get("thresholdDescription").asText();
+            String tThresholdErrorMess = thresholdNode.get("thresholdErrorMess").asText();
+            String tThresholdValue = thresholdNode.get("thresholdValue").asText();
+
+            tmpThreshold = getThreshold(thresholdType, tThresholdName, tThresholdPrintName, tThresholdDescription, tThresholdErrorMess, tThresholdValue);
+
+            APMap.put(thresholdName, tmpThreshold);
+        }
+
+        AntiPattern newAP = new AntiPattern(APid, APPrintName, APName, APDescription, APMap, APCatalogueFileName);
+
+        return newAP;
     }
 
     /**
@@ -73,50 +214,31 @@ public class AntiPatternRepository implements ServletContextAware {
     }
 
     /**
-     * This method load all queries from files for each AP.
      *
-     * @param servletContext servlet context
+     * @param thresholdType
+     * @param name
+     * @param printName
+     * @param description
+     * @param errorMessage
+     * @param value
+     * @return
      */
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-        LOGGER.info("-------START READING SQL FROM FILES-------");
-        for (AntiPatternDetector antiPatternDetector : getAllAntiPatterns()) {
-            LOGGER.info("Reading sql files for AP " + antiPatternDetector.getAntiPatternModel().getPrintName());
-            antiPatternDetector.setSqlQueries(loadSqlFile(antiPatternDetector.getSqlFileNames()));
+    private Threshold<?> getThreshold(String thresholdType, String name, String printName, String description, String errorMessage, String value){
 
+        if(thresholdType.equals("Percentage")){
+            return new Threshold<>(name, printName, description, errorMessage, new Percentage(Float.parseFloat(value)));
         }
-        LOGGER.info("-------FINISHED READING SQL FROM FILES-------");
+        else if(thresholdType.equals("PositiveFloat")){
+            return new Threshold<>(name, printName, description, errorMessage, new PositiveFloat(Float.parseFloat(value)));
+        }
+        else if(thresholdType.equals("PositiveInteger")){
+            return new Threshold<>(name, printName, description, errorMessage, new PositiveInteger(Integer.parseInt(value)));
+        }
+        else if(thresholdType.equals("String")){
+            return new Threshold<>(name, printName, description, errorMessage, value);
+        }
+
+        return null;
     }
 
-    /**
-     * Method for loading list of sql files from given list of files
-     *
-     * @param fileNames list of files with sql queries
-     * @return list of queries
-     */
-    private List<String> loadSqlFile(List<String> fileNames) {
-        List<String> queries = new ArrayList<>();
-
-        // walk through all sql filenames and load all sql queries
-        for (String fileName : fileNames) {
-            LOGGER.info("Reading sql query from file name " + fileName);
-            try {
-                URL test = servletContext.getResource(QUERY_DIR + fileName);
-                BufferedReader read = new BufferedReader(
-                        new InputStreamReader(test.openStream()));
-                String line;
-                while ((line = read.readLine()) != null) {
-                    if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length() - 1) == ';') {
-                        queries.add(line);
-                    }
-                }
-                read.close();
-            } catch (IOException e) {
-                LOGGER.warn("Cannot read sql from file " + fileName, e);
-                return queries;
-            }
-        }
-        return queries;
-    }
 }
