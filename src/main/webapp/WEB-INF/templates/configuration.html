@@ -55,6 +55,8 @@
                                            name="thresholdValues">
                                     <input th:value="${threshold.value.name}" style="display: none" class="form-control"
                                            name="thresholdNames">
+                                    <input th:value="${antiPattern.name}" style="display: none" class="form-control"
+                                           name="antiPatternNames">
                                 </div>
                                 <div th:if="${#strings.contains(threshold.value.name,'Substrings')}" id="second"
                                      style="margin: 10px; padding-left: 10px">

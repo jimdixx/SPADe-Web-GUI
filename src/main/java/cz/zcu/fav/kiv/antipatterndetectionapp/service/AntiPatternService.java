@@ -18,8 +18,6 @@ public interface AntiPatternService {
 
     List<AntiPatternDetector> getAllAntiPatternsForGivenIds(Long[] ids);
 
-    List<String> saveNewConfiguration(String[] configNames, String[] configValues);
-
     void saveAnalyzedProjects(String[] selectedProjects, String[] selectedAntiPatterns);
 
     String[] getAnalyzedProjects();

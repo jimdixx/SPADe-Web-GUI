@@ -234,10 +234,15 @@ public class AppController {
     @PostMapping("/configuration")
     public String configurationPost(Model model,
                                     @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
-                                    @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames) {
+                                    @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
+                                    @RequestParam(value = "antiPatternNames", required = false) String[] antiPatternNames,
+                                    HttpSession session) {
+
+        String currentConfigurationName = configurationGetFromSession(session);
 
         List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
-        List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
+
+        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "All configuration values has been successfully saved.");
@@ -247,6 +252,7 @@ public class AppController {
         }
 
         model.addAttribute("antiPatterns", antiPatterns);
+        model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "configuration";
     }
 
@@ -268,7 +274,8 @@ public class AppController {
                                    RedirectAttributes redirectAttrs) {
 
         AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
-        List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
+        //List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
+        List<String> wrongParameters = new ArrayList<>(); //TODO
 
         if (wrongParameters.isEmpty()) {
             redirectAttrs.addFlashAttribute("successMessage", "All threshold values has been successfully saved.");
