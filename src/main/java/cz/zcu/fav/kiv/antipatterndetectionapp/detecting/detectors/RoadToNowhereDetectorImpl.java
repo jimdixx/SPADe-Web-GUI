@@ -2,6 +2,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternServiceImpl;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
@@ -34,15 +37,24 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private int getMinNumberOfWikiPagesWithProjectPlan() {
+    private int getMinNumberOfWikiPagesWithProjectPlan(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithProjectPlan"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
     }
 
-    private int getMinNumberOfActivitiesWithProjectPlan() {
+    private int getMinNumberOfActivitiesWithProjectPlan(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithProjectPlan"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
     }
 
-    private List<String> getSearchSubstringsWithProjectPlan() {
+    private List<String> getSearchSubstringsWithProjectPlan(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return Arrays.asList(thresholds.get("searchSubstringsWithProjectPlan").split("\\|\\|"));
+
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
     }
 
@@ -82,7 +94,7 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         /* Init values */
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -91,7 +103,7 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
 
         try {
             ResultSet rs = databaseConnection.executeQueries(project,
-                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectPlan()));
+                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectPlan(thresholds)));
             if (rs != null) {
                 while (rs.next()) {
                     numberOfIssuesForProjectPlan = rs.getInt("numberOfActivitiesWithSubstrings");
@@ -108,7 +120,7 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Number of issues for creating project plan", String.valueOf(numberOfIssuesForProjectPlan)));
         resultDetails.add(new ResultDetail("Number of wiki pages for creating project plan", String.valueOf(numberOfWikiPagesForProjectPlan)));
 
-        if (numberOfIssuesForProjectPlan >= getMinNumberOfActivitiesWithProjectPlan() || numberOfWikiPagesForProjectPlan >= getMinNumberOfWikiPagesWithProjectPlan()) {
+        if (numberOfIssuesForProjectPlan >= getMinNumberOfActivitiesWithProjectPlan(thresholds) || numberOfWikiPagesForProjectPlan >= getMinNumberOfWikiPagesWithProjectPlan(thresholds)) {
             resultDetails.add(new ResultDetail("Conclusion", "Found some activities or wiki pages for project plan in first two iterations"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {

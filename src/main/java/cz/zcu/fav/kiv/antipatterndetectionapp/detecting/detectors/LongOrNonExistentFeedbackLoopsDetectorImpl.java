@@ -35,15 +35,24 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private float getDivisionOfIterationsWithFeedbackLoop() {
+    private float getDivisionOfIterationsWithFeedbackLoop(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithFeedbackLoop"))).getValue();
+
         return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
     }
 
-    private float getMaxGapBetweenFeedbackLoopRate() {
+    private float getMaxGapBetweenFeedbackLoopRate(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveFloat(Float.parseFloat(thresholds.get("maxGapBetweenFeedbackLoopRate"))).floatValue();
+
         return ((PositiveFloat) antiPattern.getThresholds().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
     }
 
-    private List<String> getSearchSubstringsWithFeedbackLoop() {
+    private List<String> getSearchSubstringsWithFeedbackLoop(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return Arrays.asList(thresholds.get("searchSubstringsWithFeedbackLoop").split("\\|\\|"));
+
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
     }
 
@@ -92,7 +101,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         // init values
         long totalNumberIterations = 0;
@@ -105,7 +114,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
         Date projectEndDate = null;
 
         List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project,
-                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithFeedbackLoop()));
+                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithFeedbackLoop(thresholds)));
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 
@@ -147,7 +156,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             }
         }
 
-        double halfNumberOfIterations = totalNumberIterations * getDivisionOfIterationsWithFeedbackLoop();
+        double halfNumberOfIterations = totalNumberIterations * getDivisionOfIterationsWithFeedbackLoop(thresholds);
 
         // if the number of iterations that contain at least one feedback activity is the ideal case
         if (totalNumberIterations <= numberOfIterationsWhichContainsAtLeastOneActivityForFeedback) {
@@ -170,7 +179,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 long daysBetween = Utils.daysBetween(firstDate, secondDate);
                 firstDate = secondDate;
 
-                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate() * averageIterationLength) {
+                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate(thresholds) * averageIterationLength) {
                     List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                             new ResultDetail("Days between", Long.toString(daysBetween)),
                             new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),
@@ -211,7 +220,7 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
                 long daysBetween = Utils.daysBetween(firstDate, secondDate);
                 firstDate = secondDate;
 
-                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate() * averageIterationLength) {
+                if (daysBetween >= getMaxGapBetweenFeedbackLoopRate(thresholds) * averageIterationLength) {
                     List<ResultDetail> resultDetails = Utils.createResultDetailsList(
                             new ResultDetail("Days between", Long.toString(daysBetween)),
                             new ResultDetail("Average iteration length", Integer.toString(averageIterationLength)),

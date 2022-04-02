@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
@@ -17,7 +18,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public List<String> getAllConfigurationNames() {
         List<String> configList = new ArrayList<String>();
 
-        // get all configurations
+        // insert default configuration
+        configList.add("Default");
+
+        // get all external configurations
         for (String key : configurationRepository.allConfigurations.keySet() ) {
             configList.add(key);
         }
@@ -35,4 +39,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return configList;
     }
 
+    @Override
+    public Map<String, Map<String, String>> getConfigurationByName(String configurationName) {
+        return configurationRepository.allConfigurations.get(configurationName);
+    }
 }

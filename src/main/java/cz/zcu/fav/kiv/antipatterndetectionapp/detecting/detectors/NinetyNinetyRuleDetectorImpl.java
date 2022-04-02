@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
@@ -26,11 +27,17 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private double getMaxDivisionRange() {
+    private double getMaxDivisionRange(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveFloat(Float.parseFloat(thresholds.get("maxDivisionRange"))).floatValue();
+
         return ((PositiveFloat) antiPattern.getThresholds().get("maxDivisionRange").getValue()).doubleValue();
     }
 
-    private int getMaxBadDivisionLimit() {
+    private int getMaxBadDivisionLimit(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("maxBadDivisionLimit"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("maxBadDivisionLimit").getValue()).intValue();
     }
 
@@ -72,7 +79,7 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         List<ResultDetail> resultDetails = new ArrayList<>();
         List<Double> divisionsResults = new ArrayList<>();
@@ -88,7 +95,7 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
                 }
                 divisionsResults.add(resultDivision);
                 // if is one division is out of range set boolean to false
-                if (resultDivision > getMaxDivisionRange()) {
+                if (resultDivision > getMaxDivisionRange(thresholds)) {
                     isAllInRange = false;
                 }
             }
@@ -102,15 +109,15 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
 
         int counterOverEstimated = 0;
         for (Double divisionResult : divisionsResults) {
-            if (divisionResult > getMaxDivisionRange()) {
+            if (divisionResult > getMaxDivisionRange(thresholds)) {
                 counterOverEstimated++;
             } else {
                 counterOverEstimated = 0;
             }
 
-            if (counterOverEstimated > getMaxBadDivisionLimit()) {
+            if (counterOverEstimated > getMaxBadDivisionLimit(thresholds)) {
                 resultDetails.add(new ResultDetail("Conclusion",
-                        getMaxBadDivisionLimit() + " or more consecutive iterations has a bad trend in estimates"));
+                        getMaxBadDivisionLimit(thresholds) + " or more consecutive iterations has a bad trend in estimates"));
                 return new QueryResultItem(this.antiPattern, true, resultDetails);
             }
 

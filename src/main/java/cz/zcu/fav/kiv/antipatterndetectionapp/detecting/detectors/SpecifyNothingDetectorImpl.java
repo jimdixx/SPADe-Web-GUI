@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
@@ -33,19 +34,31 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private int getMinNumberOfWikiPagesWithSpecification() {
+    private int getMinNumberOfWikiPagesWithSpecification(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithSpecification"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
     }
 
-    private int getMinNumberOfActivitiesWithSpecification() {
+    private int getMinNumberOfActivitiesWithSpecification(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithSpecification"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
     }
 
-    private int getMinAvgLengthOfActivityDescription() {
+    private int getMinAvgLengthOfActivityDescription(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("minAvgLengthOfActivityDescription"))).intValue();
+
         return ((PositiveInteger) antiPattern.getThresholds().get("minAvgLengthOfActivityDescription").getValue()).intValue();
     }
 
-    private List<String> getSearchSubstringsWithProjectSpecification() {
+    private List<String> getSearchSubstringsWithProjectSpecification(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return Arrays.asList(thresholds.get("searchSubstringsWithProjectSpecification").split("\\|\\|"));
+
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
     }
 
@@ -87,7 +100,7 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         /* Init values */
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -97,7 +110,7 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
 
         try {
             ResultSet rs = databaseConnection.executeQueries(project,
-                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectSpecification()));
+                    Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithProjectSpecification(thresholds)));
             if (rs != null) {
                 while (rs.next()) {
                     numberOfWikiPages = rs.getInt("numberOfWikiPagesWithSubstrings");
@@ -115,12 +128,12 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Number of activities for specification", String.valueOf(numberOfActivitiesForSpecification)));
         resultDetails.add(new ResultDetail("Number of wiki pages for specification", String.valueOf(numberOfWikiPages)));
 
-        if (numberOfActivitiesForSpecification >= getMinNumberOfActivitiesWithSpecification() ||
-                numberOfWikiPages >= getMinNumberOfWikiPagesWithSpecification()) {
+        if (numberOfActivitiesForSpecification >= getMinNumberOfActivitiesWithSpecification(thresholds) ||
+                numberOfWikiPages >= getMinNumberOfWikiPagesWithSpecification(thresholds)) {
             resultDetails.add(new ResultDetail("Conclusion", "Found activities or wiki pages that represents creation of specification"));
             return new QueryResultItem(this.antiPattern, false, resultDetails);
         } else {
-            if (averageLengthOfIssueDescription > getMinAvgLengthOfActivityDescription()) {
+            if (averageLengthOfIssueDescription > getMinAvgLengthOfActivityDescription(thresholds)) {
                 resultDetails.add(new ResultDetail("Conclusion", "Average length of activity description is grater then minimum"));
                 return new QueryResultItem(this.antiPattern, false, resultDetails);
             } else {

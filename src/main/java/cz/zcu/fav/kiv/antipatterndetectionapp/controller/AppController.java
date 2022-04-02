@@ -118,7 +118,8 @@ public class AppController {
     @PostMapping("/analyze")
     public String analyze(Model model,
                           @RequestParam(value = "selectedProjects", required = false) String[] selectedProjects,
-                          @RequestParam(value = "selectedAntiPatterns", required = false) String[] selectedAntiPatterns
+                          @RequestParam(value = "selectedAntiPatterns", required = false) String[] selectedAntiPatterns,
+                          HttpSession session
     ) {
 
         if (selectedProjects == null) {
@@ -135,7 +136,10 @@ public class AppController {
             return "index";
         }
 
-        List<QueryResult> results = antiPatternManager.analyze(selectedProjects, selectedAntiPatterns);
+        String currentConfigurationName = configurationGetFromSession(session);
+        Map<String, Map<String, String>> currentConfiguration = configurationService.getConfigurationByName(currentConfigurationName);
+
+        List<QueryResult> results = antiPatternManager.analyze(selectedProjects, selectedAntiPatterns, currentConfiguration);
         antiPatternService.saveAnalyzedProjects(selectedProjects, selectedAntiPatterns);
         antiPatternService.saveResults(results);
         antiPatternService.setConfigurationChanged(false);
@@ -186,7 +190,7 @@ public class AppController {
     public String resultRecalculate(Model model) {
 
         List<QueryResult> results = antiPatternManager.analyze(antiPatternService.getAnalyzedProjects(),
-                antiPatternService.getAnalyzedAntiPatterns());
+                antiPatternService.getAnalyzedAntiPatterns(), null);
 
         antiPatternService.saveResults(results);
         antiPatternService.setConfigurationChanged(false);
@@ -426,7 +430,7 @@ public class AppController {
         if(session.getAttribute("configuration") != null)
             return session.getAttribute("configuration").toString(); // return configuration stored in session
         else{
-            List<String> configurationList = configurationService.getAllConfigurationNames();
+            List<String> configurationList = configurationService.getDefaultConfigurationNames();
             if(configurationList.size() == 0)
                 return null;
 

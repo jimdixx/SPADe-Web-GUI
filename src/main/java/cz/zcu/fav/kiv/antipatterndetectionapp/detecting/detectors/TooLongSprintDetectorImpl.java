@@ -53,11 +53,17 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         this.sqlQueries = queries;
     }
 
-    private Integer getMaxIterationLength() {
+    private Integer getMaxIterationLength(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("maxIterationLength"))).intValue();
+
         return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationLength").getValue()).intValue();
     }
 
-    private Integer getMaxNumberOfTooLongIterations() {
+    private Integer getMaxNumberOfTooLongIterations(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("maxNumberOfTooLongIterations"))).intValue();
+
         return ((PositiveInteger) this.antiPattern.getThresholds().get("maxNumberOfTooLongIterations").getValue()).intValue();
     }
 
@@ -74,11 +80,11 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         // get configuration
-        int maxIterationLength = getMaxIterationLength();
-        int maxNumberOfTooLongIterations = getMaxNumberOfTooLongIterations();
+        int maxIterationLength = getMaxIterationLength(thresholds);
+        int maxNumberOfTooLongIterations = getMaxNumberOfTooLongIterations(thresholds);
 
         // auxiliary variables
         int numberOfLongIterations = 0;
@@ -105,9 +111,6 @@ public class TooLongSprintDetectorImpl implements AntiPatternDetector {
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "All iterations in limit"));
         }
-
-        LOGGER.info(this.antiPattern.getPrintName());
-        LOGGER.info(resultDetails.toString());
 
         return new QueryResultItem(this.antiPattern, numberOfLongIterations > maxNumberOfTooLongIterations, resultDetails);
     }

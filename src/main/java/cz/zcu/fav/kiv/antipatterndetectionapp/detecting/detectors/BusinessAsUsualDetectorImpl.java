@@ -28,11 +28,17 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private float getDivisionOfIterationsWithRetrospective() {
+    private float getDivisionOfIterationsWithRetrospective(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithRetrospective"))).getValue();
+
         return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
     }
 
-    private List<String> getSearchSubstringsWithRetrospective() {
+    private List<String> getSearchSubstringsWithRetrospective(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return Arrays.asList(thresholds.get("searchSubstringsWithRetrospective").split("\\|\\|"));
+
         return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
     }
 
@@ -78,7 +84,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
      * @return results of detection
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         // init values
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -87,7 +93,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
         // go through the results of the queries and put in one map => in this map should be all iterations
         List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project,
-                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithRetrospective()));
+                Utils.fillQueryWithSearchSubstrings(this.sqlQueries, getSearchSubstringsWithRetrospective(thresholds)));
         for (int i = 0; i < resultSets.size(); i++) {
             List<Map<String, Object>> rs = resultSets.get(i);
 
@@ -113,7 +119,7 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
 
         }
 
-        int minRetrospectiveLimit = Math.round(totalNumberIterations * getDivisionOfIterationsWithRetrospective());
+        int minRetrospectiveLimit = Math.round(totalNumberIterations * getDivisionOfIterationsWithRetrospective(thresholds));
 
         resultDetails.add(new ResultDetail("Min retrospective limit", String.valueOf(minRetrospectiveLimit)));
         resultDetails.add(new ResultDetail("Found retrospectives", String.valueOf(iterationsResults.size())));

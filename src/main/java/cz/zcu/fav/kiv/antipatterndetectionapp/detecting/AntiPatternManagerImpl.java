@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AntiPatternManagerImpl implements AntiPatternManager {
@@ -24,10 +25,10 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
     private AntiPatternService antiPatternService;
 
     @Override
-    public List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns) {
+    public List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns, Map<String, Map<String, String>> configuration) {
 
         return this.analyze(projectService.getAllProjectsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedProjects)),
-                antiPatternService.getAllAntiPatternsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedAntiPatterns)));
+                antiPatternService.getAllAntiPatternsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedAntiPatterns)), configuration);
     }
 
     /**
@@ -36,7 +37,7 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
      * @param antiPatternDetectors Ap detectoros
      * @return List of results
      */
-    private List<QueryResult> analyze(List<Project> projects, List<AntiPatternDetector> antiPatternDetectors) {
+    private List<QueryResult> analyze(List<Project> projects, List<AntiPatternDetector> antiPatternDetectors, Map<String, Map<String, String>> configuration) {
         DatabaseConnection databaseConnection = new DatabaseConnection();
 
         List<QueryResult> queryResults = new ArrayList<>();
@@ -46,8 +47,16 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
             QueryResult queryResult = new QueryResult();
             queryResult.setProject(project);
             List<QueryResultItem> queryResultItems = new ArrayList<>();
+
             for (AntiPatternDetector antiPattern : antiPatternDetectors) {
-                queryResultItems.add(antiPattern.analyze(project, databaseConnection));
+                String antiPatternName = antiPattern.getAntiPatternModel().getName();
+
+                Map<String, String> thresholds = null;
+
+                if(configuration != null)
+                    thresholds = configuration.get(antiPatternName);
+
+                queryResultItems.add(antiPattern.analyze(project, databaseConnection, thresholds));
             }
             queryResult.setQueryResultItems(queryResultItems);
             queryResults.add(queryResult);

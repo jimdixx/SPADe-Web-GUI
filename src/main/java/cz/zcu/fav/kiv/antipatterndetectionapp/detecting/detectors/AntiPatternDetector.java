@@ -4,9 +4,9 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.DatabaseConnection;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is base interface for all AP detector. In case you need to implement new AP detector
@@ -57,5 +57,5 @@ public interface AntiPatternDetector {
      * @param databaseConnection database connection
      * @return model class for results
      */
-    QueryResultItem analyze(Project project, DatabaseConnection databaseConnection);
+    QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds);
 }

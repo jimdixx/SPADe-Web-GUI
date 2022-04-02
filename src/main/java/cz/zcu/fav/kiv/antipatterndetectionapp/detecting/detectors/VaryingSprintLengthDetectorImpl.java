@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
 
@@ -31,11 +32,17 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     // sql queries loaded from sql file
     private List<String> sqlQueries;
 
-    private Integer getMaxDaysDifference() {
+    private Integer getMaxDaysDifference(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("maxDaysDifference"))).intValue();
+
         return ((PositiveInteger) this.antiPattern.getThresholds().get("maxDaysDifference").getValue()).intValue();
     }
 
-    private Integer getMaxIterationChanged() {
+    private Integer getMaxIterationChanged(Map<String, String> thresholds) {
+        if(thresholds != null)
+            return new PositiveInteger(Integer.parseInt(thresholds.get("maxIterationChanged"))).intValue();
+
         return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationChanged").getValue()).intValue();
     }
 
@@ -78,7 +85,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
      * @return detection result
      */
     @Override
-    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection) {
+    public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
 
         // init values
         List<ResultDetail> resultDetails = new ArrayList<>();
@@ -100,7 +107,7 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
                         secondIterationLength = iterationLength;
                     }
 
-                    if (Math.abs(firstIterationLength - secondIterationLength) >= getMaxDaysDifference()) {
+                    if (Math.abs(firstIterationLength - secondIterationLength) >= getMaxDaysDifference(thresholds)) {
                         iterationLengthChanged = iterationLengthChanged + 1;
                     }
                     firstIterationLength = secondIterationLength;
@@ -113,20 +120,17 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
             return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
 
-        resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(getMaxIterationChanged())));
+        resultDetails.add(new ResultDetail("Maximum iteration length change", String.valueOf(getMaxIterationChanged(thresholds))));
         resultDetails.add(new ResultDetail("Count of iterations", String.valueOf(numberOfIterations)));
         resultDetails.add(new ResultDetail("Iteration length changed", String.valueOf(iterationLengthChanged)));
 
 
-        if (iterationLengthChanged > getMaxIterationChanged()) {
+        if (iterationLengthChanged > getMaxIterationChanged(thresholds)) {
             resultDetails.add(new ResultDetail("Conclusion", "Iteration length changed significantly too often"));
         } else {
             resultDetails.add(new ResultDetail("Conclusion", "Varying iteration length is all right"));
         }
 
-        LOGGER.info(this.antiPattern.getPrintName());
-        LOGGER.info(resultDetails.toString());
-
-        return new QueryResultItem(this.antiPattern, (iterationLengthChanged > getMaxIterationChanged()), resultDetails);
+        return new QueryResultItem(this.antiPattern, (iterationLengthChanged > getMaxIterationChanged(thresholds)), resultDetails);
     }
 }
