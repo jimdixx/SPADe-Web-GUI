@@ -18,9 +18,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public List<String> getAllConfigurationNames() {
         List<String> configList = new ArrayList<String>();
 
-        // insert default configuration
-        configList.add("Default");
-
         // get all external configurations
         for (String key : configurationRepository.allConfigurations.keySet() ) {
             configList.add(key);

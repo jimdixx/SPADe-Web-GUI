@@ -215,8 +215,11 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/configuration")
-    public String configuration(Model model) {
+    public String configuration(Model model, HttpSession session) {
         model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
+
+        String currentConfigurationName = configurationGetFromSession(session);
+        model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "configuration";
     }
 

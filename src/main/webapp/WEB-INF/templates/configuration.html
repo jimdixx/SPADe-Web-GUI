@@ -46,11 +46,11 @@
                                    class="form-text text-muted"></small>
                             <div id="wrapper">
                                 <div id="first">
-                                    <input th:if="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}"
+                                    <input th:if="${threshold.value.isErrorMessageShown}" th:value="${configurations.get(antiPattern.name).get(threshold.value.name)}"
                                            class="form-control is-invalid" th:id="${threshold.value.name}"
                                            name="thresholdValues">
                                     <input th:unless="${threshold.value.isErrorMessageShown}"
-                                           th:value="${threshold.value.value}"
+                                           th:value="${configurations.get(antiPattern.name).get(threshold.value.name)}"
                                            class="form-control" th:id="${threshold.value.name}"
                                            name="thresholdValues">
                                     <input th:value="${threshold.value.name}" style="display: none" class="form-control"
