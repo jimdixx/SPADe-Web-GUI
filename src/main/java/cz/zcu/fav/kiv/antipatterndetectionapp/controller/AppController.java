@@ -232,11 +232,11 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @PostMapping(value = "/configuration", params = "configuration-save-button")
-    public String configurationPost(Model model,
+    public String configurationSavePost(Model model,
                                     @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
                                     @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
                                     @RequestParam(value = "antiPatternNames", required = false) String[] antiPatternNames,
-                                    HttpSession session) {
+                                    HttpSession session, RedirectAttributes redirectAttributes) {
 
         String currentConfigurationName = configurationGetFromSession(session);
 
@@ -245,7 +245,7 @@ public class AppController {
         List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues);
 
         if (wrongParameters.isEmpty()) {
-            model.addAttribute("successMessage", "All configuration values has been successfully saved.");
+            model.addAttribute("successMessage", "All configuration values have been successfully saved.");
         } else {
             model.addAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
             antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
@@ -253,6 +253,50 @@ public class AppController {
 
         model.addAttribute("antiPatterns", antiPatterns);
         model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
+        return "configuration";
+    }
+
+    /**
+     * Method of storing new configurations for individual AP.
+     *
+     * @param model object for passing data to the UI
+     * @param thresholdValues changed configuration values
+     * @param thresholdNames changed configuration names
+     * @return html file name for thymeleaf template
+     */
+    @PostMapping(value = "/configuration", params = "configuration-save-as-button")
+    public String configurationSaveAsPost(Model model,
+                                    @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
+                                    @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
+                                    @RequestParam(value = "antiPatternNames", required = false) String[] antiPatternNames,
+                                    @RequestParam(value = "configuration-save-as-input", required = false) String newConfigName,
+                                    HttpSession session, RedirectAttributes redirectAttributes) {
+
+        List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+
+        List<String> allConfigurationNames = configurationService.getAllConfigurationNames();
+        if (newConfigName == null || newConfigName.length() == 0 ||  allConfigurationNames.contains(newConfigName)) {
+            model.addAttribute("antiPatterns", antiPatterns);
+            model.addAttribute("errorMessage", "Configuration name is not possible.");
+            return "configuration";
+        }
+
+        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, newConfigName, antiPatternNames, thresholdNames, thresholdValues);
+
+        if (wrongParameters.isEmpty()) {
+            model.addAttribute("successMessage", "New configuration has been successfully saved.");
+        } else {
+            model.addAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
+            antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
+        }
+
+        model.addAttribute("antiPatterns", antiPatterns);
+        session.setAttribute("configuration", newConfigName);
+        model.addAttribute("configurations", configurationService.getConfigurationByName(newConfigName));
+
+        model.addAttribute("configurationList", configurationsGetList(session));
+        model.addAttribute("selectedConfiguration", session.getAttribute("configuration"));
+
         return "configuration";
     }
 

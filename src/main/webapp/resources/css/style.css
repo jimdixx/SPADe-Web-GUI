@@ -142,10 +142,7 @@ input, button, submit {
 }
 
 .save-configuration-button-container {
-    width: 30%;
-    margin: 60px auto;
-    display: flex;
-    justify-content: space-between;
+    margin: 40px auto;
 }
 
 /* ==========================================================================

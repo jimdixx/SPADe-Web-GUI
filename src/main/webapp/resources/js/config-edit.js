@@ -33,6 +33,7 @@ function checkIfConfigIsDefault(currentConfigurationValue) {
 function showSaveAsButton(){
     document.getElementById("configuration-save-button").hidden = true;
     document.getElementById("configuration-save-as-button").hidden = false;
+    document.getElementById("configuration-save-as-input").hidden = false;
 }
 
 /**
@@ -41,6 +42,7 @@ function showSaveAsButton(){
 function showBothSaveButtons(){
     document.getElementById("configuration-save-button").hidden = false;
     document.getElementById("configuration-save-as-button").hidden = false;
+    document.getElementById("configuration-save-as-input").hidden = false;
 }
 
 /**
@@ -49,4 +51,5 @@ function showBothSaveButtons(){
 function hideBothSaveButtons(){
     document.getElementById("configuration-save-button").hidden = true;
     document.getElementById("configuration-save-as-button").hidden = true;
+    document.getElementById("configuration-save-as-input").hidden = true;
 }

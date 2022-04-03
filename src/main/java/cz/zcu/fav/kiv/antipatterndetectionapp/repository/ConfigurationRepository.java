@@ -13,9 +13,7 @@ import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -140,8 +138,9 @@ public class ConfigurationRepository implements ServletContextAware {
         root.set("configuration", array);
 
         try {
-            URL url = servletContext.getResource(CONFIGURATION_DIR + configurationName + ".json");
-            JsonParser.getObjectWriter().writeValue(Paths.get(url.toURI()).toFile(), root);
+            String uri = servletContext.getResource(CONFIGURATION_DIR).toURI() + configurationName + ".json";
+
+            JsonParser.getObjectWriter().writeValue(Paths.get(new URL(uri).toURI()).toFile(), root);
         } catch (Exception e) {
             LOGGER.error("Cannot write configuration to the file");
         }
