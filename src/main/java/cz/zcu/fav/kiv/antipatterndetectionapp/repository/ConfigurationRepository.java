@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,10 @@ import org.springframework.web.context.ServletContextAware;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -108,5 +113,38 @@ public class ConfigurationRepository implements ServletContextAware {
         this.allConfigurations = configurations;
 
         LOGGER.info("-------FINISHED READING CONFIGURATIONS FROM FILES-------");
+    }
+
+    public void saveConfigurationToFile(String configurationName, Map<String, Map <String, String>> newConfiguration){
+        ObjectNode root = JsonParser.getObjectMapper().createObjectNode();
+
+        ArrayNode array = JsonParser.getObjectMapper().createArrayNode();
+
+        for(String antiPatternName : newConfiguration.keySet()){
+            ObjectNode antiPattern = JsonParser.getObjectMapper().createObjectNode();
+            antiPattern.put("antiPattern", antiPatternName);
+
+            ArrayNode thresholdsArray = JsonParser.getObjectMapper().createArrayNode();
+
+            for(String thresholdName : newConfiguration.get(antiPatternName).keySet()){
+                ObjectNode threshold = JsonParser.getObjectMapper().createObjectNode();
+                threshold.put("thresholdName", thresholdName);
+                threshold.put("value", newConfiguration.get(antiPatternName).get(thresholdName));
+                thresholdsArray.add(threshold);
+            }
+
+            antiPattern.set("thresholds", thresholdsArray);
+            array.add(antiPattern);
+        }
+
+        root.set("configuration", array);
+
+        try {
+            URL url = servletContext.getResource(CONFIGURATION_DIR + configurationName + ".json");
+            JsonParser.getObjectWriter().writeValue(Paths.get(url.toURI()).toFile(), root);
+        } catch (Exception e) {
+            LOGGER.error("Cannot write configuration to the file");
+        }
+
     }
 }

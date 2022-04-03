@@ -130,6 +130,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         else
             configurationRepository.allConfigurations.replace(configurationName, newConfiguration);
 
+        configurationRepository.saveConfigurationToFile(configurationName, newConfiguration);
+
         return incorrectParameters;
     }
 }

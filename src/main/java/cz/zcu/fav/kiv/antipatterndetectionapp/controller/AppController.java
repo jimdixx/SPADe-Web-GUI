@@ -231,7 +231,7 @@ public class AppController {
      * @param thresholdNames changed configuration names
      * @return html file name for thymeleaf template
      */
-    @PostMapping("/configuration")
+    @PostMapping(value = "/configuration", params = "configuration-save-button")
     public String configurationPost(Model model,
                                     @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
                                     @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
