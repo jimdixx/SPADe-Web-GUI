@@ -101,9 +101,11 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/anti-patterns/{id}")
-    public String getAntiPatternById(@PathVariable Long id, Model model) {
+    public String getAntiPatternById(@PathVariable Long id, Model model, HttpSession session) {
+        String currentConfigurationName = configurationGetFromSession(session);
         model.addAttribute("antiPattern", antiPatternService.getAntiPatternById(id).getAntiPatternModel());
         model.addAttribute("description", antiPatternService.getDescriptionFromCatalogue(id));
+        model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "anti-pattern";
     }
 
@@ -242,7 +244,7 @@ public class AppController {
 
         List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
 
-        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues);
+        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues, true);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "All configuration values have been successfully saved.");
@@ -281,7 +283,7 @@ public class AppController {
             return "configuration";
         }
 
-        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, newConfigName, antiPatternNames, thresholdNames, thresholdValues);
+        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, newConfigName, antiPatternNames, thresholdNames, thresholdValues, true);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "New configuration has been successfully saved.");
@@ -315,11 +317,16 @@ public class AppController {
                                    @PathVariable Long id,
                                    @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
                                    @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
+                                   @RequestParam(value = "antiPatternNames", required = false) String[] antiPatternNames,
+                                   HttpSession session,
                                    RedirectAttributes redirectAttrs) {
 
+        String currentConfigurationName = configurationGetFromSession(session);
+        List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+
         AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
-        //List<String> wrongParameters = antiPatternService.saveNewConfiguration(thresholdNames, thresholdValues);
-        List<String> wrongParameters = new ArrayList<>(); //TODO
+        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName,antiPatternNames, thresholdNames, thresholdValues, false);
+
 
         if (wrongParameters.isEmpty()) {
             redirectAttrs.addFlashAttribute("successMessage", "All threshold values has been successfully saved.");
@@ -329,7 +336,7 @@ public class AppController {
         }
 
         model.addAttribute("antiPatterns", antiPattern);
-
+        model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "redirect:/anti-patterns/{id}";
     }
 

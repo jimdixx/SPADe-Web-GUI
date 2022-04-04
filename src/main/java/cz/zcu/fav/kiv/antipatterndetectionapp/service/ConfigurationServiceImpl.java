@@ -48,7 +48,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues){
+    public List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues, boolean fullNewConfiguration){
         Map<String, Map<String, String>> newConfiguration = new HashMap<>();
         List<String> incorrectParameters = new ArrayList<>();
 
@@ -118,12 +118,21 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         if(incorrectParameters.size() != 0)
             return incorrectParameters;
 
-        for(int i = 0; i < antiPatternNames.length; i++){
-            if(newConfiguration.get(antiPatternNames[i]) == null)
-                newConfiguration.put(antiPatternNames[i], new HashMap<>());
+        if(fullNewConfiguration) { // creating full new configuration as we have all thresholds for all anti-patterns
+            for (int i = 0; i < antiPatternNames.length; i++) {
+                if (newConfiguration.get(antiPatternNames[i]) == null)
+                    newConfiguration.put(antiPatternNames[i], new HashMap<>());
 
-            newConfiguration.get(antiPatternNames[i]).put(thresholdNames[i], thresholdValues[i]);
+                newConfiguration.get(antiPatternNames[i]).put(thresholdNames[i], thresholdValues[i]);
+            }
         }
+        else{   // updating only some thresholds in current configuration
+            newConfiguration = configurationRepository.allConfigurations.get(configurationName);
+            for(int i = 0; i < thresholdNames.length; i++) {
+                newConfiguration.get(antiPatternNames[i]).replace(thresholdNames[i], thresholdValues[i]);
+            }
+        }
+
 
         if(configurationRepository.allConfigurations.get(configurationName) == null)
             configurationRepository.allConfigurations.put(configurationName, newConfiguration);

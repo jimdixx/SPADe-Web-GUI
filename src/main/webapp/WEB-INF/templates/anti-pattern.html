@@ -152,18 +152,20 @@
                        th:for="${threshold.value.name}"></label>
                 <small th:text="${threshold.value.description}" th:value="${threshold.value.name}"
                        class="form-text text-muted"></small>
-                <input th:if="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}" class="form-control is-invalid" th:id="${threshold.value.name}"
+                <input th:if="${threshold.value.isErrorMessageShown}" th:value="${configurations.get(antiPattern.name).get(threshold.value.name)}" class="form-control is-invalid" th:id="${threshold.value.name}"
                        name="thresholdValues">
-                <input th:unless="${threshold.value.isErrorMessageShown}" th:value="${threshold.value.value}" class="form-control" th:id="${threshold.value.name}"
+                <input th:unless="${threshold.value.isErrorMessageShown}" th:value="${configurations.get(antiPattern.name).get(threshold.value.name)}" class="form-control" th:id="${threshold.value.name}"
                        name="thresholdValues">
                 <input th:value="${threshold.value.name}" style="display: none" class="form-control"
                        name="thresholdNames">
+                <input th:value="${antiPattern.name}" style="display: none" class="form-control"
+                       name="antiPatternNames">
                 <small th:if="${threshold.value.isErrorMessageShown}" th:text="${threshold.value.errorMessage}" th:value="${threshold.value.errorMessage}"
                        class="form-text text-danger"></small>
 
             </div>
             <div class="save-individual-configuration-button-container">
-                <button type="submit" class="btn btn-primary custom-button">Save configuration</button>
+                <button type="submit" class="btn btn-primary custom-button" id="configuration-save-button-individual" name="configuration-save-button-individual" hidden>Save</button>
             </div>
             <!-- ./Anti pattern configuration form -->
         </form>
@@ -175,6 +177,7 @@
 <!-- Scripts -->
 <script th:src="@{/resources/js/editor.js}"></script>
 <script th:src="@{/resources/js/login.js}"></script>
+<script th:src="@{/resources/js/config-edit.js}"></script>
 <!-- ./Scripts -->
 
 </body>

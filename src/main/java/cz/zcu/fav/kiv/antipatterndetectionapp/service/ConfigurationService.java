@@ -14,5 +14,5 @@ public interface ConfigurationService {
 
     Map<String, Map<String, String>> getConfigurationByName(String configurationName);
 
-    List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues);
+    List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues, boolean fullNewConfiguration);
 }

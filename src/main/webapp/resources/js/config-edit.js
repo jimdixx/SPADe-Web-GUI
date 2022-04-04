@@ -31,25 +31,49 @@ function checkIfConfigIsDefault(currentConfigurationValue) {
  * Show only 'Save as' button
  */
 function showSaveAsButton(){
-    document.getElementById("configuration-save-button").hidden = true;
-    document.getElementById("configuration-save-as-button").hidden = false;
-    document.getElementById("configuration-save-as-input").hidden = false;
+    if(document.getElementById("configuration-save-button") != null)
+        document.getElementById("configuration-save-button").hidden = true;
+
+    if(document.getElementById("configuration-save-button-individual") != null)
+        document.getElementById("configuration-save-button-individual").hidden = true;
+
+    if(document.getElementById("configuration-save-as-button") != null)
+        document.getElementById("configuration-save-as-button").hidden = false;
+
+    if(document.getElementById("configuration-save-as-input") != null)
+        document.getElementById("configuration-save-as-input").hidden = false;
 }
 
 /**
  * Show both save buttons
  */
 function showBothSaveButtons(){
+    if(document.getElementById("configuration-save-button") != null)
     document.getElementById("configuration-save-button").hidden = false;
-    document.getElementById("configuration-save-as-button").hidden = false;
-    document.getElementById("configuration-save-as-input").hidden = false;
+
+    if(document.getElementById("configuration-save-button-individual") != null)
+        document.getElementById("configuration-save-button-individual").hidden = false;
+
+    if(document.getElementById("configuration-save-as-button") != null)
+        document.getElementById("configuration-save-as-button").hidden = false;
+
+    if(document.getElementById("configuration-save-as-input") != null)
+        document.getElementById("configuration-save-as-input").hidden = false;
 }
 
 /**
  * Hide both save buttons
  */
 function hideBothSaveButtons(){
-    document.getElementById("configuration-save-button").hidden = true;
-    document.getElementById("configuration-save-as-button").hidden = true;
-    document.getElementById("configuration-save-as-input").hidden = true;
+    if(document.getElementById("configuration-save-button") != null)
+        document.getElementById("configuration-save-button").hidden = true;
+
+    if(document.getElementById("configuration-save-button-individual") != null)
+        document.getElementById("configuration-save-button-individual").hidden = true;
+
+    if(document.getElementById("configuration-save-as-button") != null)
+        document.getElementById("configuration-save-as-button").hidden = true;
+
+    if(document.getElementById("configuration-save-as-input") != null)
+        document.getElementById("configuration-save-as-input").hidden = true;
 }
