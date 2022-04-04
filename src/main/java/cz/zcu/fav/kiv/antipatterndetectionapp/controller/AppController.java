@@ -9,6 +9,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ConfigurationService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.UserAccountService;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -360,6 +362,7 @@ public class AppController {
         String thePath = new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\" + antiPattern.getName() + ".html";
 
         try {
+            Jsoup.clean(innerText, Safelist.basic()); // xss attack prevention
             BufferedWriter writer = new BufferedWriter(new FileWriter(thePath));
             writer.write(innerText);
             writer.close();
