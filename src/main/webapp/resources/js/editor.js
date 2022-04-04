@@ -75,7 +75,7 @@ elements.forEach(element => {
         else if(command == 'header3'){
             headerH3();
         }
-        else if(command = 'codeFormat'){
+        else if(command == 'codeFormat'){
             codeFormat();
         }
         else{
