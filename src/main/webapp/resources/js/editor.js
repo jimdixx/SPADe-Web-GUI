@@ -184,7 +184,7 @@ function codeFormat() {
     }
     else{
         document.execCommand('delete',false,'');
-        document.execCommand('insertHTML',false,'<pre>'+S+'</pre>');
+        document.execCommand('insertText',false,'<pre>'+S+'</pre>');
     }
 }
 
