@@ -95,27 +95,32 @@ document.getElementById('imageInput').addEventListener('change', (event) => {
         return;
 
     document.getElementById('upload-button').click();
-
-    setTimeout(() => {
-        let imageName = document.getElementById('imageInput').files[0].name;
-        let imageString = "<img src=\"/operationalizations/images/" + imageName + "\">";
-        document.execCommand('insertHTML', false, imageString.toString());
-    }, 1000);
 });
 
 /**
  * Uploads file to the server by sending it in the POST
  */
 async function uploadFile() {
+    let imageName = document.getElementById('imageInput').files[0].name;
+    const nameArray = imageName.split('.');
+    let finalName = nameArray[0] + Date.now() + '.' + nameArray[1];
+
     let formData = new FormData();
-    formData.append("file", document.getElementById('imageInput').files[0]);
+    formData.append("file", document.getElementById('imageInput').files[0], finalName);
+
     let response = await fetch('/uploadImage', {
         method: "POST",
         body: formData
     });
 
-    if(response.status == 200)
+    if(response.status == 200) {
+        setTimeout(() => {
+        let imageName = document.getElementById('imageInput').files[0].name;
+        let imageString = "<img src=\"/operationalizations/images/" + finalName + "\">";
+        document.execCommand('insertHTML', false, imageString.toString());
+        }, 1000);
         return;
+    }
     else{
         alert("Image upload error.");
         document.getElementById('imageInput').files[0] = null;
