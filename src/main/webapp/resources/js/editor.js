@@ -146,7 +146,7 @@ function headerH1() {
 }
 
 /**
- * Wraping selected text by h2 tag
+ * Wrapping selected text by h2 tag
  */
 function headerH2() {
     let S=window.getSelection().toString();
@@ -163,7 +163,7 @@ function headerH2() {
 }
 
 /**
- * Wraping selected text by h3 tag
+ * Wrapping selected text by h3 tag
  */
 function headerH3() {
     let S=window.getSelection().toString();
@@ -179,6 +179,9 @@ function headerH3() {
     }
 }
 
+/**
+ * Wrapping selected text with pre tag
+ */
 function codeFormat() {
     let S=window.getSelection().toString();
     if(S.length == 0)

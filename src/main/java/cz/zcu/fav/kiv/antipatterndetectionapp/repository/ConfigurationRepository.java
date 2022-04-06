@@ -40,6 +40,9 @@ public class ConfigurationRepository implements ServletContextAware {
         loadConfigurations();
     }
 
+    /**
+     * Method for loading all configurations from json files in folder and saving them to map structure
+     */
     private void loadConfigurations(){
         LOGGER.info("-------START READING CONFIGURATIONS FROM FILES-------");
         Map<String, Map<String, Map<String, String>>> configurations = new HashMap<>();
@@ -120,6 +123,11 @@ public class ConfigurationRepository implements ServletContextAware {
         LOGGER.info("-------FINISHED READING CONFIGURATIONS FROM FILES-------");
     }
 
+    /**
+     * Method that creates json file from the given configuration
+     * @param configurationName Name of the json file
+     * @param newConfiguration Map with configuration values
+     */
     public void saveConfigurationToFile(String configurationName, Map<String, Map <String, String>> newConfiguration){
         ObjectNode root = JsonParser.getObjectMapper().createObjectNode();
 
@@ -154,6 +162,16 @@ public class ConfigurationRepository implements ServletContextAware {
 
     }
 
+    /**
+     * Method that saves new configuration from given parameters to the map structure
+     * @param antiPatterns List of anti-pattern objects
+     * @param configurationName New configuration name
+     * @param antiPatternNames Array of anti-pattern names
+     * @param thresholdNames Array of threshold names
+     * @param thresholdValues Array pf threshold values
+     * @param fullNewConfiguration True, if the whole new configuration is created and False, if only some thresholds are updated
+     * @return List of the incorrectly set parameters
+     */
     public List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues, boolean fullNewConfiguration){
         Map<String, Map<String, String>> newConfiguration = new HashMap<>();
         List<String> incorrectParameters = new ArrayList<>();

@@ -197,7 +197,7 @@ public class AppController {
     }
 
     /**
-     * Method of storing new configurations for individual AP.
+     * Method of saving changes of current configuration
      *
      * @param model object for passing data to the UI
      * @param thresholdValues changed configuration values
@@ -230,7 +230,7 @@ public class AppController {
     }
 
     /**
-     * Method of storing new configurations for individual AP.
+     * Method for saving full new configuration
      *
      * @param model object for passing data to the UI
      * @param thresholdValues changed configuration values
@@ -276,7 +276,7 @@ public class AppController {
     }
 
     /**
-     * Method for storing configuration values ​​for the respective AP.
+     * Method for saving changes of one AP in current configuration
      *
      * @param model object for passing data to the UI
      * @param id id of AP

@@ -11,6 +11,11 @@ public class JsonParser {
 
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
 
+    /**
+     * Method for getting Jackson ObjectMapper object
+     *
+     * @return ObjectMapper
+     */
     public static ObjectMapper getDefaultObjectMapper() {
         ObjectMapper defObjectMapper = new ObjectMapper();
 
@@ -19,6 +24,13 @@ public class JsonParser {
         return defObjectMapper;
     }
 
+    /**
+     * Method for reading tree model from json
+     *
+     * @param src
+     * @return JsonNode
+     * @throws IOException
+     */
     public static JsonNode parse(String src) throws IOException {
         return objectMapper.readTree(src);
     }

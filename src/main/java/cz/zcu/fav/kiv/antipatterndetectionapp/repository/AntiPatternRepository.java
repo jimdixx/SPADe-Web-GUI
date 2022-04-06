@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -86,7 +83,7 @@ public class AntiPatternRepository implements ServletContextAware {
     }
 
     /**
-     *
+     * Method for reading SQL queries from files
      */
     private void initSqlQueries(){
         LOGGER.info("-------START READING SQL FROM FILES-------");
@@ -134,9 +131,10 @@ public class AntiPatternRepository implements ServletContextAware {
     }
 
     /**
+     * Method for reading anti-pattern information from json files
      *
-     * @param jsonFileName
-     * @return
+     * @param jsonFileName Name of the file
+     * @return AntiPattern object
      */
     public AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
         String json = "";   // json configuration file
@@ -213,13 +211,14 @@ public class AntiPatternRepository implements ServletContextAware {
     }
 
     /**
+     * Method for creating of the Threshold object from given parameters
      *
-     * @param thresholdType
-     * @param name
-     * @param printName
-     * @param description
-     * @param errorMessage
-     * @return
+     * @param thresholdType Type of the threshold
+     * @param name Threshold name
+     * @param printName Threshold name for print
+     * @param description Short description of the threshold
+     * @param errorMessage Error message to display if threshold's value is set wrong
+     * @return Threshold object
      */
     private Threshold getThreshold(String thresholdType, String name, String printName, String description, String errorMessage){
 

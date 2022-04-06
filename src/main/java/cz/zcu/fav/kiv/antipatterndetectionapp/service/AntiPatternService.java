@@ -36,5 +36,11 @@ public interface AntiPatternService {
 
     AntiPattern setErrorMessages(AntiPattern antiPattern, List<String> wrongParameters);
 
+    /**
+     * Method for getting description of the anti-pattern from online catalogue on Github
+     *
+     * @param id ID of the anti-pattern
+     * @return Description of the anti-pattern
+     */
     String getDescriptionFromCatalogue(long id);
 }
