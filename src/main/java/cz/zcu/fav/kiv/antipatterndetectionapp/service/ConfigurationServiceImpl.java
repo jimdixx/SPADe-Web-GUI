@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,98 +48,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Override
     public List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues, boolean fullNewConfiguration){
-        Map<String, Map<String, String>> newConfiguration = new HashMap<>();
-        List<String> incorrectParameters = new ArrayList<>();
-
-        for(AntiPattern antiPattern : antiPatterns){
-            if(antiPattern.getThresholds() == null)
-                continue;
-
-            for(int i = 0; i < thresholdNames.length; i++){
-                if(antiPattern.getThresholds().containsKey(thresholdNames[i])){
-                    if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Integer")){
-                        try {
-                            Integer.parseInt(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Percentage")){
-                        try {
-                            Percentage.parsePercentage(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveInteger")){
-                        try {
-                            PositiveInteger.parsePositiveInteger(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveFloat")){
-                        try {
-                            PositiveFloat.parsePositiveFloat(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Float")){
-                        try {
-                            Float.parseFloat(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Double")){
-                        try {
-                            Double.parseDouble(thresholdValues[i]);
-                        }
-                        catch(NumberFormatException e){
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("String")){
-                        if (Utils.checkStringSubstrings(thresholdValues[i]) == false) {
-                            incorrectParameters.add(thresholdNames[i]);
-                        }
-                    }
-                }
-            }
-        }
-
-        if(incorrectParameters.size() != 0)
-            return incorrectParameters;
-
-        if(fullNewConfiguration) { // creating full new configuration as we have all thresholds for all anti-patterns
-            for (int i = 0; i < antiPatternNames.length; i++) {
-                if (newConfiguration.get(antiPatternNames[i]) == null)
-                    newConfiguration.put(antiPatternNames[i], new HashMap<>());
-
-                newConfiguration.get(antiPatternNames[i]).put(thresholdNames[i], thresholdValues[i]);
-            }
-        }
-        else{   // updating only some thresholds in current configuration
-            newConfiguration = configurationRepository.allConfigurations.get(configurationName);
-            for(int i = 0; i < thresholdNames.length; i++) {
-                newConfiguration.get(antiPatternNames[i]).replace(thresholdNames[i], thresholdValues[i]);
-            }
-        }
-
-
-        if(configurationRepository.allConfigurations.get(configurationName) == null)
-            configurationRepository.allConfigurations.put(configurationName, newConfiguration);
-        else
-            configurationRepository.allConfigurations.replace(configurationName, newConfiguration);
-
-        configurationRepository.saveConfigurationToFile(configurationName, newConfiguration);
-
-        return incorrectParameters;
+        return configurationRepository.saveNewConfiguration(antiPatterns, configurationName, antiPatternNames, thresholdNames, thresholdValues, fullNewConfiguration);
     }
 }

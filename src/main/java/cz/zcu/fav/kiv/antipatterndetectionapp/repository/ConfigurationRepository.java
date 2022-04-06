@@ -3,7 +3,12 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +18,9 @@ import javax.servlet.ServletContext;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -145,5 +152,101 @@ public class ConfigurationRepository implements ServletContextAware {
             LOGGER.error("Cannot write configuration to the file");
         }
 
+    }
+
+    public List<String> saveNewConfiguration(List<AntiPattern> antiPatterns, String configurationName, String[] antiPatternNames, String[] thresholdNames, String[] thresholdValues, boolean fullNewConfiguration){
+        Map<String, Map<String, String>> newConfiguration = new HashMap<>();
+        List<String> incorrectParameters = new ArrayList<>();
+
+        for(AntiPattern antiPattern : antiPatterns){
+            if(antiPattern.getThresholds() == null)
+                continue;
+
+            for(int i = 0; i < thresholdNames.length; i++){
+                if(antiPattern.getThresholds().containsKey(thresholdNames[i])){
+                    if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Integer")){
+                        try {
+                            Integer.parseInt(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Percentage")){
+                        try {
+                            Percentage.parsePercentage(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveInteger")){
+                        try {
+                            PositiveInteger.parsePositiveInteger(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveFloat")){
+                        try {
+                            PositiveFloat.parsePositiveFloat(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Float")){
+                        try {
+                            Float.parseFloat(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Double")){
+                        try {
+                            Double.parseDouble(thresholdValues[i]);
+                        }
+                        catch(NumberFormatException e){
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("String")){
+                        if (Utils.checkStringSubstrings(thresholdValues[i]) == false) {
+                            incorrectParameters.add(thresholdNames[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(incorrectParameters.size() != 0)
+            return incorrectParameters;
+
+        if(fullNewConfiguration) { // creating full new configuration as we have all thresholds for all anti-patterns
+            for (int i = 0; i < antiPatternNames.length; i++) {
+                if (newConfiguration.get(antiPatternNames[i]) == null)
+                    newConfiguration.put(antiPatternNames[i], new HashMap<>());
+
+                newConfiguration.get(antiPatternNames[i]).put(thresholdNames[i], thresholdValues[i]);
+            }
+        }
+        else{   // updating only some thresholds in current configuration
+            newConfiguration = this.allConfigurations.get(configurationName);
+            for(int i = 0; i < thresholdNames.length; i++) {
+                newConfiguration.get(antiPatternNames[i]).replace(thresholdNames[i], thresholdValues[i]);
+            }
+        }
+
+
+        if(this.allConfigurations.get(configurationName) == null)
+            this.allConfigurations.put(configurationName, newConfiguration);
+        else
+            this.allConfigurations.replace(configurationName, newConfiguration);
+
+        this.saveConfigurationToFile(configurationName, newConfiguration);
+
+        return incorrectParameters;
     }
 }
