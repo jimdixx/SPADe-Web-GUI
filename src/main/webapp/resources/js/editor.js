@@ -122,7 +122,7 @@ async function uploadFile() {
         return;
     }
     else{
-        alert("Image upload error.");
+        alert("Upload error. Max size of image is 1048576 bytes.");
         document.getElementById('imageInput').files[0] = null;
         return;
     }

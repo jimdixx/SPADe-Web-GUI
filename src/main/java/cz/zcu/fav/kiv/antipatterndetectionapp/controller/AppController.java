@@ -349,7 +349,7 @@ public class AppController {
      * @throws Exception If image is not in the folder
      */
     @GetMapping("/operationalizations/images/{imageName}")
-    public @ResponseBody byte[] imageTestGet(@PathVariable String imageName) throws Exception {
+    public @ResponseBody byte[] imageGet(@PathVariable String imageName) throws Exception {
         File f = new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + imageName);
         return Files.readAllBytes(f.toPath());
     }

@@ -34,7 +34,7 @@
     <h1>Configuration</h1>
 
         <!-- Form for configuration values -->
-        <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post">
+        <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post" id="configuration-form">
             <div th:each="antiPattern : ${antiPatterns}">
                 <h3 th:text="${antiPattern.printName}"></h3>
                 <div th:each="threshold : ${antiPattern.thresholds}">
@@ -88,11 +88,11 @@
 
             <!-- Submit button to save configuration -->
             <div class="text-center save-configuration-button-container">
-                <button type="submit" class="btn btn-primary btn-lg custom-button" id="configuration-save-button" name="configuration-save-button" hidden>Save</button>
+                <button type="submit" class="btn btn-primary btn-lg custom-button" id="configuration-save-button" name="configuration-save-button" disabled hidden>Save</button>
                 <div class="input-group w-25 mx-auto" style="margin: 15px">
-                    <input type="text" class="form-control" placeholder="New configuration name" id="configuration-save-as-input" name="configuration-save-as-input">
+                    <input type="text" class="form-control" placeholder="New configuration name" id="configuration-save-as-input" name="configuration-save-as-input" required>
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-primary" id="configuration-save-as-button" name="configuration-save-as-button" hidden>Save as</button>
+                        <button type="submit" class="btn btn-outline-primary" id="configuration-save-as-button" name="configuration-save-as-button" disabled hidden>Save as</button>
                     </div>
                 </div>
             </div>

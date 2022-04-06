@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}">Home</a>
+                    <a class="nav-link" th:href="@{/}">Analyze</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/configuration}">Configuration</a>
@@ -22,7 +22,7 @@
                 </li>
                 <li class="nav-item active" id="current-configuration-box">
                     <form id="configuration-form" th:action="@{/setSelectedConfiguration}" method="post">
-                        <select class="form-control" id="current-configuration-select" name="current-configuration-select" onchange="this.form.submit()">
+                        <select class="form-control" id="current-configuration-select" name="current-configuration-select" onchange="this.form.submit()" disabled>
                             <option th:each="configuration : ${configurationList}" th:value = ${configuration} th:text = ${configuration} th:selected="${#strings.equals(configuration, selectedConfiguration)}"></option>
                         </select>
                     </form>
