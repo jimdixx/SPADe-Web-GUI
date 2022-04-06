@@ -37,6 +37,7 @@
         <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post" id="configuration-form">
             <div th:each="antiPattern : ${antiPatterns}">
                 <h3 th:text="${antiPattern.printName}"></h3>
+                <hr>
                 <div th:each="threshold : ${antiPattern.thresholds}">
                     <div class="form-group row">
                         <label th:text="${threshold.value.printName} + ':'" th:for="${threshold.value.name}"
