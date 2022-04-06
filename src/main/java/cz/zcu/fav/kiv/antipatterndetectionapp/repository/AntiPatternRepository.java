@@ -168,7 +168,7 @@ public class AntiPatternRepository implements ServletContextAware {
         Map<String, Threshold> APMap = new HashMap<>();
 
         JsonNode array = node.get("thresholds");
-        Threshold<?> tmpThreshold = null;
+        Threshold tmpThreshold = null;
 
         for(int i = 0; i < array.size(); i++){
             JsonNode tmpNode = array.get(i);
@@ -182,9 +182,8 @@ public class AntiPatternRepository implements ServletContextAware {
             String tThresholdPrintName = thresholdNode.get("thresholdPrintName").asText();
             String tThresholdDescription = thresholdNode.get("thresholdDescription").asText();
             String tThresholdErrorMess = thresholdNode.get("thresholdErrorMess").asText();
-            String tThresholdValue = thresholdNode.get("thresholdValue").asText();
 
-            tmpThreshold = getThreshold(thresholdType, tThresholdName, tThresholdPrintName, tThresholdDescription, tThresholdErrorMess, tThresholdValue);
+            tmpThreshold = getThreshold(thresholdType, tThresholdName, tThresholdPrintName, tThresholdDescription, tThresholdErrorMess);
 
             APMap.put(thresholdName, tmpThreshold);
         }
@@ -220,22 +219,12 @@ public class AntiPatternRepository implements ServletContextAware {
      * @param printName
      * @param description
      * @param errorMessage
-     * @param value
      * @return
      */
-    private Threshold<?> getThreshold(String thresholdType, String name, String printName, String description, String errorMessage, String value){
+    private Threshold getThreshold(String thresholdType, String name, String printName, String description, String errorMessage){
 
-        if(thresholdType.equals("Percentage")){
-            return new Threshold<>(name, printName, description, errorMessage, new Percentage(Float.parseFloat(value)));
-        }
-        else if(thresholdType.equals("PositiveFloat")){
-            return new Threshold<>(name, printName, description, errorMessage, new PositiveFloat(Float.parseFloat(value)));
-        }
-        else if(thresholdType.equals("PositiveInteger")){
-            return new Threshold<>(name, printName, description, errorMessage, new PositiveInteger(Integer.parseInt(value)));
-        }
-        else if(thresholdType.equals("String")){
-            return new Threshold<>(name, printName, description, errorMessage, value);
+        if(thresholdType.equals("Percentage") || thresholdType.equals("PositiveFloat") || thresholdType.equals("PositiveInteger") || thresholdType.equals("String")){
+            return new Threshold(name, printName, description, errorMessage, thresholdType);
         }
 
         return null;

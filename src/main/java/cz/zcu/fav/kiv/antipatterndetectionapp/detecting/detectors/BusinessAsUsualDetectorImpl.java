@@ -29,17 +29,11 @@ public class BusinessAsUsualDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithRetrospective(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithRetrospective"))).getValue();
-
-        return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithRetrospective").getValue()).getValue();
+        return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithRetrospective"))).getValue();
     }
 
     private List<String> getSearchSubstringsWithRetrospective(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return Arrays.asList(thresholds.get("searchSubstringsWithRetrospective").split("\\|\\|"));
-
-        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithRetrospective").getValue()).split("\\|\\|"));
+        return Arrays.asList(thresholds.get("searchSubstringsWithRetrospective").split("\\|\\|"));
     }
 
     @Override

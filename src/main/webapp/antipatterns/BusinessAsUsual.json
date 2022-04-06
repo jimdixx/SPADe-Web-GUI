@@ -11,8 +11,7 @@
                 "thresholdName": "divisionOfIterationsWithRetrospective",
                 "thresholdPrintName": "Division of iterations with retrospective",
                 "thresholdDescription": "Minimum percentage of the total number of iterations with a retrospective (0,100)",
-                "thresholdErrorMess": "Percentage must be float number between 0 and 100",
-                "thresholdValue": "66.66f"
+                "thresholdErrorMess": "Percentage must be float number between 0 and 100"
             }
         },
         {
@@ -22,8 +21,7 @@
                 "thresholdName": "searchSubstringsWithRetrospective",
                 "thresholdPrintName": "Search substrings with retrospective",
                 "thresholdDescription": "Substring that will be search in wikipages and activities",
-                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || ",
-                "thresholdValue": "%retr%||%revi%||%week%scrum%"
+                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || "
             }
         }
     ],

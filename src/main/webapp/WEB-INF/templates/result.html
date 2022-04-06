@@ -17,20 +17,6 @@
 
 <!-- Result table container -->
 <div class="container">
-    <!-- Container for show success message -->
-    <div class="container">
-        <div th:if="${isConfigurationChanged}" class="alert alert-warning" role="alert">
-            Configuration values have changed! Would you like to
-            <form action="#" th:action="@{/recalculate}" method="post" style="display: inline-block">
-                <button type="submit"
-                        style="display: inline-block;background-color: #FEF3CD; color: #167AF6; text-decoration: underline;">
-                    recalculate
-                </button>
-            </form>
-            the results?
-        </div>
-    </div>
-    <!-- ./Container for show success message -->
     <h1>Results</h1>
     <table class="table table-bordered table-hover">
         <!-- Result table header -->

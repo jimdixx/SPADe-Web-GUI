@@ -38,24 +38,15 @@ public class RoadToNowhereDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithProjectPlan(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithProjectPlan"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithProjectPlan").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithProjectPlan"))).intValue();
     }
 
     private int getMinNumberOfActivitiesWithProjectPlan(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithProjectPlan"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithProjectPlan").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithProjectPlan"))).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectPlan(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return Arrays.asList(thresholds.get("searchSubstringsWithProjectPlan").split("\\|\\|"));
-
-        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectPlan").getValue()).split("\\|\\|"));
+        return Arrays.asList(thresholds.get("searchSubstringsWithProjectPlan").split("\\|\\|"));
     }
 
     @Override

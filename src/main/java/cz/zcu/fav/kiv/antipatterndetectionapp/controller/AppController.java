@@ -174,37 +174,6 @@ public class AppController {
     }
 
     /**
-     * Method for recalculating the results after a configuration change.
-     *
-     * @param model object for passing data to the UI
-     * @return html file name for thymeleaf template
-     */
-    @GetMapping("/recalculate")
-    public String recalculateGet(Model model) {
-        return analyzeGet(model);
-    }
-
-    /**
-     * Method for recalculating the results after a configuration change.
-     *
-     * @param model object for passing data to the UI
-     * @return html file name for thymeleaf template
-     */
-    @PostMapping("/recalculate")
-    public String resultRecalculate(Model model) {
-
-        List<QueryResult> results = antiPatternManager.analyze(antiPatternService.getAnalyzedProjects(),
-                antiPatternService.getAnalyzedAntiPatterns(), null);
-
-        antiPatternService.saveResults(results);
-        antiPatternService.setConfigurationChanged(false);
-
-        model.addAttribute("queryResults", results);
-        model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
-        return "result";
-    }
-
-    /**
      * Method for showing about page.
      *
      * @return html file name for thymeleaf template

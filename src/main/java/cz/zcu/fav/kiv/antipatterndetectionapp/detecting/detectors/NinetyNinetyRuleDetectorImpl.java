@@ -28,17 +28,11 @@ public class NinetyNinetyRuleDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private double getMaxDivisionRange(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveFloat(Float.parseFloat(thresholds.get("maxDivisionRange"))).floatValue();
-
-        return ((PositiveFloat) antiPattern.getThresholds().get("maxDivisionRange").getValue()).doubleValue();
+        return new PositiveFloat(Float.parseFloat(thresholds.get("maxDivisionRange"))).floatValue();
     }
 
     private int getMaxBadDivisionLimit(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("maxBadDivisionLimit"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("maxBadDivisionLimit").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("maxBadDivisionLimit"))).intValue();
     }
 
     @Override

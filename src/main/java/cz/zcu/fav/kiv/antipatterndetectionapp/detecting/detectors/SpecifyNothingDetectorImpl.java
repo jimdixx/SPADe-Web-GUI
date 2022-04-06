@@ -35,31 +35,19 @@ public class SpecifyNothingDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private int getMinNumberOfWikiPagesWithSpecification(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithSpecification"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfWikiPagesWithSpecification").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfWikiPagesWithSpecification"))).intValue();
     }
 
     private int getMinNumberOfActivitiesWithSpecification(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithSpecification"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("minNumberOfActivitiesWithSpecification").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("minNumberOfActivitiesWithSpecification"))).intValue();
     }
 
     private int getMinAvgLengthOfActivityDescription(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("minAvgLengthOfActivityDescription"))).intValue();
-
-        return ((PositiveInteger) antiPattern.getThresholds().get("minAvgLengthOfActivityDescription").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("minAvgLengthOfActivityDescription"))).intValue();
     }
 
     private List<String> getSearchSubstringsWithProjectSpecification(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return Arrays.asList(thresholds.get("searchSubstringsWithProjectSpecification").split("\\|\\|"));
-
-        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithProjectSpecification").getValue()).split("\\|\\|"));
+        return Arrays.asList(thresholds.get("searchSubstringsWithProjectSpecification").split("\\|\\|"));
     }
 
     @Override

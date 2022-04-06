@@ -58,7 +58,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
             for(int i = 0; i < thresholdNames.length; i++){
                 if(antiPattern.getThresholds().containsKey(thresholdNames[i])){
-                    if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == Integer.class){
+                    if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Integer")){
                         try {
                             Integer.parseInt(thresholdValues[i]);
                         }
@@ -66,7 +66,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == Percentage.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Percentage")){
                         try {
                             Percentage.parsePercentage(thresholdValues[i]);
                         }
@@ -74,7 +74,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == PositiveInteger.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveInteger")){
                         try {
                             PositiveInteger.parsePositiveInteger(thresholdValues[i]);
                         }
@@ -82,7 +82,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == PositiveFloat.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveFloat")){
                         try {
                             PositiveFloat.parsePositiveFloat(thresholdValues[i]);
                         }
@@ -90,7 +90,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == Float.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Float")){
                         try {
                             Float.parseFloat(thresholdValues[i]);
                         }
@@ -98,7 +98,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == Double.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Double")){
                         try {
                             Double.parseDouble(thresholdValues[i]);
                         }
@@ -106,7 +106,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                             incorrectParameters.add(thresholdNames[i]);
                         }
                     }
-                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getValue().getClass() == String.class){
+                    else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("String")){
                         if (Utils.checkStringSubstrings(thresholdValues[i]) == false) {
                             incorrectParameters.add(thresholdNames[i]);
                         }

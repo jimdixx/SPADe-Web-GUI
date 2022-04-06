@@ -33,17 +33,11 @@ public class VaryingSprintLengthDetectorImpl implements AntiPatternDetector {
     private List<String> sqlQueries;
 
     private Integer getMaxDaysDifference(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("maxDaysDifference"))).intValue();
-
-        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxDaysDifference").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("maxDaysDifference"))).intValue();
     }
 
     private Integer getMaxIterationChanged(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveInteger(Integer.parseInt(thresholds.get("maxIterationChanged"))).intValue();
-
-        return ((PositiveInteger) this.antiPattern.getThresholds().get("maxIterationChanged").getValue()).intValue();
+        return new PositiveInteger(Integer.parseInt(thresholds.get("maxIterationChanged"))).intValue();
     }
 
     @Override

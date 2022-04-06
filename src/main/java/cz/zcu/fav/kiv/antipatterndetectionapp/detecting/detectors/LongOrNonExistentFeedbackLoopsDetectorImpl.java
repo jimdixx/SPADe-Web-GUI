@@ -36,24 +36,15 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
     private List<String> sqlQueries;
 
     private float getDivisionOfIterationsWithFeedbackLoop(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithFeedbackLoop"))).getValue();
-
-        return ((Percentage) antiPattern.getThresholds().get("divisionOfIterationsWithFeedbackLoop").getValue()).getValue();
+        return new Percentage(Float.parseFloat(thresholds.get("divisionOfIterationsWithFeedbackLoop"))).getValue();
     }
 
     private float getMaxGapBetweenFeedbackLoopRate(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return new PositiveFloat(Float.parseFloat(thresholds.get("maxGapBetweenFeedbackLoopRate"))).floatValue();
-
-        return ((PositiveFloat) antiPattern.getThresholds().get("maxGapBetweenFeedbackLoopRate").getValue()).floatValue();
+        return new PositiveFloat(Float.parseFloat(thresholds.get("maxGapBetweenFeedbackLoopRate"))).floatValue();
     }
 
     private List<String> getSearchSubstringsWithFeedbackLoop(Map<String, String> thresholds) {
-        if(thresholds != null)
-            return Arrays.asList(thresholds.get("searchSubstringsWithFeedbackLoop").split("\\|\\|"));
-
-        return Arrays.asList(((String) antiPattern.getThresholds().get("searchSubstringsWithFeedbackLoop").getValue()).split("\\|\\|"));
+        return Arrays.asList(thresholds.get("searchSubstringsWithFeedbackLoop").split("\\|\\|"));
     }
 
     @Override
