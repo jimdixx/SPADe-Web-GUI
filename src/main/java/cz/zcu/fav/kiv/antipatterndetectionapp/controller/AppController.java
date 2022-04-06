@@ -246,10 +246,12 @@ public class AppController {
                                     HttpSession session, RedirectAttributes redirectAttributes) {
 
         List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+        String currentConfigurationName = configurationGetFromSession(session);
 
         List<String> allConfigurationNames = configurationService.getAllConfigurationNames();
         if (newConfigName == null || newConfigName.length() == 0 ||  allConfigurationNames.contains(newConfigName)) {
             model.addAttribute("antiPatterns", antiPatterns);
+            model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
             model.addAttribute("errorMessage", "Configuration name is not possible.");
             return "configuration";
         }
