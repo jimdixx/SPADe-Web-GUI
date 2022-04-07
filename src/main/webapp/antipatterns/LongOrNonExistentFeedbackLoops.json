@@ -7,32 +7,23 @@
         {
             "thresholdName": "divisionOfIterationsWithFeedbackLoop",
             "thresholdType": "Percentage",
-            "threshold": {
-                "thresholdName": "divisionOfIterationsWithFeedbackLoop",
-                "thresholdPrintName": "Division of iterations with feedback loop",
-                "thresholdDescription": "Minimum percentage of the total number of iterations with feedback loop (0,100)",
-                "thresholdErrorMess": "Percentage must be float number between 0 and 100"
-            }
+            "thresholdPrintName": "Division of iterations with feedback loop",
+            "thresholdDescription": "Minimum percentage of the total number of iterations with feedback loop (0,100)",
+            "thresholdErrorMess": "Percentage must be float number between 0 and 100"
         },
         {
             "thresholdName": "maxGapBetweenFeedbackLoopRate",
             "thresholdType": "PositiveFloat",
-            "threshold": {
-                "thresholdName": "maxGapBetweenFeedbackLoopRate",
-                "thresholdPrintName": "Maximum gap between feedback loop rate",
-                "thresholdDescription": "Value that multiplies average iteration length for given project. Result is maximum threshold value for gap between feedback loops in days.",
-                "thresholdErrorMess": "Maximum gap between feedback loop rate must be positive float number"
-            }
+            "thresholdPrintName": "Maximum gap between feedback loop rate",
+            "thresholdDescription": "Value that multiplies average iteration length for given project. Result is maximum threshold value for gap between feedback loops in days.",
+            "thresholdErrorMess": "Maximum gap between feedback loop rate must be positive float number"
         },
         {
             "thresholdName": "searchSubstringsWithFeedbackLoop",
             "thresholdType": "String",
-            "threshold": {
-                "thresholdName": "searchSubstringsWithFeedbackLoop",
-                "thresholdPrintName": "Search substrings with feedback loop",
-                "thresholdDescription": "Substring that will be search in wikipages and activities",
-                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
-            }
+            "thresholdPrintName": "Search substrings with feedback loop",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
         }
     ]
 }

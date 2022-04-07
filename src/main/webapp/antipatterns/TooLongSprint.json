@@ -7,22 +7,17 @@
         {
             "thresholdName": "maxIterationLength",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "maxIterationLength",
-                "thresholdPrintName": "Max Iteration Length",
-                "thresholdDescription": "Maximum iteration length in days",
-                "thresholdErrorMess": "Max iteration length must be positive integer"
-            }
+            "thresholdPrintName": "Max Iteration Length",
+            "thresholdDescription": "Maximum iteration length in days",
+            "thresholdErrorMess": "Max iteration length must be positive integer"
         },
         {
             "thresholdName": "maxNumberOfTooLongIterations",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "maxNumberOfTooLongIterations",
-                "thresholdPrintName": "Max number of foo long iterations",
-                "thresholdDescription": "Maximum number of too long iterations in project",
-                "thresholdErrorMess": "Max number of too long iterations must be positive integer"
-            }
+            "thresholdPrintName": "Max number of foo long iterations",
+            "thresholdDescription": "Maximum number of too long iterations in project",
+            "thresholdErrorMess": "Max number of too long iterations must be positive integer"
+
         }
     ]
 }

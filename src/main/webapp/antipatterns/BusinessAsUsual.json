@@ -7,22 +7,16 @@
         {
             "thresholdName": "divisionOfIterationsWithRetrospective",
             "thresholdType": "Percentage",
-            "threshold": {
-                "thresholdName": "divisionOfIterationsWithRetrospective",
-                "thresholdPrintName": "Division of iterations with retrospective",
-                "thresholdDescription": "Minimum percentage of the total number of iterations with a retrospective (0,100)",
-                "thresholdErrorMess": "Percentage must be float number between 0 and 100"
-            }
+            "thresholdPrintName": "Division of iterations with retrospective",
+            "thresholdDescription": "Minimum percentage of the total number of iterations with a retrospective (0,100)",
+            "thresholdErrorMess": "Percentage must be float number between 0 and 100"
         },
         {
             "thresholdName": "searchSubstringsWithRetrospective",
             "thresholdType": "String",
-            "threshold": {
-                "thresholdName": "searchSubstringsWithRetrospective",
-                "thresholdPrintName": "Search substrings with retrospective",
-                "thresholdDescription": "Substring that will be search in wikipages and activities",
-                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || "
-            }
+            "thresholdPrintName": "Search substrings with retrospective",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || "
         }
     ],
     "catalogueFileName": "Business_As_Usual.md"

@@ -7,22 +7,16 @@
         {
             "thresholdName": "maxDivisionRange",
             "thresholdType": "PositiveFloat",
-            "threshold": {
-                "thresholdName": "maxDivisionRange",
-                "thresholdPrintName": "Maximum ration value",
-                "thresholdDescription": "Maximum ratio value of spent and estimated time",
-                "thresholdErrorMess": "Ration values must be positive float number"
-            }
+            "thresholdPrintName": "Maximum ration value",
+            "thresholdDescription": "Maximum ratio value of spent and estimated time",
+            "thresholdErrorMess": "Ration values must be positive float number"
         },
         {
             "thresholdName": "maxBadDivisionLimit",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "maxBadDivisionLimit",
-                "thresholdPrintName": "Maximum iterations thresholds",
-                "thresholdDescription": "Maximum number of consecutive iterations where the thresholds were exceeded",
-                "thresholdErrorMess": "Maximum number of consecutive iterations must be positive integer number"
-            }
+            "thresholdPrintName": "Maximum iterations thresholds",
+            "thresholdDescription": "Maximum number of consecutive iterations where the thresholds were exceeded",
+            "thresholdErrorMess": "Maximum number of consecutive iterations must be positive integer number"
         }
     ]
 }

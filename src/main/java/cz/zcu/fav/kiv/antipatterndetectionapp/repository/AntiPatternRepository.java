@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -70,7 +69,14 @@ public class AntiPatternRepository implements ServletContextAware {
                 AntiPatternDetector antiPatternDetector = subType.getDeclaredConstructor().newInstance();
 
                 // loading anti-pattern from json file and linking it to the detector file
-                antiPatternDetector.setAntiPattern(getAntiPatternFromJsonFile(antiPatternDetector.getJsonFileName()));
+                AntiPattern antiPattern = getAntiPatternFromJsonFile(antiPatternDetector.getJsonFileName());
+
+                // anti-pattern was not read from file properly
+                if(antiPattern == null) {
+                    LOGGER.error("Anti-pattern from " + antiPatternDetector.getJsonFileName() + " was not read correctly");
+                    continue;
+                }
+                antiPatternDetector.setAntiPattern(antiPattern);
 
                 antiPatterns.putIfAbsent(antiPatternDetector.getAntiPatternModel().getId(), antiPatternDetector);
                 LOGGER.info("Creating detector " + antiPatternDetector.getAntiPatternModel().getPrintName());
@@ -133,20 +139,21 @@ public class AntiPatternRepository implements ServletContextAware {
         return queries;
     }
 
+
     /**
-     * Method for reading anti-pattern information from json files
+     * Method for reading anti-pattern parameters from json file
      *
      * @param jsonFileName Name of the file
      * @return AntiPattern object
      */
-    public AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
-        String json = "";   // json configuration file
-        JsonNode node = null;
+    private AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
+        String json = "";  // json configuration file content as string
 
         LOGGER.info("Reading anti-pattern from json file " + jsonFileName);
 
         try {
             URL url = servletContext.getResource(AP_DIR + jsonFileName);
+
             BufferedReader read = new BufferedReader(
                     new InputStreamReader(url.openStream()));
 
@@ -154,44 +161,67 @@ public class AntiPatternRepository implements ServletContextAware {
             while ((line = read.readLine()) != null) {
                 json += line;
             }
-            node = JsonParser.parse(json);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.warn("Cannot read anti-pattern from json file " + jsonFileName);
             return null;
         }
 
-        Long APid = Long.parseLong(node.get("id").asText());
-        String APPrintName = node.get("printName").asText();
-        String APName = node.get("name").asText();
-        String APDescription = node.get("description").asText();
-        String APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null;
+        return parseAntiPatternFromJson(json);
+    }
 
-        Map<String, Threshold> APMap = new HashMap<>();
+    /**
+     * Method for parsing json file content and making AntiPattern object
+     * @param jsonString Json file content
+     * @return AntiPattern object made from json file
+     */
+    private AntiPattern parseAntiPatternFromJson(String jsonString){
+        Long APid;
+        JsonNode node = null;
+        String APPrintName, APName, APDescription, APCatalogueFileName;
 
+        // reading of anti-pattern basic information
+        try {
+            node = JsonParser.parse(jsonString);
+
+            APid = Long.parseLong(node.get("id").asText());
+            APPrintName = node.get("printName").asText();
+            APName = node.get("name").asText();
+            APDescription = node.get("description").asText();
+            APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null; // optional field
+        }
+        catch(Exception e){
+            return null;
+        }
+
+        // reading of thresholds
+        Map<String, Threshold> thresholdMap = new HashMap<>();
         JsonNode array = node.get("thresholds");
         Threshold tmpThreshold = null;
 
+        String thresholdName, thresholdType, thresholdPrintName, thresholdDescription, thresholdErrorMess;
+
         for(int i = 0; i < array.size(); i++){
             JsonNode tmpNode = array.get(i);
+            try {
+                thresholdName = tmpNode.get("thresholdName").asText();
+                thresholdType = tmpNode.get("thresholdType").asText();
+                thresholdPrintName = tmpNode.get("thresholdPrintName").asText();
+                thresholdDescription = tmpNode.get("thresholdDescription").asText();
+                thresholdErrorMess = tmpNode.get("thresholdErrorMess").asText();
+            }
+            catch(Exception e){
+                return null;
+            }
 
-            String thresholdName = tmpNode.get("thresholdName").asText();
-            String thresholdType = tmpNode.get("thresholdType").asText();
-
-            JsonNode thresholdNode = tmpNode.get("threshold");
-
-            String tThresholdName = thresholdNode.get("thresholdName").asText();
-            String tThresholdPrintName = thresholdNode.get("thresholdPrintName").asText();
-            String tThresholdDescription = thresholdNode.get("thresholdDescription").asText();
-            String tThresholdErrorMess = thresholdNode.get("thresholdErrorMess").asText();
-
-            tmpThreshold = getThreshold(thresholdType, tThresholdName, tThresholdPrintName, tThresholdDescription, tThresholdErrorMess);
-
-            APMap.put(thresholdName, tmpThreshold);
+            // creating of Threshold object and storing it in map
+            tmpThreshold = getThreshold(thresholdType, thresholdName, thresholdPrintName, thresholdDescription, thresholdErrorMess);
+            thresholdMap.put(thresholdName, tmpThreshold);
         }
 
-        AntiPattern newAP = new AntiPattern(APid, APPrintName, APName, APDescription, APMap, APCatalogueFileName);
+        // creating of the AntiPattern object
+        AntiPattern result = new AntiPattern(APid, APPrintName, APName, APDescription, thresholdMap, APCatalogueFileName);
 
-        return newAP;
+        return result;
     }
 
     /**

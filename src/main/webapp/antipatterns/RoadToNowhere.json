@@ -7,32 +7,23 @@
         {
             "thresholdName": "minNumberOfWikiPagesWithProjectPlan",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "minNumberOfWikiPagesWithProjectPlan",
-                "thresholdPrintName": "Minimum number of wiki pages with project plan",
-                "thresholdDescription": "Number of wiki pages",
-                "thresholdErrorMess": "Minimum number of wikipages must be positive integer number"
-            }
+            "thresholdPrintName": "Minimum number of wiki pages with project plan",
+            "thresholdDescription": "Number of wiki pages",
+            "thresholdErrorMess": "Minimum number of wikipages must be positive integer number"
         },
         {
             "thresholdName": "minNumberOfActivitiesWithProjectPlan",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "minNumberOfActivitiesWithProjectPlan",
-                "thresholdPrintName": "Minimum number of activities with project plan",
-                "thresholdDescription": "Number of activities",
-                "thresholdErrorMess": "Minimum number of activities must be positive integer number"
-            }
+            "thresholdPrintName": "Minimum number of activities with project plan",
+            "thresholdDescription": "Number of activities",
+            "thresholdErrorMess": "Minimum number of activities must be positive integer number"
         },
         {
             "thresholdName": "searchSubstringsWithProjectPlan",
             "thresholdType": "String",
-            "threshold": {
-                "thresholdName": "searchSubstringsWithProjectPlan",
-                "thresholdPrintName": "Search substrings with project plan",
-                "thresholdDescription": "Substring that will be search in wikipages and activities",
-                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
-            }
+            "thresholdPrintName": "Search substrings with project plan",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
         }
     ],
     "catalogueFileName": "Road_To_Nowhere.md"

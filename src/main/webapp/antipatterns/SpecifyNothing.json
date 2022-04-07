@@ -7,42 +7,30 @@
         {
             "thresholdName": "minNumberOfWikiPagesWithSpecification",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "minNumberOfWikiPagesWithSpecification",
-                "thresholdPrintName": "Minimum number of wiki pages with project specification",
-                "thresholdDescription": "Number of wiki pages",
-                "thresholdErrorMess": "Minimum number of wikipages must be positive integer number"
-            }
+            "thresholdPrintName": "Minimum number of wiki pages with project specification",
+            "thresholdDescription": "Number of wiki pages",
+            "thresholdErrorMess": "Minimum number of wikipages must be positive integer number"
         },
         {
             "thresholdName": "minNumberOfActivitiesWithSpecification",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "minNumberOfActivitiesWithSpecification",
-                "thresholdPrintName": "Minimum number of activities with project specification",
-                "thresholdDescription": "Number of activities",
-                "thresholdErrorMess": "Minimum number of activities with project specification must be positive integer number"
-            }
+            "thresholdPrintName": "Minimum number of activities with project specification",
+            "thresholdDescription": "Number of activities",
+            "thresholdErrorMess": "Minimum number of activities with project specification must be positive integer number"
         },
         {
             "thresholdName": "minAvgLengthOfActivityDescription",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "minAvgLengthOfActivityDescription",
-                "thresholdPrintName": "Minimum average length of activity description",
-                "thresholdDescription": "Minimum average number of character of activity description",
-                "thresholdErrorMess": "Minimum average length of activity description must be positive integer number"
-            }
+            "thresholdPrintName": "Minimum average length of activity description",
+            "thresholdDescription": "Minimum average number of character of activity description",
+            "thresholdErrorMess": "Minimum average length of activity description must be positive integer number"
         },
         {
             "thresholdName": "searchSubstringsWithProjectSpecification",
             "thresholdType": "String",
-            "threshold": {
-                "thresholdName": "searchSubstringsWithProjectSpecification",
-                "thresholdPrintName": "Search substrings with project specification",
-                "thresholdDescription": "Substring that will be search in wikipages and activities",
-                "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
-            }
+            "thresholdPrintName": "Search substrings with project specification",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
         }
     ],
     "catalogueFileName": "Specify_Nothing.md"

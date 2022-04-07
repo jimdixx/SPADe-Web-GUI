@@ -7,22 +7,16 @@
         {
             "thresholdName": "maxDaysDifference",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "maxDaysDifference",
-                "thresholdPrintName": "Max days difference",
-                "thresholdDescription": "Maximum distance of two consecutive iterations in days",
-                "thresholdErrorMess": "Maximum distance must be positive integer number"
-            }
+            "thresholdPrintName": "Max days difference",
+            "thresholdDescription": "Maximum distance of two consecutive iterations in days",
+            "thresholdErrorMess": "Maximum distance must be positive integer number"
         },
         {
             "thresholdName": "maxIterationChanged",
             "thresholdType": "PositiveInteger",
-            "threshold": {
-                "thresholdName": "maxIterationChanged",
-                "thresholdPrintName": "Max number of iteration changed",
-                "thresholdDescription": "Maximum allowed number of significant changes in iteration lengths",
-                "thresholdErrorMess": "Maximum number of iterations changed must be positive integer number"
-            }
+            "thresholdPrintName": "Max number of iteration changed",
+            "thresholdDescription": "Maximum allowed number of significant changes in iteration lengths",
+            "thresholdErrorMess": "Maximum number of iterations changed must be positive integer number"
         }
     ]
 }
