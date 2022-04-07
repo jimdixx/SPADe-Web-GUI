@@ -45,50 +45,50 @@ public class ConfigurationRepository implements ServletContextAware {
      */
     private void loadConfigurations(){
         LOGGER.info("-------START READING CONFIGURATIONS FROM FILES-------");
+
         Map<String, Map<String, Map<String, String>>> configurations = new HashMap<>();
 
-        File folder = null;
-
+        File configurationsFolder = null;
         try {
             URL url = servletContext.getResource(CONFIGURATION_DIR);
-            folder = new File(url.getFile());
+            configurationsFolder = new File(url.getFile());
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.error("Cannot access folder with configurations " + CONFIGURATION_DIR);
+            return;
         }
 
-        for (final File fileEntry : folder.listFiles()) {
+        // iterate over all configuration files in the folder
+        for (final File fileEntry : configurationsFolder.listFiles()) {
             LOGGER.info("Reading configuration from file " + fileEntry.getName());
 
-            String json = "";   // json configuration file
+            String jsonContent = "";   // json configuration file
             try {
                 BufferedReader read = new BufferedReader(new InputStreamReader(fileEntry.toURI().toURL().openStream()));
 
                 String line;
                 while ((line = read.readLine()) != null) {
-                    json += line;
+                    jsonContent += line;
                 }
             }
             catch(Exception e){
-                e.printStackTrace();
                 LOGGER.error("Cannot read configuration from file " + fileEntry.getName());
                 continue;
             }
 
-            JsonNode node = null;
+            // parsing of the json file content
+            JsonNode rootNode = null;
             try {
-                node = JsonParser.parse(json);
+                rootNode = JsonParser.parse(jsonContent);
             } catch (IOException e) {
-                e.printStackTrace();
                 LOGGER.error("Cannot parse configuration from file " + fileEntry.getName());
                 continue;
             }
 
             String configurationName = fileEntry.getName().split("\\.")[0];
 
-            JsonNode arrayOfConfigurations = node.get("configuration");
+            JsonNode arrayOfConfigurations = rootNode.get("configuration");
 
-            if(arrayOfConfigurations == null)
+            if(arrayOfConfigurations == null)   // empty array
                 continue;
 
             Map<String, Map<String, String>> newAntiPatternMap = new HashMap<>();
@@ -111,7 +111,6 @@ public class ConfigurationRepository implements ServletContextAware {
 
                     newThresholds.put(thresholdName, value);
                 }
-
                 newAntiPatternMap.put(antiPatternName, newThresholds);
 
             }
