@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -27,6 +28,8 @@ public class AntiPatternRepository implements ServletContextAware {
 
     private static final String QUERY_DIR = "/queries/";
     private static final String AP_DIR = "/antipatterns/";
+    private static final String OPERATIONALIZATION_DIR = "/operationalizations/";
+    private static final String OPERATIONALIZATION_IMG_DIR = "/operationalizations/images/";
     private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
     private ServletContext servletContext;
     private Map<Long, AntiPatternDetector> antiPatternDetectors;
@@ -226,6 +229,24 @@ public class AntiPatternRepository implements ServletContextAware {
             return new Threshold(name, printName, description, errorMessage, thresholdType);
         }
 
+        return null;
+    }
+
+    public String getOperationalizationDirPathName(){
+        try {
+            return servletContext.getResource(OPERATIONALIZATION_DIR).getFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getOperationalizationImgDirFileName(){
+        try {
+            return servletContext.getResource(OPERATIONALIZATION_IMG_DIR).getFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

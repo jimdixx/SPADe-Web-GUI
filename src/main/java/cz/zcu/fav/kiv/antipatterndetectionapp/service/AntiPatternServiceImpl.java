@@ -7,20 +7,11 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.CacheablesValues;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveFloat;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.PositiveInteger;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
-import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -172,5 +163,15 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         } while(tmpIndex < body.length() - 1);
 
         return resultDescription.trim();
+    }
+
+    @Override
+    public String getOperationalizationFilePath(String antiPatternName){
+        return antiPatternRepository.getOperationalizationDirPathName() + antiPatternName + ".html";
+    }
+
+    @Override
+    public String getOperationalizationImageFilePath(String imageName){
+        return antiPatternRepository.getOperationalizationImgDirFileName() + imageName;
     }
 }

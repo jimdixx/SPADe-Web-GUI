@@ -43,4 +43,8 @@ public interface AntiPatternService {
      * @return Description of the anti-pattern
      */
     String getDescriptionFromCatalogue(long id);
+
+    String getOperationalizationFilePath(String antiPatternName);
+
+    String getOperationalizationImageFilePath(String imageName);
 }

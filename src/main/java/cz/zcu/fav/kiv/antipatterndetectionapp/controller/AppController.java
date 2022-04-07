@@ -14,7 +14,6 @@ import org.jsoup.safety.Safelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -330,8 +329,7 @@ public class AppController {
 
         AntiPattern antiPattern = antiPatternService.antiPatternToModel(antiPatternService.getAntiPatternById(id));
 
-        String thePath = new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\" + antiPattern.getName() + ".html";
-
+        String thePath = antiPatternService.getOperationalizationFilePath(antiPattern.getName());
         try {
             Jsoup.clean(innerText, Safelist.basic()); // xss attack prevention
             BufferedWriter writer = new BufferedWriter(new FileWriter(thePath));
@@ -352,7 +350,7 @@ public class AppController {
      */
     @GetMapping("/operationalizations/images/{imageName}")
     public @ResponseBody byte[] imageGet(@PathVariable String imageName) throws Exception {
-        File f = new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + imageName);
+        File f = new File(antiPatternService.getOperationalizationImageFilePath(imageName));
         return Files.readAllBytes(f.toPath());
     }
 
@@ -367,12 +365,12 @@ public class AppController {
 
         String fileName = file.getOriginalFilename();
 
-        if(new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + fileName).isFile()){
+        if(new File(antiPatternService.getOperationalizationImageFilePath(fileName)).isFile()){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         try {
-            file.transferTo( new File(new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\images\\" + fileName));
+            file.transferTo(new File(antiPatternService.getOperationalizationImageFilePath(fileName)));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
