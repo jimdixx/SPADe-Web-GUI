@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
@@ -12,6 +11,9 @@ import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -166,12 +168,25 @@ public class AntiPatternServiceImpl implements AntiPatternService {
     }
 
     @Override
+    public String getOperationalizationText(String fileName){
+        String filePath = getOperationalizationFilePath(fileName);
+
+        String content = null;
+        try {
+            content = new String (Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
+    @Override
     public String getOperationalizationFilePath(String antiPatternName){
-        return antiPatternRepository.getOperationalizationDirPathName() + antiPatternName + ".html";
+        return antiPatternRepository.getOperationalizationDirPathName() + "/" + antiPatternName + ".html";
     }
 
     @Override
     public String getOperationalizationImageFilePath(String imageName){
-        return antiPatternRepository.getOperationalizationImgDirFileName() + imageName;
+        return antiPatternRepository.getOperationalizationImgDirFileName() + "/" + imageName;
     }
 }

@@ -128,7 +128,7 @@
                     <input type="file" id="imageInput" name="fileupload" hidden>
                     <button id="upload-button" onclick="uploadFile()" hidden></button>
                 </div>
-                <div class="content form-control" id="content-area" onload="getContent()" th:utext="${antiPattern.getOperationalizationText()}"></div>
+                <div class="content form-control" id="content-area" onload="getContent()" th:utext="${operationalizationText}"></div>
             </div>
             <form id="operationalization-form" action="#" th:action="@{/anti-patterns/} + ${antiPattern.id} + @{/operationalization}" th:object="${antiPattern}" method="post">
                 <div class="save-operationalization-button-container">

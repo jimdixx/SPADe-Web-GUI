@@ -11,32 +11,28 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.ServletContextAware;
 
-import javax.servlet.ServletContext;
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
-public class ConfigurationRepository implements ServletContextAware {
+public class ConfigurationRepository {
 
-    private ServletContext servletContext;
-    private static final String CONFIGURATION_DIR = "/configurations/";
+    private final String CONFIGURATION_DIR;
     private final Logger LOGGER = LoggerFactory.getLogger(ConfigurationRepository.class);
 
     // Map<ConfigurationName, Map<AntiPatternName, Map<ThresholdName, value>>>
     public Map<String, Map<String, Map<String, String>>> allConfigurations;
 
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-
+    /**
+     * Constructor to set configurations folder and start loading
+     * @param dir
+     */
+    public ConfigurationRepository(@Value("${DATA_PATH}")String dir){
+        this.CONFIGURATION_DIR = dir + "configurations/";
         loadConfigurations();
     }
 
@@ -50,8 +46,7 @@ public class ConfigurationRepository implements ServletContextAware {
 
         File configurationsFolder = null;
         try {
-            URL url = servletContext.getResource(CONFIGURATION_DIR);
-            configurationsFolder = new File(url.getFile());
+            configurationsFolder = new File(new FileSystemResource(CONFIGURATION_DIR).getFile().getAbsolutePath());
         } catch (Exception e) {
             LOGGER.error("Cannot access folder with configurations " + CONFIGURATION_DIR);
             return;
@@ -151,10 +146,11 @@ public class ConfigurationRepository implements ServletContextAware {
 
         root.set("configuration", array);
 
+        File configurationFile = null;
         try {
-            String uri = servletContext.getResource(CONFIGURATION_DIR).toURI() + configurationName + ".json";
+            configurationFile = new File(new FileSystemResource(CONFIGURATION_DIR + configurationName + ".json").getFile().getAbsolutePath());
 
-            JsonParser.getObjectWriter().writeValue(Paths.get(new URL(uri).toURI()).toFile(), root);
+            JsonParser.getObjectWriter().writeValue(configurationFile, root);
         } catch (Exception e) {
             LOGGER.error("Cannot write configuration to the file");
         }

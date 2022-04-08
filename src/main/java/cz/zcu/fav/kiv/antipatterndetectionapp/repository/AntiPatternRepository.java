@@ -8,6 +8,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
@@ -27,12 +29,17 @@ public class AntiPatternRepository implements ServletContextAware {
 
     private static final String QUERY_DIR = "/queries/";
     private static final String AP_DIR = "/antipatterns/";
-    private static final String OPERATIONALIZATION_DIR = "/operationalizations/";
-    private static final String OPERATIONALIZATION_IMG_DIR = "/operationalizations/images/";
+    private final String OPERATIONALIZATION_DIR;
+    private final String OPERATIONALIZATION_IMG_DIR;
     private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
     private ServletContext servletContext;
     private Map<Long, AntiPatternDetector> antiPatternDetectors;
 
+
+    public AntiPatternRepository(@Value("${DATA_PATH}")String dir){
+        this.OPERATIONALIZATION_DIR = dir + "operationalizations/";
+        this.OPERATIONALIZATION_IMG_DIR = dir + "operationalizations/images/";
+    }
     /**
      * This method load all queries from files for each AP.
      *
@@ -264,7 +271,7 @@ public class AntiPatternRepository implements ServletContextAware {
 
     public String getOperationalizationDirPathName(){
         try {
-            return servletContext.getResource(OPERATIONALIZATION_DIR).getFile();
+            return new FileSystemResource(OPERATIONALIZATION_DIR).getFile().getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -273,7 +280,7 @@ public class AntiPatternRepository implements ServletContextAware {
 
     public String getOperationalizationImgDirFileName(){
         try {
-            return servletContext.getResource(OPERATIONALIZATION_IMG_DIR).getFile();
+            return new FileSystemResource(OPERATIONALIZATION_IMG_DIR).getFile().getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();
         }

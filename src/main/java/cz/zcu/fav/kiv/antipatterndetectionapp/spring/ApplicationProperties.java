@@ -21,4 +21,12 @@ public class ApplicationProperties {
     public String getDataSourcePassword() {
         return environment.getProperty("spring.datasource.password");
     }
+
+    public String getAccountUserName() {
+        return environment.getProperty("account.user.name");
+    }
+
+    public String getAccountUserPassword() {
+        return environment.getProperty("account.user.password");
+    }
 }

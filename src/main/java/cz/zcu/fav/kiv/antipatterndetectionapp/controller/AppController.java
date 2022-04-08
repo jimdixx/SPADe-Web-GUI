@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,8 +29,6 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +103,7 @@ public class AppController {
         String currentConfigurationName = configurationGetFromSession(session);
         model.addAttribute("antiPattern", antiPatternService.getAntiPatternById(id).getAntiPatternModel());
         model.addAttribute("description", antiPatternService.getDescriptionFromCatalogue(id));
+        model.addAttribute("operationalizationText", antiPatternService.getOperationalizationText(antiPatternService.getAntiPatternById(id).getAntiPatternModel().getName()));
         model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "anti-pattern";
     }

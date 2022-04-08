@@ -101,18 +101,6 @@ public class AntiPattern {
         return Constants.ANTI_PATTERN_CATALOGUE_URL + this.catalogueFileName;
     }
 
-    public String getOperationalizationText() {
-        String myPath = new FileSystemResource("").getFile().getAbsolutePath() + "\\src\\main\\webapp\\operationalizations\\" + this.getName() + ".html";
-        String content = null;
-        try {
-            content = new String ( Files.readAllBytes(Paths.get(myPath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return content;
-    }
-
     @Override
     public String toString() {
         return "AntiPattern{" +
