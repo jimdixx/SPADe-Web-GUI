@@ -1,0 +1,23 @@
+{
+    "id": "3",
+    "printName": "Business As Usual",
+    "name": "BusinessAsUsual",
+    "description": "Absence of a retrospective after individual iterations or after the completion project.",
+    "thresholds": [
+        {
+            "thresholdName": "divisionOfIterationsWithRetrospective",
+            "thresholdType": "Percentage",
+            "thresholdPrintName": "Division of iterations with retrospective",
+            "thresholdDescription": "Minimum percentage of the total number of iterations with a retrospective (0,100)",
+            "thresholdErrorMess": "Percentage must be float number between 0 and 100"
+        },
+        {
+            "thresholdName": "searchSubstringsWithRetrospective",
+            "thresholdType": "String",
+            "thresholdPrintName": "Search substrings with retrospective",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || "
+        }
+    ],
+    "catalogueFileName": "Business_As_Usual.md"
+}

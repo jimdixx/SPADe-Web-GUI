@@ -1,0 +1,22 @@
+{
+    "id": "2",
+    "printName": "Varying Sprint Length",
+    "name": "VaryingSprintLength",
+    "description": "The length of the sprint changes very often. It is clear that iterations will be different lengths at the beginning and end of the project, but the length of the sprint should not change during the project.",
+    "thresholds": [
+        {
+            "thresholdName": "maxDaysDifference",
+            "thresholdType": "PositiveInteger",
+            "thresholdPrintName": "Max days difference",
+            "thresholdDescription": "Maximum distance of two consecutive iterations in days",
+            "thresholdErrorMess": "Maximum distance must be positive integer number"
+        },
+        {
+            "thresholdName": "maxIterationChanged",
+            "thresholdType": "PositiveInteger",
+            "thresholdPrintName": "Max number of iteration changed",
+            "thresholdDescription": "Maximum allowed number of significant changes in iteration lengths",
+            "thresholdErrorMess": "Maximum number of iterations changed must be positive integer number"
+        }
+    ]
+}

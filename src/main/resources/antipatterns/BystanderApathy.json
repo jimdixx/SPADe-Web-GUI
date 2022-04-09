@@ -1,0 +1,8 @@
+{
+  "id": "9",
+  "printName": "Bystander Apathy",
+  "name": "BystanderApathy",
+  "description": "The state in which individuals are less likely to offer help to a peer in trouble when there are other people present.",
+  "thresholds": [
+  ]
+}

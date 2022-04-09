@@ -1,0 +1,30 @@
+{
+    "id": "5",
+    "printName": "Road To Nowhere",
+    "name": "RoadToNowhere",
+    "description": "The project is not sufficiently planned and therefore takes place on an ad hoc basis with an uncertain outcome and deadline. There is no project plan in the project.",
+    "thresholds": [
+        {
+            "thresholdName": "minNumberOfWikiPagesWithProjectPlan",
+            "thresholdType": "PositiveInteger",
+            "thresholdPrintName": "Minimum number of wiki pages with project plan",
+            "thresholdDescription": "Number of wiki pages",
+            "thresholdErrorMess": "Minimum number of wikipages must be positive integer number"
+        },
+        {
+            "thresholdName": "minNumberOfActivitiesWithProjectPlan",
+            "thresholdType": "PositiveInteger",
+            "thresholdPrintName": "Minimum number of activities with project plan",
+            "thresholdDescription": "Number of activities",
+            "thresholdErrorMess": "Minimum number of activities must be positive integer number"
+        },
+        {
+            "thresholdName": "searchSubstringsWithProjectPlan",
+            "thresholdType": "String",
+            "thresholdPrintName": "Search substrings with project plan",
+            "thresholdDescription": "Substring that will be search in wikipages and activities",
+            "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters ||"
+        }
+    ],
+    "catalogueFileName": "Road_To_Nowhere.md"
+}
