@@ -11,12 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.ServletContextAware;
 
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
@@ -25,37 +21,25 @@ import java.util.*;
  * A class that takes care of working with AP.
  */
 @Component
-public class AntiPatternRepository implements ServletContextAware {
+public class AntiPatternRepository {
 
-    private static final String QUERY_DIR = "/queries/";
-    private static final String AP_DIR = "/antipatterns/";
+    private final String QUERY_DIR;
+    private final String AP_DIR;
     private final String OPERATIONALIZATION_DIR;
     private final String OPERATIONALIZATION_IMG_DIR;
     private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternRepository.class);
-    private ServletContext servletContext;
     private Map<Long, AntiPatternDetector> antiPatternDetectors;
 
 
     public AntiPatternRepository(@Value("${DATA_PATH}")String dir){
         this.OPERATIONALIZATION_DIR = dir + "operationalizations/";
         this.OPERATIONALIZATION_IMG_DIR = dir + "operationalizations/images/";
-    }
-    /**
-     * This method load all queries from files for each AP.
-     *
-     * @param servletContext servlet context
-     */
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
+        this.AP_DIR = "antipatterns/";
+        this.QUERY_DIR = "queries/";
 
-        // initialize all detectors
         this.antiPatternDetectors = initDetectors();
-
-        // initialize sql queries
         initSqlQueries();
     }
-
 
     /**
      * The method that loads all available detectors that implement
@@ -128,9 +112,9 @@ public class AntiPatternRepository implements ServletContextAware {
             LOGGER.info("Reading sql query from file " + fileName);
 
             try {
-                URL test = servletContext.getResource(QUERY_DIR + fileName);
+                URL url = getClass().getClassLoader().getResource(QUERY_DIR + fileName);
                 BufferedReader read = new BufferedReader(
-                        new InputStreamReader(test.openStream()));
+                        new InputStreamReader(url.openStream()));
                 String line;
                 while ((line = read.readLine()) != null) {
                     if (line.startsWith("select") || line.startsWith("set") && line.charAt(line.length() - 1) == ';') {
@@ -159,7 +143,7 @@ public class AntiPatternRepository implements ServletContextAware {
         LOGGER.info("Reading anti-pattern from json file " + jsonFileName);
 
         try {
-            URL url = servletContext.getResource(AP_DIR + jsonFileName);
+            URL url = getClass().getClassLoader().getResource(AP_DIR + jsonFileName);
 
             BufferedReader read = new BufferedReader(
                     new InputStreamReader(url.openStream()));

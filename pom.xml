@@ -81,26 +81,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/java/resources</directory>
-				<includes>
-					<include>queries/*.sql</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/java/resources</directory>
-				<includes>
-					<include>antipatterns/*.json</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/java/resources</directory>
-				<includes>
-					<include>configurations/*.json</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
 
 </project>
