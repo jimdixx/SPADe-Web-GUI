@@ -48,6 +48,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/spade
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: testtest
-      ACCOUNT_USER_NAME: 
-      ACCOUNT_USER_PASSWORD:
-      DATA_PATH: /data/
+      ACCOUNT_USER_NAME: admin
+      ACCOUNT_USER_PASSWORD: test
+      DATA_PATH: usr/local/etc/data/
+    volumes:
+      - ./data/:/usr/local/etc/data/
