@@ -32,11 +32,10 @@
     <!-- ./Container for show success message -->
 
     <h1>Configuration</h1>
-
+    <hr>
         <!-- Form for configuration values -->
         <form action="#" th:action="@{/configuration}" th:object="${antiPatterns}" method="post" id="configuration-form">
             <div th:each="antiPattern : ${antiPatterns}">
-                <hr>
                 <h3 th:text="${antiPattern.printName}"></h3>
                 <div th:each="threshold : ${antiPattern.thresholds}">
                     <div class="form-group row">
@@ -85,6 +84,7 @@
                     </div>
 
                 </div>
+                <hr>
             </div>
 
             <!-- Submit button to save configuration -->
