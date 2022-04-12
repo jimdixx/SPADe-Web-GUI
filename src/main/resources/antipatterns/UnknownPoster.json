@@ -4,5 +4,12 @@
   "name": "UnknownPoster",
   "description": "The identity of the contributor is unknown. The real name of the contributor is missing or replaced by nickname according to which the contributor cannot be identified.",
   "thresholds": [
+    {
+      "thresholdName": "searchSubstringsInvalidNames",
+      "thresholdType": "String",
+      "thresholdPrintName": "Search substrings with invalid names",
+      "thresholdDescription": "Substring that will be search in names",
+      "thresholdErrorMess": "Maximum number of substrings is ten and must not starts and ends with characters || "
+    }
   ]
 }

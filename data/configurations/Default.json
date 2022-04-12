@@ -106,6 +106,15 @@
                     "value": "2"
                 }
             ]
+        },
+        {
+            "antiPattern": "UnknownPoster",
+            "thresholds": [
+                {
+                    "thresholdName": "searchSubstringsInvalidNames",
+                    "value": "%unknown%||%anonym%"
+                }
+            ]
         }
     ]
 }
