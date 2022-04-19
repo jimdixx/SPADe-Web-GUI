@@ -115,6 +115,19 @@
                     "value": "%unknown%||%anonym%"
                 }
             ]
+        },
+        {
+            "antiPattern": "YetAnotherProgrammer",
+            "thresholds": [
+                {
+                    "thresholdName": "maxNumberOfNewContributors",
+                    "value": "5"
+                },
+                {
+                    "thresholdName": "numberOfFirstMonthsWithoutDetection",
+                    "value": "2"
+                }
+            ]
         }
     ]
 }

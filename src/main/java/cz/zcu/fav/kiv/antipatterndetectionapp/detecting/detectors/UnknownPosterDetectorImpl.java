@@ -25,7 +25,7 @@ public class UnknownPosterDetectorImpl implements AntiPatternDetector {
     private final List<String> SQL_FILE_NAMES = Arrays.asList(
             "set_project_id.sql",
             "select_all_persons_without_full_name.sql",
-            "select_identities_without_valid_information.sql"
+            "select_identities_with_valid_information.sql"
     );
 
     // sql queries loaded from sql file
@@ -88,9 +88,12 @@ public class UnknownPosterDetectorImpl implements AntiPatternDetector {
         List<ResultDetail> resultDetails = new ArrayList<>();
         resultDetails.add(new ResultDetail("Number of unknown contributors", String.valueOf(resultNumber)));
 
-        if(resultNumber > 0)
+        if(resultNumber > 0) {
+            resultDetails.add(new ResultDetail("Conclusion", "Unknown contributors were detected."));
             return new QueryResultItem(this.antiPattern, true, resultDetails);
+        }
 
+        resultDetails.add(new ResultDetail("Conclusion", "Any unknown contributors were not detected."));
         return new QueryResultItem(this.antiPattern, false, resultDetails);
     }
 }

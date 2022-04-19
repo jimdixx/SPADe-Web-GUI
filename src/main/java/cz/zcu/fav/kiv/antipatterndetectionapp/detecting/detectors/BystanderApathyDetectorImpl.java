@@ -5,6 +5,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,11 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
 
     private AntiPattern antiPattern;
 
-    private final List<String> SQL_FILE_NAMES = Arrays.asList();
+    private final List<String> SQL_FILE_NAMES = Arrays.asList(
+            "set_project_id.sql",
+            "select_work_units_from_project.sql",
+            "select_number_of_work_unit_other_contributors.sql"
+    );
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
@@ -55,8 +60,30 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
+        List<String> queriesFirstPart = this.sqlQueries.subList(0, 2);
+        List<String> queriesSecondPart = this.sqlQueries.subList(2, 3);
+
+        List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, queriesFirstPart);
+
+        int bystanderAP = 0;
+        for(Map<String, Object> result : resultSets.get(0)) {
+            List<String> parameters = new ArrayList<>();
+            parameters.add(result.get("id").toString());
+            parameters.add(result.get("authorId").toString());
+            List<List<Map<String, Object>>> resultsForInvalidIds = databaseConnection.executeQueriesWithMultipleResults(project, Utils.fillQueryWithSearchSubstrings(queriesSecondPart, parameters));
+
+            if(Integer.parseInt(resultsForInvalidIds.get(0).get(0).get("otherContributorsNumber").toString()) == 0)
+                bystanderAP++;
+        }
+
         List<ResultDetail> resultDetails = new ArrayList<>();
-        resultDetails.add(new ResultDetail("Test", "Test"));
+        resultDetails.add(new ResultDetail("Bystander number", String.valueOf(bystanderAP)));
+
+        if(bystanderAP > 0) {
+            resultDetails.add(new ResultDetail("Conclusion", "Tasks without other contributors besides author were detected."));
+            return new QueryResultItem(this.antiPattern, true, resultDetails);
+        }
+        resultDetails.add(new ResultDetail("Conclusion", "Any tasks without other contributors besides author were not detected."));
         return new QueryResultItem(this.antiPattern, false, resultDetails);
     }
 }

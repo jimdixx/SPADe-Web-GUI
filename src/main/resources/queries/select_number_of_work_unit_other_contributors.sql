@@ -1,0 +1,2 @@
+/* Select number of contributors to the work unit except the author */
+select count(distinct cv.authorId) as otherContributorsNumber from configurationView cv where cv.id in (select distinct cc.configurationId from configuration_change cc where cc.changeId in (select wic.id from work_item_change wic where wic.workItemId = '§0§')) and cv.authorName not like '%dependabot%' and cv.authorId != '§1§';

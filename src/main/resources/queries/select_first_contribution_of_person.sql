@@ -1,0 +1,1 @@
+select c.created from configurationView c where c.authorId = '§0§' and c.type like 'CONFIGURATION' ORDER by created ASC limit 1;
