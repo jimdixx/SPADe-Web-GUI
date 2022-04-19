@@ -186,13 +186,13 @@ function codeFormat() {
     let S=window.getSelection().toString();
     if(S.length == 0)
         return;
-    if(window.getSelection().anchorNode.parentNode.nodeName.toLowerCase() ===  'pre'){
+    if(window.getSelection().anchorNode.parentNode.nodeName.toLowerCase() ===  'code'){
         document.execCommand('formatBlock', false, 'div');
         document.execCommand('insertHTML',false, S);
     }
     else{
         document.execCommand('delete',false,'');
-        document.execCommand('insertText',false,'<pre>'+S+'</pre>');
+        document.execCommand('insertText',false,'<code>'+S+'</code>');
     }
 }
 
