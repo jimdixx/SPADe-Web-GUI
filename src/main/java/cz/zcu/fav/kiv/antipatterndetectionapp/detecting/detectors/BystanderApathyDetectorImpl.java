@@ -97,7 +97,7 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
         resultDetails.add(new ResultDetail("Bystander tasks number", String.valueOf(bystanderAP)));
 
         float totalRatioOfBystanderTasks = (float) bystanderAP / workUnitsTotalCount;
-        resultDetails.add(new ResultDetail("Bystander tasks ratio", String.format("%.02f", totalRatioOfBystanderTasks)));
+        resultDetails.add(new ResultDetail("Bystander tasks ratio", String.format("%.02f", totalRatioOfBystanderTasks * 100) + "%"));
 
         if(totalRatioOfBystanderTasks > getMaximumPercentageOfTasksWithoutTeamwork(thresholds)) {
             resultDetails.add(new ResultDetail("Conclusion", "Tasks without other contributors besides author were detected."));
