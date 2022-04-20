@@ -117,6 +117,19 @@
             ]
         },
         {
+            "antiPattern": "BystanderApathy",
+            "thresholds": [
+                {
+                    "thresholdName": "searchSubstringsInvalidContributors",
+                    "value": "%dependabot%"
+                },
+                {
+                    "thresholdName": "maximumPercentageOfTasksWithoutTeamwork",
+                    "value": "30f"
+                }
+            ]
+        },
+        {
             "antiPattern": "YetAnotherProgrammer",
             "thresholds": [
                 {

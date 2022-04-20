@@ -95,6 +95,7 @@ public class YetAnotherProgrammerDetectorImpl implements AntiPatternDetector {
             for(Map<String, Object> res : resultsForInvalidIds.get(0)) {
                 LocalDateTime dateTime = LocalDateTime.parse(res.get("created").toString());
                 contributors.put(result.get("id").toString(), dateTime);
+                //System.out.println("- Person: " + result.get("id").toString() + " - " + dateTime);
             }
         }
 

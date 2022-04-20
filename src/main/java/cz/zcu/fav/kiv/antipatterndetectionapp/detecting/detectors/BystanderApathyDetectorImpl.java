@@ -5,6 +5,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,14 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
 
     // sql queries loaded from sql file
     private List<String> sqlQueries;
+
+    private List<String> getSearchSubstringsInvalidContributors(Map<String, String> thresholds) {
+        return Arrays.asList(thresholds.get("searchSubstringsInvalidContributors").split("\\|\\|"));
+    }
+
+    private float getMaximumPercentageOfTasksWithoutTeamwork(Map<String, String> thresholds) {
+        return new Percentage(Float.parseFloat(thresholds.get("maximumPercentageOfTasksWithoutTeamwork"))).getValue();
+    }
 
     @Override
     public String getJsonFileName(){
@@ -66,20 +75,31 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
         List<List<Map<String, Object>>> resultSets = databaseConnection.executeQueriesWithMultipleResults(project, queriesFirstPart);
 
         int bystanderAP = 0;
+        int workUnitsTotalCount = 0;
         for(Map<String, Object> result : resultSets.get(0)) {
+            workUnitsTotalCount++;
+
             List<String> parameters = new ArrayList<>();
             parameters.add(result.get("id").toString());
             parameters.add(result.get("authorId").toString());
+
+            List<String> substringsInvalidContributors = getSearchSubstringsInvalidContributors(thresholds);
+            for(String substring : substringsInvalidContributors)
+                parameters.add(substring);
+
             List<List<Map<String, Object>>> resultsForInvalidIds = databaseConnection.executeQueriesWithMultipleResults(project, Utils.fillQueryWithSearchSubstrings(queriesSecondPart, parameters));
 
-            if(Integer.parseInt(resultsForInvalidIds.get(0).get(0).get("otherContributorsNumber").toString()) == 0)
+            if(Integer.parseInt(resultsForInvalidIds.get(0).get(0).get("otherContributorsNumber").toString()) == 1)
                 bystanderAP++;
         }
 
         List<ResultDetail> resultDetails = new ArrayList<>();
-        resultDetails.add(new ResultDetail("Bystander number", String.valueOf(bystanderAP)));
+        resultDetails.add(new ResultDetail("Bystander tasks number", String.valueOf(bystanderAP)));
 
-        if(bystanderAP > 0) {
+        float totalRatioOfBystanderTasks = (float) bystanderAP / workUnitsTotalCount;
+        resultDetails.add(new ResultDetail("Bystander tasks ratio", String.format("%.02f", totalRatioOfBystanderTasks)));
+
+        if(totalRatioOfBystanderTasks > getMaximumPercentageOfTasksWithoutTeamwork(thresholds)) {
             resultDetails.add(new ResultDetail("Conclusion", "Tasks without other contributors besides author were detected."));
             return new QueryResultItem(this.antiPattern, true, resultDetails);
         }
