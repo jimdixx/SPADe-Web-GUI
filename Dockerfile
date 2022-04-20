@@ -10,6 +10,7 @@ RUN mvn -f pom.xml clean package -Dmaven.test.skip=true
 ### STAGE 2: RUN ###
 FROM adoptopenjdk:11-jre-hotspot
 COPY --from=build /workspace/target/*.war app.war
+COPY --from=build /workspace/target/classes/application.properties application.properties
 
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.war"]
+ENTRYPOINT ["java","-jar","app.war", "--spring.config.location=/application.properties"]
