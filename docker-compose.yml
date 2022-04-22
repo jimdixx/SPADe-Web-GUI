@@ -51,3 +51,4 @@ services:
       DATA_PATH: usr/local/etc/data/
     volumes:
       - ./data/:/usr/local/etc/data/
+      - ./src/main/resources/application.properties:/application.properties
