@@ -61,7 +61,18 @@ public class UnknownPosterDetectorImpl implements AntiPatternDetector {
     }
 
     /**
+     * Detection procedure:
+     * 1) find all persons involved in the project
+     * 2) check if persons have full name filled in
+     * 3) select identities for unidentified persons
+     * 4) check if every person has filled in at least one of the information in one of used identities
+     *    (email, full name in description, valid nickname)
+     * 5) if there is at least one unidentified person, the anti-pattern is detected
      *
+     * @param project model class for analyzed project
+     * @param databaseConnection database connection
+     * @param thresholds current thresholds
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {

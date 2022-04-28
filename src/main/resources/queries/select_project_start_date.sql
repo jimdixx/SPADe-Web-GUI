@@ -1,2 +1,2 @@
 /* Get project start date */
-select startDate as 'projectStartDate' from iteration where superProjectId = @projectId order by startDate limit 1;
+select startDate FROM project where id = @projectId;

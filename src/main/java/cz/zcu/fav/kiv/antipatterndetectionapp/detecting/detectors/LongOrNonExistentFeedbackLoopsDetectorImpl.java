@@ -28,8 +28,8 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             "select_average_iterations_length.sql",
             "select_number_of_iterations_with_substrings_in_activity.sql",
             "select_all_activities_with_substrings_and_last_modified_date_as_end_date.sql",
-            "select_project_start_date.sql",
-            "select_project_end_date.sql",
+            "select_project_start_date_by_iteration.sql",
+            "select_project_end_date_by_iteration.sql",
             "select_all_iterations_that_contains_wikipages_with_substrings.sql");
 
     // sql queries loaded from sql file
@@ -112,6 +112,13 @@ public class LongOrNonExistentFeedbackLoopsDetectorImpl implements AntiPatternDe
             switch (i) {
                 case 0:
                     totalNumberIterations = (long) rs.get(0).get("numberOfIterations");
+                    if(totalNumberIterations == 0) {
+                        List<ResultDetail> resultDetails = Utils.createResultDetailsList(
+                                new ResultDetail("Number of iterations", Long.toString(totalNumberIterations)),
+                                new ResultDetail("Number of iterations with feedback loops", Integer.toString(numberOfIterationsWhichContainsAtLeastOneActivityForFeedback)),
+                                new ResultDetail("Conclusion", "No iterations in the project"));
+                        return new QueryResultItem(this.antiPattern, false, resultDetails);
+                    }
                     break;
                 case 1:
                     averageIterationLength = ((BigDecimal) rs.get(0).get("averageIterationLength")).intValue();

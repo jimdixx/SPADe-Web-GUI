@@ -9,6 +9,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.types.Percentage;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thymeleaf.spring5.processor.SpringTextareaFieldTagProcessor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -67,7 +68,18 @@ public class YetAnotherProgrammerDetectorImpl implements AntiPatternDetector {
     }
 
     /**
+     * Detection procedure:
+     * 1) select start and end date of the project
+     * 2) select all persons involved in the project
+     * 3) get first involvement date for each person in the project
+     * 4) divide project into months
+     * 5) for each month (except first X months) get number of persons with first involvement in this month
+     * 6) if number of new persons in any month is more than Y, the anti-pattern is detected
      *
+     * @param project model class for analyzed project
+     * @param databaseConnection database connection
+     * @param thresholds current thresholds
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {

@@ -65,7 +65,16 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
     }
 
     /**
+     * Detection procedure:
+     * 1) find all work units in the project
+     * 2) find number of contributors to each project
+     * 3) if there is only one contributor (author) in the work unit, the work unit is without cooperation
+     * 4) if there is certain percentage of work units without cooperation in all work unit number, the anti-pattern is detected
      *
+     * @param project model class for analyzed project
+     * @param databaseConnection database connection
+     * @param thresholds current thresholds
+     * @return detection result
      */
     @Override
     public QueryResultItem analyze(Project project, DatabaseConnection databaseConnection, Map<String, String> thresholds) {
@@ -81,7 +90,7 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
 
             List<String> parameters = new ArrayList<>();
             parameters.add(result.get("id").toString());
-            parameters.add(result.get("authorId").toString());
+            //parameters.add(result.get("authorId").toString());
 
             List<String> substringsInvalidContributors = getSearchSubstringsInvalidContributors(thresholds);
             for(String substring : substringsInvalidContributors)
@@ -94,6 +103,7 @@ public class BystanderApathyDetectorImpl implements AntiPatternDetector {
         }
 
         List<ResultDetail> resultDetails = new ArrayList<>();
+        resultDetails.add(new ResultDetail("Tasks total number", String.valueOf(workUnitsTotalCount)));
         resultDetails.add(new ResultDetail("Bystander tasks number", String.valueOf(bystanderAP)));
 
         float totalRatioOfBystanderTasks = (float) bystanderAP / workUnitsTotalCount;
