@@ -119,6 +119,7 @@ public class YetAnotherProgrammerDetectorImpl implements AntiPatternDetector {
         tmpPeriodEnd = tmpPeriodStart.plusMonths(1);
 
         boolean detected = false;
+        int detectedMonthsNumber = 0;
         int numberOfNewContributors;
 
         while(tmpPeriodStart.isBefore(endDateTime)){
@@ -128,8 +129,10 @@ public class YetAnotherProgrammerDetectorImpl implements AntiPatternDetector {
                 if((tmp.isAfter(tmpPeriodStart) || tmp.isEqual(tmpPeriodStart)) && tmp.isBefore(tmpPeriodEnd))
                     numberOfNewContributors++;
             }
-            if(numberOfNewContributors > getMaximumNumberOfNewContributors(thresholds))
+            if(numberOfNewContributors > getMaximumNumberOfNewContributors(thresholds)) {
                 detected = true;
+                detectedMonthsNumber++;
+            }
 
             //System.out.println("Project: "+ project.getId() + " - Period: " + tmpPeriodStart + " - " + tmpPeriodEnd + "- Number of new contributors: " + numberOfNewContributors);
 
@@ -138,6 +141,7 @@ public class YetAnotherProgrammerDetectorImpl implements AntiPatternDetector {
         }
 
         List<ResultDetail> resultDetails = new ArrayList<>();
+        resultDetails.add(new ResultDetail("Months number with detected increase", String.valueOf(detectedMonthsNumber)));
         if(detected == true)
             resultDetails.add(new ResultDetail("Conclusion", "Significant increase of new contributors at a later stage of the project detected"));
         else
