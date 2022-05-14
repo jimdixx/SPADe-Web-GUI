@@ -67,7 +67,7 @@
 
         <!-- Anti pattern description -->
         <div class="form-group">
-            <h5 for="antiPatternDescription">Anti Pattern Description</h5>
+            <h5 for="antiPatternDescription">Anti-pattern Description</h5>
             <textarea disabled class="form-control" id="antiPatternDescription" rows="5"
                       th:text="${description}"></textarea>
         </div>
@@ -77,7 +77,7 @@
 
         <!-- Anti pattern operationalization -->
         <div class="operationalization-detail">
-            <h5 style="display: inline-block">Anti Pattern Operationalization Detail</h5>
+            <h5 style="display: inline-block">Anti-pattern Operationalization Detail</h5>
             <button type="button" class="btn edit-button" id="operationalizationEditButton" onclick="enableEdit()">
                 <i class="fa fa-pen-to-square fa-lg"></i>
             </button>
@@ -143,7 +143,7 @@
         <hr>
 
         <!-- Anti pattern configuration form -->
-        <h5>Anti Pattern Configurations</h5>
+        <h5>Anti-pattern Configurations</h5>
 
         <!-- Form for configuration values -->
         <form action="#" th:action="@{/anti-patterns/} + ${antiPattern.id}" th:object="${antiPattern}" method="post">
