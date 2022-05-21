@@ -24,5 +24,5 @@ function showProgressBar() {
     $('#progressBar').css('display', '');
     var analyzeButton = $('#analyzeButton');
     analyzeButton.addClass('disabled');
-    analyzeButton.text('Analyzing...');
+    analyzeButton.text('Detecting...');
 }
