@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col">
                 <!-- Table for selecting projects -->
-                <table class="table">
+                <table th:if="${not #lists.isEmpty(query.projects)}" class="table">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -62,11 +62,14 @@
                     </tr>
                     </tbody>
                 </table>
+                <div th:unless="${not #lists.isEmpty(query.projects)}" class="alert alert-danger" role="alert">
+                    There are no projects to analyze!
+                </div>
                 <!-- ./Table for selecting projects -->
             </div>
             <div class="col">
                 <!-- Table for selecting anti patterns -->
-                <table class="table">
+                <table th:if="${not #lists.isEmpty(query.antiPatterns)}" class="table">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -97,6 +100,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <div th:unless="${not #lists.isEmpty(query.antiPatterns)}" class="alert alert-danger" role="alert">
+                    There are no anti-patterns to detect!
+                </div>
                 <!-- ./Table for selecting anti patterns -->
             </div>
         </div>
@@ -120,7 +126,7 @@
 
     <!-- Container for analyze button -->
     <div class="analyze-button-container">
-        <button id="analyzeButton" type="submit" class="btn btn-primary btn-lg btn-block" onclick="showProgressBar()">Detect</button>
+        <button id="analyzeButton" type="submit" class="btn btn-primary btn-lg btn-block" onclick="showProgressBar()" th:disabled="${#lists.isEmpty(query.projects) or #lists.isEmpty(query.antiPatterns)}">Detect</button>
     </div>
     <!-- ./Container for analyze button -->
 
