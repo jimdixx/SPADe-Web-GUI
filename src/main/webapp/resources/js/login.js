@@ -26,7 +26,8 @@ function checkIfUserIsLogged() {
 function applyUnloggedStyle(){
     document.getElementById("login-button").hidden = false;
     document.getElementById("logout-button").hidden = true;
-    document.getElementById("current-configuration-select").disabled = true;
+    document.getElementById("current-configuration-select").hidden = true;
+    document.getElementById("current-configuration-label").hidden = true;
 
     if(document.getElementById("operationalizationEditButton") != null) {
         document.getElementById("operationalizationEditButton").hidden = true;
@@ -42,7 +43,8 @@ function applyLoggedStyle(user){
     document.getElementById("logout-button").hidden = false;
     document.getElementById("user-name-container").innerText = user;
     document.getElementById("user-name-container").hidden = false;
-    document.getElementById("current-configuration-select").disabled = false;
+    document.getElementById("current-configuration-select").hidden = false;
+    document.getElementById("current-configuration-label").hidden = false;
 
     if(document.getElementById("operationalizationEditButton") != null) {
         document.getElementById("operationalizationEditButton").hidden = false;
