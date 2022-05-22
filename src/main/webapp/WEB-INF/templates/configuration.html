@@ -39,9 +39,9 @@
             <div class="panel-group" id="accordion">
                 <div th:each="antiPattern : ${antiPatterns}">
                     <div class="panel panel-default">
-                            <h3 class="panel-title ap-configuration-header">
+                            <h4 class="panel-title ap-configuration-header">
                                 <a class="ap-configuration-header" data-toggle="collapse" data-parent="#accordion" th:href="${'#'+ antiPattern.name}" th:text="${antiPattern.printName}"></a>
-                            </h3>
+                            </h4>
                         <div th:id="${antiPattern.name}" class="panel-collapse collapse in">
                             <div th:each="threshold : ${antiPattern.thresholds}">
                                 <div class="form-group row">
