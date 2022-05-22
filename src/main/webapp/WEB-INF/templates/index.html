@@ -34,25 +34,19 @@
                 <table th:if="${not #lists.isEmpty(query.projects)}" class="table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Project Name</th>
-                        <th scope="col">Detail</th>
                         <th scope="col">Detect?</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="project : ${query.projects}">
-                        <td th:text="${project.id}"></td>
-                        <td th:text="${project.name}"></td>
-                        <td><a th:href="@{'/projects/' + ${project.id}}">Show</a></td>
+                        <td><a th:text="${project.name}" th:href="@{'/projects/' + ${project.id}}" class="anchor-table"></a></td>
                         <td style="text-align: center">
                             <input checked type="checkbox" class="form-check-input" name="selectedProjects"
                                    th:value="${project.id}" th:id="@{project_} + ${project.id}">
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td>
                             <input checked type="checkbox" class="form-check-input" id="select_all_projects"
@@ -72,25 +66,19 @@
                 <table th:if="${not #lists.isEmpty(query.antiPatterns)}" class="table">
                     <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Anti-pattern</th>
-                        <th scope="col">Detail</th>
                         <th scope="col">Detect?</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="antiPattern : ${query.antiPatterns}">
-                        <td th:text="${antiPattern.id}"></td>
-                        <td th:text="${antiPattern.printName}"></td>
-                        <td><a th:href="@{'/anti-patterns/' + ${antiPattern.id}}">Show</a></td>
+                        <td><a th:text="${antiPattern.printName}" th:href="@{'/anti-patterns/' + ${antiPattern.id}}" class="anchor-table"></a></td>
                         <td style="text-align: center">
                             <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns"
                                    th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
                         </td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td>
                             <input checked type="checkbox" class="form-check-input" id="select_all_anti_patterns"
