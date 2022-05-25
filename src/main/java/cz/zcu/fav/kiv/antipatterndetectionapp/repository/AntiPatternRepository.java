@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.reflections.Reflections;
@@ -221,7 +222,9 @@ public class AntiPatternRepository {
      * @return list of AP
      */
     public List<AntiPatternDetector> getAllAntiPatterns() {
-        return new ArrayList<>(this.antiPatternDetectors.values());
+        List<AntiPatternDetector> antiPatternDetectors = new ArrayList<>(this.antiPatternDetectors.values());
+        Collections.sort(antiPatternDetectors, Comparator.comparing(AntiPatternDetector -> AntiPatternDetector.getAntiPatternModel().getName()));
+        return antiPatternDetectors;
     }
 
     /**
