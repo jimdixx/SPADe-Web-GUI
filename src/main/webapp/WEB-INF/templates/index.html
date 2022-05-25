@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Anti Pattern Detector</title>
+    <title>SPAWn – SPADe Web Interface</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/resources/css/style.css}">
@@ -33,10 +33,7 @@
                 <!-- Table for selecting projects -->
                 <table th:if="${not #lists.isEmpty(query.projects)}" class="table">
                     <thead>
-                    <tr>
-                        <th scope="col">Project Name</th>
-                        <th scope="col">Detect?</th>
-                    </tr>
+
                     </thead>
                     <tbody>
                     <tr th:each="project : ${query.projects}">
@@ -65,10 +62,7 @@
                 <!-- Table for selecting anti patterns -->
                 <table th:if="${not #lists.isEmpty(query.antiPatterns)}" class="table">
                     <thead>
-                    <tr>
-                        <th scope="col">Anti-pattern</th>
-                        <th scope="col">Detect?</th>
-                    </tr>
+                    
                     </thead>
                     <tbody>
                     <tr th:each="antiPattern : ${query.antiPatterns}">
