@@ -43,6 +43,8 @@
                                    th:value="${project.id}" th:id="@{project_} + ${project.id}">
                         </td>
                     </tr>
+                    </tbody>
+                    <tfoot>
                     <tr>
                         <td></td>
                         <td>
@@ -51,7 +53,7 @@
                             <label class="form-check-label" for="select_all_projects">Select All</label>
                         </td>
                     </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
                 <div th:unless="${not #lists.isEmpty(query.projects)}" class="alert alert-danger" role="alert">
                     There are no projects to analyze!
@@ -72,6 +74,8 @@
                                    th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
                         </td>
                     </tr>
+                    </tbody>
+                    <tfoot>
                     <tr>
                         <td></td>
                         <td>
@@ -80,7 +84,7 @@
                             <label class="form-check-label" for="select_all_anti_patterns">Select All</label>
                         </td>
                     </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
                 <div th:unless="${not #lists.isEmpty(query.antiPatterns)}" class="alert alert-danger" role="alert">
                     There are no anti-patterns to detect!
