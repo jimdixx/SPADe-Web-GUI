@@ -223,7 +223,7 @@ public class AntiPatternRepository {
      */
     public List<AntiPatternDetector> getAllAntiPatterns() {
         List<AntiPatternDetector> antiPatternDetectors = new ArrayList<>(this.antiPatternDetectors.values());
-        Collections.sort(antiPatternDetectors, Comparator.comparing(AntiPatternDetector -> AntiPatternDetector.getAntiPatternModel().getName()));
+        Collections.sort(antiPatternDetectors, Comparator.comparing(AntiPatternDetector -> AntiPatternDetector.getAntiPatternModel().getName(), String.CASE_INSENSITIVE_ORDER));
         return antiPatternDetectors;
     }
 

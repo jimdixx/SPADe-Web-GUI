@@ -18,7 +18,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
-        Collections.sort(projects, Comparator.comparing(Project::getName));
+        Collections.sort(projects, Comparator.comparing(Project::getName, String.CASE_INSENSITIVE_ORDER));
         return projects;
     }
 
