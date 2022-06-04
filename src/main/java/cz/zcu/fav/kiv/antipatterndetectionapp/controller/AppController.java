@@ -78,6 +78,7 @@ public class AppController {
      */
     @GetMapping("/projects/{id}")
     public String getProjectById(@PathVariable Long id, Model model) {
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("project", projectService.getProjectById(id));
         return "project";
     }
@@ -87,7 +88,8 @@ public class AppController {
      * @return list of AP
      */
     @GetMapping("/anti-patterns")
-    public @ResponseBody List<AntiPattern> getAllAntiPatterns() {
+    public @ResponseBody List<AntiPattern> getAllAntiPatterns(Model model) {
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         return antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
     }
 
@@ -101,6 +103,7 @@ public class AppController {
     @GetMapping("/anti-patterns/{id}")
     public String getAntiPatternById(@PathVariable Long id, Model model, HttpSession session) {
         String currentConfigurationName = configurationGetFromSession(session);
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("antiPattern", antiPatternService.getAntiPatternById(id).getAntiPatternModel());
         model.addAttribute("description", antiPatternService.getDescriptionFromCatalogue(id));
         model.addAttribute("operationalizationText", antiPatternService.getOperationalizationText(antiPatternService.getAntiPatternById(id).getAntiPatternModel().getName()));
@@ -164,6 +167,7 @@ public class AppController {
         }
         antiPatternService.setConfigurationChanged(false);
 
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("queryResults", antiPatternService.getResults());
         model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
 
@@ -176,7 +180,10 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/about")
-    public String about() {return "about";}
+    public String about(Model model) {
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
+        return "about";
+    }
 
     /**
      * Method for getting all configuration from app and set it to the model class.
@@ -186,6 +193,7 @@ public class AppController {
      */
     @GetMapping("/configuration")
     public String configuration(Model model, HttpSession session) {
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("antiPatterns", antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
 
         String currentConfigurationName = configurationGetFromSession(session);
@@ -381,7 +389,8 @@ public class AppController {
      * @return html file name for thymeleaf template
      */
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model){
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         return "login";
     }
 
