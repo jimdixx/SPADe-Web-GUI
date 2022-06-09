@@ -148,6 +148,7 @@ public class AppController {
         antiPatternService.saveResults(results);
         antiPatternService.setConfigurationChanged(false);
 
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("queryResults", results);
         model.addAttribute("recalculationTime", DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalTime.now()));
 
