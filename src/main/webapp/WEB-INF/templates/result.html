@@ -22,7 +22,6 @@
         <!-- Result table header -->
         <thead>
         <tr>
-            <th scope="col">#</th>
             <th scope="col">Project Name</th>
             <th scope="col" th:each="antiPattern: ${queryResults.get(0).getQueryResultItems()}">
                 <a data-toggle="popover"
@@ -40,7 +39,6 @@
         <!-- Result table content -->
         <tbody>
         <tr th:each="queryResult : ${queryResults}">
-            <td th:text="${queryResult.getProject().id}"></td>
             <td th:text="${queryResult.getProject().name}"></td>
             <td class="align-middle" th:each="resultItems: ${queryResult.getQueryResultItems()}">
 
