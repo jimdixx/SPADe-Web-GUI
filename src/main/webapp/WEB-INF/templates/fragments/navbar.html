@@ -22,7 +22,7 @@
                 </li>
                 <li class="nav-item active" id="current-configuration-box">
                     <form id="configuration-form" th:action="@{/setSelectedConfiguration}" method="post">
-                        <select class="form-control" id="current-configuration-select" name="current-configuration-select" onchange="this.form.submit()" disabled>
+                        <select class="form-control" id="current-configuration-select" name="current-configuration-select" onchange="this.form.submit()">
                             <option th:each="configuration : ${configurationList}" th:value = ${configuration} th:text = ${configuration} th:selected="${#strings.equals(configuration, selectedConfiguration)}"></option>
                         </select>
                     </form>

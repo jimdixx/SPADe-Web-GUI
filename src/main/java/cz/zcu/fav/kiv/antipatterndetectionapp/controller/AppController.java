@@ -230,6 +230,7 @@ public class AppController {
             antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
         }
 
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("antiPatterns", antiPatterns);
         model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "configuration";
@@ -271,6 +272,7 @@ public class AppController {
             antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
         }
 
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         model.addAttribute("antiPatterns", antiPatterns);
         session.setAttribute("configuration", newConfigName);
         model.addAttribute("configurations", configurationService.getConfigurationByName(newConfigName));
