@@ -11,9 +11,9 @@ services:
       - "3306:3306"
     restart: always
     volumes:
-      - ./db_dump.sql:/usr/local/etc/db_dump.sql
-      - ./config.sql:/usr/local/etc/config.sql
-
+      - ./db/spade.sql:/usr/local/etc/spade.sql
+      - ./db/spade-views.sql:/usr/local/etc/spade-views.sql
+      - ./db/spade-config.sql:/usr/local/etc/spade-config.sql
 
   #service 2: definition of phpMyAdmin
   phpmyadmin:
