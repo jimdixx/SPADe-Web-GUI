@@ -219,19 +219,19 @@ public class AppController {
 
         String currentConfigurationName = configurationGetFromSession(session);
 
-        List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+        Query query = new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
 
-        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues, true);
+        List<String> wrongParameters = configurationService.saveNewConfiguration(query.getAntiPatterns(), currentConfigurationName, antiPatternNames, thresholdNames, thresholdValues, true);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "All configuration values have been successfully saved.");
         } else {
             model.addAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
-            antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
+            antiPatternService.setErrorMessages(query.getAntiPatterns(), wrongParameters);
         }
 
-        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
-        model.addAttribute("antiPatterns", antiPatterns);
+        model.addAttribute("query", query);
+
         model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         return "configuration";
     }
@@ -252,30 +252,29 @@ public class AppController {
                                     @RequestParam(value = "configuration-save-as-input", required = false) String newConfigName,
                                     HttpSession session, RedirectAttributes redirectAttributes) {
 
-        List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
+        Query query = new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
         String currentConfigurationName = configurationGetFromSession(session);
 
         List<String> allConfigurationNames = configurationService.getAllConfigurationNames();
         if (newConfigName == null || newConfigName.length() == 0 ||  allConfigurationNames.contains(newConfigName)) {
-            model.addAttribute("antiPatterns", antiPatterns);
             model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
             model.addAttribute("errorMessage", "Configuration name is not possible.");
             return "configuration";
         }
 
-        List<String> wrongParameters = configurationService.saveNewConfiguration(antiPatterns, newConfigName, antiPatternNames, thresholdNames, thresholdValues, true);
+        List<String> wrongParameters = configurationService.saveNewConfiguration(query.getAntiPatterns(), newConfigName, antiPatternNames, thresholdNames, thresholdValues, true);
 
         if (wrongParameters.isEmpty()) {
             model.addAttribute("successMessage", "New configuration has been successfully saved.");
+            session.setAttribute("configuration", newConfigName);
+            model.addAttribute("configurations", configurationService.getConfigurationByName(newConfigName));
         } else {
             model.addAttribute("errorMessage", "One or more configuration values are not in correct format, see messages below.");
-            antiPatternService.setErrorMessages(antiPatterns, wrongParameters);
+            antiPatternService.setErrorMessages(query.getAntiPatterns(), wrongParameters);
+            model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
         }
 
-        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
-        model.addAttribute("antiPatterns", antiPatterns);
-        session.setAttribute("configuration", newConfigName);
-        model.addAttribute("configurations", configurationService.getConfigurationByName(newConfigName));
+        model.addAttribute("query", query);
 
         model.addAttribute("configurationList", configurationsGetList(session));
         model.addAttribute("selectedConfiguration", session.getAttribute("configuration"));
