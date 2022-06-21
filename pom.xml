@@ -85,6 +85,22 @@
 			<version>5.4.0</version>
 			<scope>test</scope>
 		</dependency>
+
+
+		<!-- UI TESTING -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version> <!-- HIGHER VERSION 4+ are not compatible with webdrivermanager plugin -->
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
