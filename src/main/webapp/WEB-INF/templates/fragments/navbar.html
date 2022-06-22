@@ -9,8 +9,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/}">Detect</a>
                 </li>
-                <li th:if="${not #lists.isEmpty(query.antiPatterns)}" class="nav-item active">
-                    <a class="nav-link" th:href="@{/configuration}">Configuration</a>
+                <li th:switch="${query} == null OR ${#lists.isEmpty(query.antiPatterns)}" class="nav-item active">
+                    <a th:case="false" class="nav-link" th:href="@{/configuration}">Configuration</a>
+                    <a th:case="true" class="nav-link" href="#" style="color: red">Configuration</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/about}">About</a>
