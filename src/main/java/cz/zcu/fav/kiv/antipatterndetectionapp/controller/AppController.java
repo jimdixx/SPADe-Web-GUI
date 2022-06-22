@@ -126,6 +126,14 @@ public class AppController {
                           HttpSession session
     ) {
 
+        String currentConfigurationName = configurationGetFromSession(session);
+
+        if (currentConfigurationName == null) {
+            model.addAttribute("errorMessage", "No configuration was found!");
+            model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
+            return "index";
+        }
+
         if (selectedProjects == null) {
             model.addAttribute("errorMessage", "No project selected." +
                     " Select at least one project.");
@@ -140,9 +148,9 @@ public class AppController {
             return "index";
         }
 
-        String currentConfigurationName = configurationGetFromSession(session);
-        Map<String, Map<String, String>> currentConfiguration = configurationService.getConfigurationByName(currentConfigurationName);
 
+
+        Map<String, Map<String, String>> currentConfiguration = configurationService.getConfigurationByName(currentConfigurationName);
         List<QueryResult> results = antiPatternManager.analyze(selectedProjects, selectedAntiPatterns, currentConfiguration);
         antiPatternService.saveAnalyzedProjects(selectedProjects, selectedAntiPatterns);
         antiPatternService.saveResults(results);
@@ -249,16 +257,17 @@ public class AppController {
                                     @RequestParam(value = "thresholdValues", required = false) String[] thresholdValues,
                                     @RequestParam(value = "thresholdNames", required = false) String[] thresholdNames,
                                     @RequestParam(value = "antiPatternNames", required = false) String[] antiPatternNames,
-                                    @RequestParam(value = "configuration-save-as-input", required = false) String newConfigName,
+                                    @RequestParam(value = "configuration-save-as-input") String newConfigName,
                                     HttpSession session, RedirectAttributes redirectAttributes) {
 
         Query query = new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
         String currentConfigurationName = configurationGetFromSession(session);
 
         List<String> allConfigurationNames = configurationService.getAllConfigurationNames();
-        if (newConfigName == null || newConfigName.length() == 0 ||  allConfigurationNames.contains(newConfigName)) {
+        if (newConfigName == null || newConfigName.isEmpty() || newConfigName.isBlank() ||  allConfigurationNames.contains(newConfigName)) {
             model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
             model.addAttribute("errorMessage", "Configuration name is not possible.");
+            model.addAttribute("query", query);
             return "configuration";
         }
 
