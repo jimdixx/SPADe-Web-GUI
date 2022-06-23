@@ -14,7 +14,20 @@
 <body>
     <div th:replace="fragments/navbar :: navBar"></div>
 
-    <h1>We are sorry for the error</h1>
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="err-div">
+            <h1 class="err-text">500 - Internal Server Error</h1>
+            <p class="err-text">An Internal Server Error has occurred.</p>
+        </div>
+    </div>
+    <div th:if="${errorMsg != null}" class="row d-flex align-items-center justify-content-center">
+        <h2 class="err-text">Cause</h2>
+        <p class="err-text" th:text="${errorMsg}"></p>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/resources/js/login.js}"></script>
+    <!-- ./Scripts -->
 
 </body>
 </html>

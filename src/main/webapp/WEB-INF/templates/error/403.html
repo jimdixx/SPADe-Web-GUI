@@ -15,7 +15,20 @@
 
     <div th:replace="fragments/navbar :: navBar"></div>
 
-    <h1>Not accessible with your current user role.</h1>
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="err-div">
+            <h1 class="err-text">403 - Not Authorized</h1>
+            <p class="err-text">You don't seem to have permission to be here!</p>
+        </div>
+    </div>
+    <div th:if="${errorMsg != null}" class="row d-flex align-items-center justify-content-center">
+        <h2 class="err-text">Cause</h2>
+        <p class="err-text" th:text="${errorMsg}"></p>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/resources/js/login.js}"></script>
+    <!-- ./Scripts -->
 
 </body>
 </html>

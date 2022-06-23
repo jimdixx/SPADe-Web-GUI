@@ -258,7 +258,8 @@ public class AppController {
         List<String> allConfigurationNames = configurationService.getAllConfigurationNames();
         if (newConfigName == null || newConfigName.length() == 0 ||  allConfigurationNames.contains(newConfigName)) {
             model.addAttribute("configurations", configurationService.getConfigurationByName(currentConfigurationName));
-            model.addAttribute("errorMessage", "Configuration name is not possible.");
+            model.addAttribute("errorMessage", "Configuration name was not entered!");
+            model.addAttribute("query", query);
             return "configuration";
         }
 

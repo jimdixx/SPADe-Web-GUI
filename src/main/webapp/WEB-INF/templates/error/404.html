@@ -14,7 +14,20 @@
 <body>
     <div th:replace="fragments/navbar :: navBar"></div>
 
-    <h1>The page you have requested could not be found</h1>
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="err-div">
+            <h1 class="err-text">404 - Content Not Found</h1>
+            <p class="err-text">The specific content does not seem to be here...</p>
+        </div>
+    </div>
+    <div th:if="${errorMsg != null}" class="row d-flex align-items-center justify-content-center">
+        <h2 class="err-text">Cause</h2>
+        <p class="err-text" th:text="${errorMsg}"></p>
+    </div>
+
+    <!-- Scripts -->
+    <script th:src="@{/resources/js/login.js}"></script>
+    <!-- ./Scripts -->
 
 </body>
 </html>
