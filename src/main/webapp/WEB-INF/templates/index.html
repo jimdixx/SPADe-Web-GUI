@@ -7,9 +7,24 @@
     <link rel="stylesheet" th:href="@{/resources/css/style.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 
     <script th:src="@{/resources/js/core.js}"></script>
+
+    <style>
+        table a {
+            text-decoration: none !important;
+        }
+
+        table a:hover {
+            text-decoration: underline !important;
+        }
+
+        table td {
+            font-size: 1.3em !important;
+        }
+    </style>
+
 </head>
 <body>
 <!-- Navigation bar imported -->
@@ -46,11 +61,13 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td></td>
-                        <td>
-                            <input checked type="checkbox" class="form-check-input" id="select_all_projects"
+                        <td style="border-bottom: none !important; text-align: right !important;">
+                            Select All
+                        </td>
+                        <td style="border-bottom: none; !important">
+<!--                            <label class="form-check-label" for="select_all_projects">Select All</label>-->
+                            <input checked type="checkbox" class="form-check-input add-label" id="select_all_projects"
                                    onclick="checkAllProjects(this)">
-                            <label class="form-check-label" for="select_all_projects">Select All</label>
                         </td>
                     </tr>
                     </tfoot>
@@ -77,11 +94,13 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td></td>
-                        <td>
-                            <input checked type="checkbox" class="form-check-input" id="select_all_anti_patterns"
+                        <td style="border-bottom: none !important; text-align: right !important;">
+                            Select All
+                        </td>
+                        <td style="border-bottom: none !important; text-align: center !important;">
+<!--                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>-->
+                            <input checked type="checkbox" class="form-check-input add-label" id="select_all_anti_patterns"
                                    onclick="checkAllAntiPatterns(this)">
-                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>
                         </td>
                     </tr>
                     </tfoot>
