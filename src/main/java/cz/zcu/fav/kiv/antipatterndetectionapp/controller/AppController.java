@@ -55,6 +55,12 @@ public class AppController {
     @Autowired
     private ConfigurationService configurationService;
 
+    @GetMapping("/")
+    public String mainPage(Model model) {
+        model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
+        return "main-page";
+    }
+
     /**
      *  This method is called by the GET method and initializes
      *  the main page of the application (index). Loads all projects
@@ -63,7 +69,7 @@ public class AppController {
      * @param model object for passing data to the UI
      * @return html file name for thymeleaf template
      */
-    @GetMapping("/")
+    @GetMapping("/detect")
     public String index(Model model) {
         model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
         return "index";

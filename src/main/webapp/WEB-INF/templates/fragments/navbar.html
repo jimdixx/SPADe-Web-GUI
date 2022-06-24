@@ -1,5 +1,5 @@
 <div th:fragment="navBar" xmlns:th="http://www.w3.org/1999/xhtml">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" id="main-navbar">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand"><b>SPAWn</b> – SPADe Web Interface</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/}">Detect</a>
+                    <a class="nav-link" th:href="@{/detect}">Detect</a>
                 </li>
                 <li th:if="${not #lists.isEmpty(query.antiPatterns)}" class="nav-item active">
                     <a class="nav-link" th:href="@{/configuration}">Configuration</a>

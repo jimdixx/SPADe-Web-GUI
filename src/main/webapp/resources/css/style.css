@@ -171,3 +171,62 @@ input, button, submit {
     margin-right: 1em;
 }
 
+/* ==========================================================================
+   footer.html
+   ========================================================================== */
+
+footer {
+  padding-top: 2em;
+  padding-bottom: 2em;
+  min-height: 150px;
+  background-color: rgba(224, 224, 224, 0.267);
+}
+
+.footer-table {
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   main-page.html
+   ========================================================================== */
+
+.custom-img {
+  width: 100%;
+  height: 400px;
+}
+
+.custom-logo-img {
+  width: 50%;
+  height: 40px !important;
+}
+
+.custom-text {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.custom-text-rightAlign {
+  text-align: right;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.custom-text-centerAlign {
+  text-align: center;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+#about-div {
+  width: 100%;
+  min-height: 400px;
+}
+
+.section {
+  width: 100%;
+  min-height: 400px;
+  background-color: rgba(224, 224, 224, 0.267);
+  box-shadow:rgba(224, 224, 224, 0.267) 10px 10px 10px;
+  margin-bottom: 3em;
+}
