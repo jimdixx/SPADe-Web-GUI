@@ -1,5 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class represents percentage as a positive int number between 0 and MAX_INT.
  */
@@ -10,8 +13,11 @@ public class PositiveInteger extends Number {
 
     private final int value;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(PositiveInteger.class);
+
     public PositiveInteger(int value) throws NumberFormatException {
         if (value > MAX_VALUE || value < MIN_VALUE) {
+            LOGGER.error("Invalid number entered!");
             throw new NumberFormatException("Positive integer should be between 0 and infinity");
         }
         this.value = value;

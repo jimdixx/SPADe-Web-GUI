@@ -182,6 +182,7 @@ public class AntiPatternRepository {
             APCatalogueFileName = node.get("catalogueFileName") != null ? node.get("catalogueFileName").asText() : null; // optional field
         }
         catch(Exception e){
+            LOGGER.error(e.getMessage());
             return null;
         }
 
@@ -202,6 +203,7 @@ public class AntiPatternRepository {
                 thresholdErrorMess = tmpNode.get("thresholdErrorMess").asText();
             }
             catch(Exception e){
+                LOGGER.error(e.getMessage());
                 return null;
             }
 
@@ -260,6 +262,7 @@ public class AntiPatternRepository {
         try {
             return new FileSystemResource(OPERATIONALIZATION_DIR).getFile().getAbsolutePath();
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -269,6 +272,7 @@ public class AntiPatternRepository {
         try {
             return new FileSystemResource(OPERATIONALIZATION_IMG_DIR).getFile().getAbsolutePath();
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
         return null;

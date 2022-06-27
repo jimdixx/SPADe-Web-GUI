@@ -1,5 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.model.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class represents percentage as a positive float number between 0 an 100.
  */
@@ -10,8 +13,11 @@ public class Percentage extends Number {
 
     private final float value;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(Percentage.class);
+
     public Percentage(float value) throws NumberFormatException {
         if (value > MAX_VALUE || value < MIN_VALUE) {
+            LOGGER.error("Invalid number entered!");
             throw new NumberFormatException("Percentage should be between 0 and 100");
         }
         this.value = value;

@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.spring.ApplicationProperties;
 import cz.zcu.fav.kiv.antipatterndetectionapp.spring.SpringApplicationContext;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.Map;
  * A class that takes care of database connections and running queries.
  */
 public class DatabaseConnection {
+    private final Logger LOGGER = LoggerFactory.getLogger(DatabaseConnection.class);
 
     private Connection databaseConnection;
 
@@ -45,6 +48,7 @@ public class DatabaseConnection {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            LOGGER.error("Connection with DB could not be created");
         }
         return conn;
     }
@@ -58,6 +62,7 @@ public class DatabaseConnection {
         try {
             this.databaseConnection.close();
         } catch (SQLException e) {
+            LOGGER.error("Connection to DB could not be closed!");
             e.printStackTrace();
         }
     }
@@ -96,6 +101,7 @@ public class DatabaseConnection {
 
             }
         } catch (SQLException e) {
+            LOGGER.error("DB query could not be performed!");
             e.printStackTrace();
         }
         return resultSet;
@@ -129,6 +135,7 @@ public class DatabaseConnection {
 
             }
         } catch (SQLException e) {
+            LOGGER.error("DB query with multiple results could not be performed!");
             e.printStackTrace();
         }
 

@@ -66,7 +66,7 @@ public class ConfigurationRepository {
                 }
             }
             catch(Exception e){
-                LOGGER.error("Cannot read configuration from file " + fileEntry.getName());
+                LOGGER.error("Cannot read configuration from file " + fileEntry.getName(), e);
                 continue;
             }
 
@@ -183,6 +183,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Percentage")){
@@ -191,6 +192,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveInteger")){
@@ -199,6 +201,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("PositiveFloat")){
@@ -207,6 +210,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Float")){
@@ -215,6 +219,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("Double")){
@@ -223,6 +228,7 @@ public class ConfigurationRepository {
                         }
                         catch(NumberFormatException e){
                             incorrectParameters.add(thresholdNames[i]);
+                            LOGGER.error(e.getMessage());
                         }
                     }
                     else if(antiPattern.getThresholds().get(thresholdNames[i]).getType().equals("String")){
