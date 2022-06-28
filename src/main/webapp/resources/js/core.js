@@ -1,3 +1,38 @@
+function projectCheckboxesAllIndeterminate(checkbox, selectPattern) {
+
+    var globalCheckboxPattern = "";
+    var checkboxPattern = "";
+
+    if (selectPattern == 0) {
+        globalCheckboxPattern = '*[id^="select_all_projects"]';
+        checkboxPattern = '*[id^="project_"]';
+    } else {
+        globalCheckboxPattern = '*[id^="select_all_anti_patterns"]';
+        checkboxPattern = '*[id^="anti-pattern_"]';
+    }
+
+    var projectCheckboxes = document.querySelectorAll(checkboxPattern);
+    var checkedCounter = 0;
+
+    for (let i = 0; i < projectCheckboxes.length; i++) {
+            if(projectCheckboxes[i].checked) {
+                checkedCounter++;
+            }
+     }
+        var projectSelectAllCheckbox = document.querySelector(globalCheckboxPattern);
+
+        if (checkedCounter <= 0) {
+            projectSelectAllCheckbox.indeterminate = false;
+            projectSelectAllCheckbox.checked = false;
+        } else if (checkedCounter < projectCheckboxes.length) {
+            projectSelectAllCheckbox.indeterminate = true;
+        } else {
+            projectSelectAllCheckbox.indeterminate = false;
+            projectSelectAllCheckbox.checked = true;
+        }
+
+}
+
 // script to popover
 $(document).ready(function () {
     $('[data-toggle="popover"]').popover();
@@ -18,6 +53,7 @@ function checkAllAntiPatterns(checkBox) {
     for (i = 0; i < antiPatterns.length; i++) {
         antiPatterns[i].checked = !!checkBox.checked;
     }
+    antiPatternsChecked = true;
 }
 
 function showProgressBar() {
