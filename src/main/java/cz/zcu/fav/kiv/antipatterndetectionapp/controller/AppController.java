@@ -183,7 +183,7 @@ public class AppController {
     @GetMapping("/about")
     public String about(Model model) {
         model.addAttribute("query", new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns())));
-        return "about";
+        return "about-custom";
     }
 
     /**
