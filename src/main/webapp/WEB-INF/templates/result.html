@@ -9,6 +9,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        table th a {
+            text-decoration: none !important;
+            color: black !important;
+        }
+
+        table th a:hover {
+            text-decoration: none !important;
+            color: black !important;
+        }
+
+        table td a {
+            text-decoration: none !important;
+            color: black !important;
+        }
+
+        table td a:hover {
+            text-decoration: none !important;
+            color: black !important;
+        }
+
+    </style>
+
 </head>
 <body>
 <!-- Navigation bar imported -->
@@ -25,12 +49,10 @@
             <th scope="id" hidden>Project ID</th>
             <th scope="col">Project Name</th>
             <th scope="col" th:each="antiPattern: ${queryResults.get(0).getQueryResultItems()}">
-                <a data-toggle="popover"
-                   data-html="true"
-                   data-content=""
+                <a
                    th:text="${antiPattern.getAntiPattern().printName}"
-                   th:attr="data-content=${antiPattern.getAntiPattern().getUrl()}"
-                >
+                   th:href="@{'/anti-patterns/' + ${antiPattern.getAntiPattern().id}}"
+                   th:attr="data-content=${antiPattern.getAntiPattern().getUrl()}">
                 </a>
             </th>
         </tr>
@@ -41,7 +63,10 @@
         <tbody>
         <tr th:each="queryResult : ${queryResults}">
             <td th:text="${queryResult.getProject().id}" hidden></td>
-            <td th:text="${queryResult.getProject().name}"></td>
+            <td><a th:text="${queryResult.getProject().name}"
+                   th:href="@{'/projects/' + ${queryResult.getProject().id}}">
+
+            </a></td>
             <td class="align-middle" th:each="resultItems: ${queryResult.getQueryResultItems()}">
 
                 <div th:if="${resultItems.isDetected()}">
