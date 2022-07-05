@@ -16,6 +16,7 @@ function projectCheckboxesAllIndeterminate(checkbox, selectPattern) {
 
     for (let i = 0; i < projectCheckboxes.length; i++) {
             if(projectCheckboxes[i].checked) {
+                setCookie(selectPattern);
                 checkedCounter++;
             }
      }
@@ -45,6 +46,7 @@ function checkAllProjects(checkBox) {
     for (i = 0; i < projects.length; i++) {
         projects[i].checked = !!checkBox.checked;
     }
+    setCookie(0);
 }
 
 function checkAllAntiPatterns(checkBox) {
@@ -53,7 +55,7 @@ function checkAllAntiPatterns(checkBox) {
     for (i = 0; i < antiPatterns.length; i++) {
         antiPatterns[i].checked = !!checkBox.checked;
     }
-    antiPatternsChecked = true;
+    setCookie(1);
 }
 
 function showProgressBar() {
