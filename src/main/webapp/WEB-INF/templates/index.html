@@ -26,7 +26,7 @@
             font-size: 1.3em !important;
         }
 
-        .custom-td-style:hover {
+        .custom-td-style tr:hover td {
             background-color: white !important;
             border-bottom: none !important;
         }
@@ -35,6 +35,20 @@
             font-size: 1.7em !important;
             font-weight: 500;
             border-bottom: none !important;
+       }
+
+       .custom-td-style-ext tr:hover td {
+            background-color: white !important;
+            border-bottom: none !important;
+       }
+
+       .custom-td-style-ext {
+            border-bottom: none !important;
+            text-align: center !important;
+       }
+
+       .no-hover:hover {
+            background-color: white !important;
        }
     </style>
 
@@ -63,11 +77,11 @@
                     <thead></thead>
                     <tbody>
 
-                    <tr>
+                    <tr class="no-hover">
                         <td class="custom-td-style">
                             Quick Select
                         </td>
-                        <td class="custom-td-style">
+                        <td class="custom-td-style-ext">
                             <!--<label class="form-check-label" for="select_all_projects">Select All</label>-->
                             <input type="checkbox" class="form-check-input add-label" id="select_all_projects"
                                    onclick="checkAllProjects(this)">
@@ -97,11 +111,11 @@
                     
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr class="no-hover">
                         <td class="custom-td-style">
                             Quick Select
                         </td>
-                        <td class="custom-td-style">
+                        <td class="custom-td-style-ext">
                             <!--                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>-->
                             <input type="checkbox" class="form-check-input add-label" id="select_all_anti_patterns"
                                    onclick="checkAllAntiPatterns(this)">
