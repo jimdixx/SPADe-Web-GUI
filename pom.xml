@@ -18,11 +18,12 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<org.reflecions.version>0.9.12</org.reflecions.version>
-		<org.jsoup.version>1.14.3</org.jsoup.version>
-		<com.fasterxml.jackson.core.version>2.13.2</com.fasterxml.jackson.core.version>
+		<spring.boot.version>2.6.9</spring.boot.version>
+		<org.reflections.version>0.10.2</org.reflections.version>
+		<org.jsoup.version>1.15.2</org.jsoup.version>
+		<com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
 		<org.junit.jupiter.version>5.4.0</org.junit.jupiter.version>
-		<org.apache.maven.plugins.version>2.22.0</org.apache.maven.plugins.version>
+		<org.apache.maven.plugins.version>3.0.0-M7</org.apache.maven.plugins.version>
 	</properties>
 	
 	<dependencies>
@@ -62,7 +63,7 @@
 		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
-			<version>${org.reflecions.version}</version>
+			<version>${org.reflections.version}</version>
 		</dependency>
 
 		<!-- jsoup HTML parser library @ https://jsoup.org/ -->
