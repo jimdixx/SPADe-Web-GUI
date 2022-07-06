@@ -95,4 +95,146 @@ public class UITestRunner {
 
     }
 
+    @Test
+    void testConfigurationPage() {
+        driver.get(url + "/configuration");
+
+        List<WebElement> elements = driver.findElements(By.xpath("//a[@class='ap-configuration-header']"));
+        // Check if there are 10 options to configure! CAN BE CHANGED IN THE TIME, SO
+        // THIS PART OF THE CODE WILL NEED TO BE EXTENDED.
+        Assertions.assertEquals(10, elements.size());
+
+
+        //// PREPARE VARIABLES \\\\
+
+
+        WebElement clickableHeader;
+        WebElement numbuerValue;
+        double parsedNumValue;
+        WebElement stringValue;
+        String substringValue;
+        WebElement numberValue2;
+        double parsedNumValue2;
+
+
+        //// ------------------------- \\\\
+
+        // BUSINESS AS USUAL --> Testing Default.json values!!!!
+        driver.findElement(By.xpath("//a[@href='#BusinessAsUsual']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='divisionOfIterationsWithRetrospective']"));
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsWithRetrospective']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        substringValue = stringValue.getAttribute("value");
+
+        Assertions.assertEquals(66.66, parsedNumValue);
+        Assertions.assertEquals("%retr%||%revi%||%week%scrum%", substringValue);
+
+        // BYSTANDER APATHY
+        driver.findElement(By.xpath("//a[@href='#BystanderApathy']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='maximumPercentageOfTasksWithoutTeamwork']"));
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsInvalidContributors']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        substringValue = stringValue.getAttribute("value");
+
+        Assertions.assertEquals(30, parsedNumValue);
+        Assertions.assertEquals("%dependabot%", substringValue);
+
+        // LONG OR NON EXISTENT FEEDBACK LOOPS
+        driver.findElement(By.xpath("//a[@href='#LongOrNonExistentFeedbackLoops']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='divisionOfIterationsWithFeedbackLoop']"));
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsWithFeedbackLoop']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='maxGapBetweenFeedbackLoopRate']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        substringValue = stringValue.getAttribute("value");
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(50.00, parsedNumValue);
+        Assertions.assertEquals("%schůz%zákazník%||%předvedení%zákazník%||%zákazn%demo%||%schůz%zadavat%||%inorm%schůz%||%zákazn%||%zadavatel%", substringValue);
+        Assertions.assertEquals(2, parsedNumValue2);
+
+        // NINETY NINETY RULE
+        driver.findElement(By.xpath("//a[@href='#NinetyNinetyRule']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='maxDivisionRange']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='maxBadDivisionLimit']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(1.25, parsedNumValue);
+        Assertions.assertEquals(2, parsedNumValue2);
+
+
+        // ROAD TO NOWHERE
+        driver.findElement(By.xpath("//a[@href='#RoadToNowhere']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='minNumberOfWikiPagesWithProjectPlan']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='minNumberOfActivitiesWithProjectPlan']"));
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsWithProjectPlan']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        substringValue = stringValue.getAttribute("value");
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(1, parsedNumValue);
+        Assertions.assertEquals(1, parsedNumValue2);
+        Assertions.assertEquals("%plán projektu%||%project plan%||%plan project%||%projektový plán%", substringValue);
+
+        // SPECIFY NOTHING
+        driver.findElement(By.xpath("//a[@href='#SpecifyNothing']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='minNumberOfWikiPagesWithSpecification']"));
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsWithProjectSpecification']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='minAvgLengthOfActivityDescription']"));
+        WebElement numberValue3 = driver.findElement(By.xpath("//input[@id='minNumberOfActivitiesWithSpecification']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        substringValue = stringValue.getAttribute("value");
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+        double parsedNumValue3 = Double.parseDouble(numberValue3.getAttribute("value"));
+
+        Assertions.assertEquals(1, parsedNumValue);
+        Assertions.assertEquals("%dsp%||%speciikace%||%speciication%||%vize%proj%||%vize%produ%", substringValue);
+        Assertions.assertEquals(150, parsedNumValue2);
+        Assertions.assertEquals(1, parsedNumValue3);
+
+        // TOO LONG SPRINT
+        driver.findElement(By.xpath("//a[@href='#TooLongSprint']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='maxIterationLength']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='maxNumberOfTooLongIterations']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(21, parsedNumValue);
+        Assertions.assertEquals(0, parsedNumValue2);
+
+        // UKNOWN POSTER
+        driver.findElement(By.xpath("//a[@href='#UnknownPoster']")).click(); // click on the header so the section opens up.
+        stringValue = driver.findElement(By.xpath("//input[@id='searchSubstringsInvalidNames']"));
+        substringValue = stringValue.getAttribute("value");
+        Assertions.assertEquals("%unknown%||%anonym%", substringValue);
+
+        // VARYING SPRINT LENGTH
+        driver.findElement(By.xpath("//a[@href='#VaryingSprintLength']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='maxDaysDifference']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='maxIterationChanged']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(7, parsedNumValue);
+        Assertions.assertEquals(1, parsedNumValue2);
+
+        // YET ANOTHER PROGRAMMER
+        driver.findElement(By.xpath("//a[@href='#YetAnotherProgrammer']")).click(); // click on the header so the section opens up.
+        numbuerValue = driver.findElement(By.xpath("//input[@id='numberOfFirstMonthsWithoutDetection']"));
+        numberValue2 = driver.findElement(By.xpath("//input[@id='maxNumberOfNewContributors']"));
+
+        parsedNumValue = Double.parseDouble(numbuerValue.getAttribute("value"));
+        parsedNumValue2 = Double.parseDouble(numberValue2.getAttribute("value"));
+
+        Assertions.assertEquals(2, parsedNumValue);
+        Assertions.assertEquals(5, parsedNumValue2);
+    }
 }
