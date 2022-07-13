@@ -5,11 +5,53 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" th:href="@{/resources/css/style.css}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 
     <script th:src="@{/resources/js/core.js}"></script>
+    <script th:src="@{/resources/js/cookies.js}"></script>
+
+
+    <style>
+        table a {
+            text-decoration: none !important;
+        }
+
+        table a:hover {
+            text-decoration: underline !important;
+        }
+
+        table td {
+            font-size: 1.3em !important;
+        }
+
+        .custom-td-style tr:hover td {
+            background-color: white !important;
+            border-bottom: 2px solid black !important;
+        }
+
+       .custom-td-style {
+            font-size: 1.2em !important;
+            font-style: italic !important;
+            border-bottom: 2px solid black !important;
+       }
+
+       .custom-td-style-ext tr:hover td {
+            background-color: white !important;
+            border-bottom: 2px solid black !important;
+       }
+
+       .custom-td-style-ext {
+            text-align: center !important;
+            border-bottom: 2px solid black !important;
+       }
+
+       .no-hover:hover {
+            background-color: white !important;
+       }
+    </style>
+
 </head>
 <body>
 <!-- Navigation bar imported -->
@@ -32,28 +74,30 @@
             <div class="col">
                 <!-- Table for selecting projects -->
                 <table th:if="${not #lists.isEmpty(query.projects)}" class="table">
-                    <thead>
-
-                    </thead>
+                    <thead></thead>
                     <tbody>
+
+                    <tr class="no-hover">
+                        <td class="custom-td-style">
+                            Quick Select
+                        </td>
+                        <td class="custom-td-style-ext">
+                            <!--<label class="form-check-label" for="select_all_projects">Select All</label>-->
+                            <input type="checkbox" class="form-check-input add-label" id="select_all_projects"
+                                   onclick="checkAllProjects(this)">
+                        </td>
+                    </tr>
+
                     <tr th:each="project : ${query.projects}">
                         <td><a th:text="${project.name}" th:href="@{'/projects/' + ${project.id}}" class="anchor-table"></a></td>
                         <td style="text-align: center">
-                            <input checked type="checkbox" class="form-check-input" name="selectedProjects"
-                                   th:value="${project.id}" th:id="@{project_} + ${project.id}">
+                            <input type="checkbox" class="form-check-input" name="selectedProjects"
+                                   th:value="${project.id}" th:id="@{project_} + ${project.id}"
+                            onclick="projectCheckboxesAllIndeterminate(this, 0)">
                         </td>
                     </tr>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input checked type="checkbox" class="form-check-input" id="select_all_projects"
-                                   onclick="checkAllProjects(this)">
-                            <label class="form-check-label" for="select_all_projects">Select All</label>
-                        </td>
-                    </tr>
-                    </tfoot>
+                    <tfoot></tfoot>
                 </table>
                 <div th:unless="${not #lists.isEmpty(query.projects)}" class="alert alert-danger" role="alert">
                     There are no projects to analyze!
@@ -67,24 +111,26 @@
                     
                     </thead>
                     <tbody>
+                    <tr class="no-hover">
+                        <td class="custom-td-style">
+                            Quick Select
+                        </td>
+                        <td class="custom-td-style-ext">
+                            <!--                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>-->
+                            <input type="checkbox" class="form-check-input add-label" id="select_all_anti_patterns"
+                                   onclick="checkAllAntiPatterns(this)">
+                        </td>
+                    </tr>
                     <tr th:each="antiPattern : ${query.antiPatterns}">
                         <td><a th:text="${antiPattern.printName}" th:href="@{'/anti-patterns/' + ${antiPattern.id}}" class="anchor-table"></a></td>
                         <td style="text-align: center">
-                            <input checked type="checkbox" class="form-check-input" name="selectedAntiPatterns"
-                                   th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}">
+                            <input type="checkbox" class="form-check-input" name="selectedAntiPatterns"
+                                   th:value="${antiPattern.id}" th:id="@{anti-pattern_} + ${antiPattern.id}"
+                                   onclick="projectCheckboxesAllIndeterminate(this, 1)">
                         </td>
                     </tr>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input checked type="checkbox" class="form-check-input" id="select_all_anti_patterns"
-                                   onclick="checkAllAntiPatterns(this)">
-                            <label class="form-check-label" for="select_all_anti_patterns">Select All</label>
-                        </td>
-                    </tr>
-                    </tfoot>
+                    <tfoot></tfoot>
                 </table>
                 <div th:unless="${not #lists.isEmpty(query.antiPatterns)}" class="alert alert-danger" role="alert">
                     There are no anti-patterns to detect!
@@ -121,6 +167,8 @@
 
 <!-- Scripts -->
 <script th:src="@{/resources/js/login.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script type="text/javascript">setCheckboxes();</script>
 <!-- ./Scripts -->
 
 </body>
