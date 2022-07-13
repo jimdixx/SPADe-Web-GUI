@@ -171,3 +171,15 @@ input, button, submit {
     margin-right: 1em;
 }
 
+.err-div {
+      background-color: rgb(238, 238, 238);
+      border-radius: 10px;
+      width: 80%;
+      margin: 0 auto;
+}
+
+.err-text {
+  text-align: center;
+  font-weight: 500;
+}
+
