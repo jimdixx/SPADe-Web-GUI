@@ -5,20 +5,13 @@ function setCookie(typeOfCookie) {
 
      if (typeOfCookie == 0) {
        type = "projects";
-       checkBoxes = document.querySelectorAll('*[id^="project_"]');
+       checkBoxes = [...document.querySelectorAll('*[id^="project_"]')].filter(x => x.checked).map(x => x.value)
      } else {
        type = "antipatterns";
-       checkBoxes = document.querySelectorAll('*[id^="anti-pattern_"]');
+       checkBoxes = [...document.querySelectorAll('*[id^="anti-pattern_"]')].filter(x => x.checked).map(x => x.value)
      }
 
-    var arr = [];
-    for (let i = 0; i < checkBoxes.length; i++) {
-        if (checkBoxes[i].checked) {
-            arr.push(checkBoxes[i].value);
-        }
-    }
-
-    let jsonString = JSON.stringify(arr);
+    let jsonString = JSON.stringify(checkBoxes);
 
     const expirationDate = 60*60*24*7*1000 //expires in one week
     const date = new Date();
@@ -31,13 +24,16 @@ function setCookie(typeOfCookie) {
 
 function setCheckboxes() {
     var projects = readCookie("projects");
-    projects = JSON.parse(projects);
+    if (projects != "") {
+        projects = JSON.parse(projects);
+        setCheckboxes2(0, projects);
+    }
 
     var antipatterns = readCookie("antipatterns");
-    antipatterns = JSON.parse(antipatterns);
-
-    setCheckboxes2(0, projects);
-    setCheckboxes2(1, antipatterns);
+    if (antipatterns != "") {
+        antipatterns = JSON.parse(antipatterns);
+        setCheckboxes2(1, antipatterns);
+    }
 
     projectCheckboxesAllIndeterminate(this, 0);
     projectCheckboxesAllIndeterminate(this, 1);
@@ -57,6 +53,8 @@ function setCheckboxes2(selectPattern, array) {
 
     var projectCheckboxes = document.querySelectorAll(checkboxPattern);
 
+
+
     for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < projectCheckboxes.length; j++) {
             if (array[i] == projectCheckboxes[j].value) {
@@ -73,4 +71,6 @@ function readCookie(name) {
     for (var ca = document.cookie.split(/;\s*/), i = ca.length - 1; i >= 0; i--)
         if (!ca[i].indexOf(name))
             return ca[i].replace(name, '');
+
+    return "";
 }
