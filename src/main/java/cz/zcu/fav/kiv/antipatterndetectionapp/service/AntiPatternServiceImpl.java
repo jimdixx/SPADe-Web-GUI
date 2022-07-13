@@ -8,6 +8,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.*;
 
 @Service
 public class AntiPatternServiceImpl implements AntiPatternService {
+    private final Logger LOGGER = LoggerFactory.getLogger(AntiPatternServiceImpl.class);
 
     @Autowired
     private AntiPatternRepository antiPatternRepository;
@@ -141,6 +144,7 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         }
         catch (Exception e){
             /* If html from catalogue is not extracted, the description from anti-pattern configuration is returned */
+            LOGGER.error(e.getMessage());
             return ap.getDescription();
         }
 
@@ -175,6 +179,7 @@ public class AntiPatternServiceImpl implements AntiPatternService {
         try {
             content = new String (Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
+            LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
         return content;
