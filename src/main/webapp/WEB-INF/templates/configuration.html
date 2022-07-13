@@ -56,7 +56,7 @@
                                                        class="form-control is-invalid" th:id="${threshold.value.name}"
                                                        name="thresholdValues">
                                                 <input th:unless="${threshold.value.isErrorMessageShown}"
-                                                       th:value="${configurations.get(antiPattern.name).get(threshold.value.name)}"
+                                                       th:value="${#strings.replace(configurations.get(antiPattern.name).get(threshold.value.name), 'f', '')}"
                                                        class="form-control" th:id="${threshold.value.name}"
                                                        name="thresholdValues">
                                                 <input th:value="${threshold.value.name}" style="display: none" class="form-control"
