@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios'
 
-function App() {
+const App = () => {
+
+  let [data, setData] = useState(null);
+  let [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+      setLoading(true);
+
+      axios
+          .get("http://localhost:8080/v2/testCall")
+          .then((result) => {
+              setData(result.data.response);
+              setLoading(false);
+          })
+          .catch((error) => console.log(error));
+  }, []);
+
+    if (loading) {
+        return <p>Loading...</p>
+    }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="container">{data}</div>
   );
-}
+};
+
 
 export default App;
