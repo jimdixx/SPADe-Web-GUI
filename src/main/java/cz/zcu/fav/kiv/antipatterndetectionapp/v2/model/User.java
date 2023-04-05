@@ -8,6 +8,7 @@ import javax.persistence.*;
  * @author Vaclav Hrabik, Jiri Trefil
  */
 @Entity
+@Table(name = "Users")
 public class User {
 
     /**
@@ -19,8 +20,8 @@ public class User {
      * Unique key of table
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /**
      * Name of the User
@@ -34,12 +35,19 @@ public class User {
     @Column(length = MAX_COLUMN_LENGTH)
     private String email;
 
+    @Column(length = MAX_COLUMN_LENGTH)
+    private String password;
+
+
+    public String getPassword() {
+        return password;
+    }
 
     /**
      * Getter of id
      * @return id of the user
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -57,6 +65,10 @@ public class User {
      */
     public String getEmail() {
         return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     /**

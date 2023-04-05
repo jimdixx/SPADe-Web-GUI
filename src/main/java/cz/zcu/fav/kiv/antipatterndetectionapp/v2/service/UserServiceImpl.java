@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,10 +29,13 @@ public class UserServiceImpl implements UserService {
     public int registerUser(User user) {
         final String email = user.getEmail();
         final String name = user.getName();
+        final String password = user.getPassword();
         //if client request violates constraints - kill the request. User will not be registered.
-        if (email.length() > User.getEmailConstraint() || name.length() > User.getNameConstraint()) {
+        // TODO refactor!! password length
+        if (password.length() > 255 || email.length() > User.getEmailConstraint() || name.length() > User.getNameConstraint()) {
             return 0;
         }
+
         //if the username is taken, kill the request aswell
         if (userRepository.findByName(user.getName()) != null) {
             return -1;
@@ -42,6 +46,11 @@ public class UserServiceImpl implements UserService {
         //TODO request to OAuth for token - send user info to the oauth app for token
         //return okay status code, the user was created
         return 1;
+    }
+
+    private String encryptPassword(String originalPassword) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder.encode(originalPassword);
     }
 
     /**
