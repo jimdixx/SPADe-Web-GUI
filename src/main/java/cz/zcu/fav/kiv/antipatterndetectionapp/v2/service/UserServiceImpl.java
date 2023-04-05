@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByName(user.getName()) != null) {
             return -1;
         }
+
+        user.setPassword(encryptPassword(password));
+
         //save the user
         User u = userRepository.save(user);
 

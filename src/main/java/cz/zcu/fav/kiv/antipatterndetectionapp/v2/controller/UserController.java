@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,9 +27,14 @@ public class UserController {
      * @return      message
      */
     @PostMapping(value = "/register")
-    public String registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
         int statusCode = userService.registerUser(user);
-        return "user register";
+
+        if (statusCode == -1) {
+            return ResponseEntity.badRequest().body("{\"message\": \"User already exists!\"}");
+        } else {
+            return ResponseEntity.ok().body("{\"message\": \"Successfully signed up\"}");
+        }
     }
 
     /**
