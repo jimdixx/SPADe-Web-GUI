@@ -96,4 +96,7 @@ public class User {
         return MAX_COLUMN_LENGTH;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
 }

@@ -50,8 +50,10 @@ public class UserServiceImpl implements UserService {
             return UserModelStatusCodes.HASH_FAILED;
         }
         //save the user
-        User u = userRepository.save(user);
-
+        User u = userRepository.save(new User(name, email, passwordHash));
+        //database insert failed for some reason
+        if(u == null)
+            return UserModelStatusCodes.USER_CREATION_FAILED;
         //TODO request to OAuth for token - send user info to the oauth app for token
         //return okay status code, the user was created
         return UserModelStatusCodes.USER_CREATED;
