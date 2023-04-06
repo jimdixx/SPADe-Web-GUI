@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,7 +53,7 @@ public class UserServiceImpTest {
     /**
      * Mocked User
      */
-    private final User mockUser = new User("test", "test@tt.cz");
+    private final User mockUser = new User("test", "test@tt.cz", "Ahoj99");
 
     /**
      * Testing registration implementation
@@ -66,9 +67,9 @@ public class UserServiceImpTest {
                 "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "dddddddddddhfbsdjfhbsdjhbjckvxjhbvjhfbsjhbdjhsbvhbsckjhvbsdhfbsdjhvbjxhcbvhbjhvbxcv", "tt@aa.ct");
-        int foundCode = userService.registerUser(MUser);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
 
-        assertEquals(foundCode, 0);
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
     }
 
     /**
@@ -82,9 +83,9 @@ public class UserServiceImpTest {
                 "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt@aa.ct");
-        int foundCode = userService.registerUser(MUser);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
 
-        assertEquals(foundCode, 0);
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
     }
 
     /**
@@ -104,9 +105,65 @@ public class UserServiceImpTest {
                 "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
                 "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddt@aa.ct");
-        int foundCode = userService.registerUser(MUser);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
 
-        assertEquals(foundCode, 0);
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLName_thenReturnMSG() {
+        User MUser = new User(null, "tt@asd.cf", "Ahoj99");
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLEmail_thenReturnMSG() {
+        User MUser = new User("tt", null, "Ahoj99");
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLPassword_thenReturnMSG() {
+        User MUser = new User("tt", "tt@asd.cf", null);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLNameEmail_thenReturnMSG() {
+        User MUser = new User(null, null, "Ahoj99");
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLNamePassword_thenReturnMSG() {
+        User MUser = new User(null, "tt@asd.cf", null);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLEmailPassword_thenReturnMSG() {
+        User MUser = new User("tt", null, null);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
+    }
+
+    @Test
+    public void whenUserNULLNameEmailPassword_thenReturnMSG() {
+        User MUser = new User(null, null, null);
+        UserModelStatusCodes foundCode = userService.registerUser(MUser);
+
+        assertEquals(foundCode, UserModelStatusCodes.INVALID_USER_ARGUMENTS);
     }
 
     /**
@@ -115,11 +172,11 @@ public class UserServiceImpTest {
      */
     @Test
     public void whenUserIsNotRegistered_thenRegisterHim() {
-        Mockito.when(userRepository.findByName("neni_v_DB")).thenReturn(null);
+        Mockito.when(userRepository.save(any())).thenReturn(mockUser);
 
-        int foundCode = userService.registerUser(mockUser);
+        UserModelStatusCodes foundCode = userService.registerUser(mockUser);
 
-        assertEquals(foundCode, 1);
+        assertEquals(foundCode, UserModelStatusCodes.USER_CREATED);
     }
 
     /**
@@ -130,9 +187,9 @@ public class UserServiceImpTest {
     public void whenUserIsRegistered_thenSendMSG() {
         Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
-        int foundCode = userService.registerUser(mockUser);
+        UserModelStatusCodes foundCode = userService.registerUser(mockUser);
 
-        assertEquals(foundCode, -1);
+        assertEquals(foundCode, UserModelStatusCodes.USER_EXISTS);
     }
 
     /**
@@ -145,9 +202,9 @@ public class UserServiceImpTest {
         Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
         String name = "test";
-        int foundCode = userService.loginUser(new User(name, ""));
+        UserModelStatusCodes foundCode = userService.loginUser(new User(name, ""));
 
-        assertEquals(foundCode, 1);
+        assertEquals(foundCode, UserModelStatusCodes.USER_LOGGED_IN);
     }
 
     /**
@@ -160,9 +217,9 @@ public class UserServiceImpTest {
         //Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
         String name = "notest";
-        int foundCode = userService.loginUser(new User(name, ""));
+        UserModelStatusCodes foundCode = userService.loginUser(new User(name, ""));
 
-        assertEquals(foundCode, 0);
+        assertEquals(foundCode, UserModelStatusCodes.USER_LOGIN_FAILED);
     }
 
 }
