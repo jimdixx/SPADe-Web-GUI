@@ -35,13 +35,26 @@ public class User {
     @Column(length = MAX_COLUMN_LENGTH)
     private String email;
 
+    /**
+     * Password of the User
+     */
     @Column(length = MAX_COLUMN_LENGTH)
     private String password;
 
-
-    public String getPassword() {
-        return password;
+    public User() {
     }
+
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public User(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
 
     /**
      * Getter of id
@@ -65,10 +78,6 @@ public class User {
      */
     public String getEmail() {
         return email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**

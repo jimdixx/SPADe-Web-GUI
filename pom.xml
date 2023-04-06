@@ -99,13 +99,15 @@
         </dependency>
 
 
-        <!-- Junit libraries for unit tests-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${org.junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
+
+
+		<!-- Junit libraries for unit tests-->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${org.junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -122,6 +124,18 @@
             <version>4.8.1</version> <!-- HIGHER VERSION 4+ are not compatible with webdrivermanager plugin -->
         </dependency>
 
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring TESTING -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>

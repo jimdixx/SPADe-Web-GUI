@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 
 /**
@@ -13,19 +14,19 @@ public interface UserService {
      * @param user serialized JSON object representing user
      * @return Integer - status code of the operation, ie 1 - successful, 0 - name taken, ...
      */
-    public int registerUser(User user);
+    public UserModelStatusCodes registerUser(User user);
     /**
      * Method attempts to log in a user and returns status code indicating login result
      * @param user serialized JSON object representing user
      * @return Integer - status code of the operation, ie 1 - successful, 0 - failed, ....
      */
-    public int loginUser(User user);
+    public UserModelStatusCodes loginUser(User user);
     /**
      * Method attempts to log out a user
      * @param user serialized JSON object representing user
      * @return Integer - status code of the operation, ie 1 - successful, 0 - failed, ....
      */
-    public int logoutUser(User user);
+    public UserModelStatusCodes logoutUser(User user);
 
 
 }
