@@ -6,6 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -97,7 +98,8 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         byte [] tmp = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        return new String(tmp,StandardCharsets.UTF_8);
+        //convert byte array into string
+        return (new HexBinaryAdapter()).marshal(tmp);
     }
 
     /**
