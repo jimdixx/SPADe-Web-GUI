@@ -15,6 +15,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests for userServiceImplementation
@@ -38,6 +40,8 @@ public class UserServiceImpTest {
      */
     @Autowired
     private UserService userService;
+
+
 
     /**
      * Mocked userRepository
@@ -153,11 +157,12 @@ public class UserServiceImpTest {
     @Test
     public void whenUserIsNotRegistered_thenReturnMSG() {
 
-        Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
+        //Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
         String name = "notest";
         int foundCode = userService.loginUser(new User(name, ""));
 
         assertEquals(foundCode, 0);
     }
+
 }

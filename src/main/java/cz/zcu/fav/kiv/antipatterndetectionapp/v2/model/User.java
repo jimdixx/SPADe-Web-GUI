@@ -34,6 +34,12 @@ public class User {
     @Column(length = MAX_COLUMN_LENGTH)
     private String email;
 
+    /**
+     * Password of the User
+     */
+    @Column(length = MAX_COLUMN_LENGTH)
+    private String password;
+
     public User() {
     }
 
@@ -41,6 +47,13 @@ public class User {
         this.name = name;
         this.email = email;
     }
+
+    public User(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
 
     /**
      * Getter of id

@@ -93,6 +93,8 @@
 		</dependency>
 
 
+
+
 		<!-- Junit libraries for unit tests-->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -120,6 +122,12 @@
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring TESTING -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
