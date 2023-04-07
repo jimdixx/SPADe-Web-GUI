@@ -116,9 +116,8 @@ public class DatabaseConnection {
     public List<List<Map<String, Object>>> executeQueriesWithMultipleResults(Project project, List<String> queries) {
         Statement stmt;
         List<List<Map<String, Object>>> allResults = new ArrayList<>();
-        ResultSet resultSet = null;
-        try {
-            stmt = this.getDatabaseConnection().createStatement();
+        ResultSet resultSet;
+        try(Statement stmt = this.getDatabaseConnection().createStatement()) {
 
             for (String query : queries) {
                 if (queries.indexOf(query) != queries.size() - 1) {
