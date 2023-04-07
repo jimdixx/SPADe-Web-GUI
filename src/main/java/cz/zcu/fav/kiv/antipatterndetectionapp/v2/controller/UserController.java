@@ -2,11 +2,13 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.UserService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,11 +23,17 @@ import java.util.HashMap;
 @RequestMapping("v2/user")
 public class UserController {
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     /**
      * Service for work with user management
      */
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OAuthService authService;
 
     /**
      * Method to register new user in the app
@@ -47,7 +55,8 @@ public class UserController {
      */
     @PostMapping(value = "/login")
     public ResponseEntity<String> loginUser(@RequestBody User user) {
-        UserModelStatusCodes statusCode = userService.loginUser(user);
+        UserModelStatusCodes statusCode = userService.verifyUser(user);
+        ResponseEntity<String> response = authService.loginUser(user);
 
         String jwtToken = null;
         if (statusCode.getStatusCode() == 200) {

@@ -16,6 +16,13 @@ public class User {
      */
     @Transient
     private static final int MAX_COLUMN_LENGTH = 255;
+
+    /**
+     * Max length of column in the table
+     */
+    @Transient
+    private String token;
+
     /**
      * Unique key of table
      */
@@ -96,7 +103,27 @@ public class User {
         return MAX_COLUMN_LENGTH;
     }
 
+    /**
+     * Getter for password of user
+     * @return user password
+     */
     public String getPassword() {
         return this.password;
+    }
+
+    /**
+     * Getter for token of user
+     * @return  user token
+     */
+    public String getToken() {
+        return this.token;
+    }
+
+    /**
+     * Setter of user token
+     * @param token user token
+     */
+    public void setToken(String token) {
+        this.token = token;
     }
 }

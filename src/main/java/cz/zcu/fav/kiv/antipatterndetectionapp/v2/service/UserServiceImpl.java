@@ -54,8 +54,10 @@ public class UserServiceImpl implements UserService {
         //save the user
         User u = userRepository.save(new User(name, email, passwordHash));
         //database insert failed for some reason
-        if(u == null)
+        if(u == null) {
             return UserModelStatusCodes.USER_CREATION_FAILED;
+        }
+
         //TODO request to OAuth for token - send user info to the oauth app for token
         //return okay status code, the user was created
         return UserModelStatusCodes.USER_CREATED;
@@ -90,7 +92,7 @@ public class UserServiceImpl implements UserService {
     private String hashPassword(String password) {
         //standard java security encryption module
         MessageDigest digest = null;
-        try{
+        try {
             //try to instance the class - throws an error if algorithm
             digest = MessageDigest.getInstance("SHA3-256");
         }
@@ -112,7 +114,7 @@ public class UserServiceImpl implements UserService {
      */
 
     @Override
-    public UserModelStatusCodes loginUser(User user) {
+    public UserModelStatusCodes verifyUser(User user) {
         final String name = user.getName();
         final String password = user.getPassword();
         if(name == null || password == null) {
@@ -135,7 +137,7 @@ public class UserServiceImpl implements UserService {
      * @param hash String hash saved in database
      * @return true if hashes are the same
      */
-    boolean comparePassword(String password, String hash){
+    boolean comparePassword(String password, String hash) {
         final String passwordHash = this.hashPassword(password);
         return hash.equals(passwordHash);
     }
