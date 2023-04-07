@@ -25,11 +25,12 @@ public class UserServiceImpl implements UserService {
     /**
      * Method attempts to register a user
      * @param user serialized JSON object representing user
-     * @return Integer flag:
-     *  1 - if the user is registered successfully
-     *  0 - if the user request violates constraints of column(s)
-     *  -1 - if the username is already taken
-     *
+     * @return  Enum code UserModelStatusCodes.
+     *      INVALID_USER_ARGUMENTS      if user send invalid name, email or password
+     *      USER_EXISTS                 if user send name, which is already taken
+     *      HASH_FAILED                 if hash function failed
+     *      USER_CREATION_FAILED        if there is problem with database
+     *      USER_CREATED                if user were created (happy-day)
      */
     @Override
     public UserModelStatusCodes registerUser(User user) {
@@ -105,10 +106,11 @@ public class UserServiceImpl implements UserService {
     /**
      * Method
      * @param user serialized JSON object representing user
-     * @return Integer Flag:
-     *      0 - if username is not registered
-     *      1 - if user is logged successfully
+     * @return  Enum flag UserModelStatusCodes.
+     *      USER_LOGGED_IN     if user has right name and password
+     *      USER_LOGIN_FAILED  if user has wrong name or password
      */
+
     @Override
     public UserModelStatusCodes loginUser(User user) {
         final String name = user.getName();
@@ -118,6 +120,10 @@ public class UserServiceImpl implements UserService {
         }
 
         User u = userRepository.findByName(user.getName());
+
+        if (u == null) {
+            return UserModelStatusCodes.USER_LOGIN_FAILED;
+        }
         //TODO request to OAuth for authentication
         final boolean passwordMatches = comparePassword(password,u.getPassword());
 
