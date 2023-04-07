@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         //TODO request to OAuth for authentication
         final boolean passwordMatches = comparePassword(password,u.getPassword());
 
-        return passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN;
+        return (!passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN);
     }
 
     /**
