@@ -111,9 +111,28 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserModelStatusCodes loginUser(User user) {
+        final String name = user.getName();
+        final String password = user.getPassword();
+        if(name == null || password == null) {
+            return UserModelStatusCodes.USER_LOGIN_FAILED;
+        }
+
         User u = userRepository.findByName(user.getName());
         //TODO request to OAuth for authentication
-        return u == null ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN;
+        final boolean passwordMatches = comparePassword(password,u.getPassword());
+
+        return passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN;
+    }
+
+    /**
+     * Method compares user password with stored hash
+     * @param password String user provided password
+     * @param hash String hash saved in database
+     * @return true if hashes are the same
+     */
+    boolean comparePassword(String password, String hash){
+        final String passwordHash = this.hashPassword(password);
+        return hash.equals(passwordHash);
     }
 
     /**
