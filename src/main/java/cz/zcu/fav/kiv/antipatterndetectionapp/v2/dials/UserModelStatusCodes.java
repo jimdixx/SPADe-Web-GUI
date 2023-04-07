@@ -13,12 +13,19 @@ public enum UserModelStatusCodes {
     USER_CREATION_FAILED("Error occurred while creating user",503),
     USER_LOGGED_OUT("User logged out.",200);
 
-    public final String label;
-    public final int statusCode;
+    private final String label;
+    private final int statusCode;
 
     UserModelStatusCodes(String s, int i) {
         this.label = s;
         this.statusCode = i;
+    }
+
+    public int getStatusCode(){
+        return this.statusCode;
+    }
+    public String getLabel(){
+        return this.label;
     }
 
 }

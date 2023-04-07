@@ -97,7 +97,11 @@
 			<version>${com.fasterxml.jackson.core.version}</version>
 		</dependency>
 
-
+	<!-- Security library -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 
 
 		<!-- Junit libraries for unit tests-->

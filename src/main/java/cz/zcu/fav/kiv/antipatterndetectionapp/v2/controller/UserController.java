@@ -50,8 +50,10 @@ public class UserController {
         UserModelStatusCodes statusCode = userService.loginUser(user);
 
         String jwtToken = null;
-        if (statusCode.statusCode == 200)
-            jwtToken = "token";
+        if (statusCode.getStatusCode() == 200) {
+            jwtToken = response.getBody();
+        }
+
 
         return getResponseEntity(statusCode, jwtToken);
     }
@@ -76,7 +78,7 @@ public class UserController {
      */
     private ResponseEntity<String> getResponseEntity(UserModelStatusCodes statusCode, String jwtToken) {
         String message = this.generateResponseObject(statusCode, jwtToken);
-        int code = statusCode.statusCode;
+        int code = statusCode.getStatusCode();
         return new ResponseEntity<>(message, HttpStatus.valueOf(code));
     }
 
@@ -88,7 +90,7 @@ public class UserController {
      */
     private String generateResponseObject(UserModelStatusCodes code, String jwtToken) {
         HashMap<String, String> json = new HashMap<>();
-        json.put("msg", code.label);
+        json.put("message", code.getLabel());
         if (jwtToken != null) {
             json.put("jwtToken", jwtToken);
         }

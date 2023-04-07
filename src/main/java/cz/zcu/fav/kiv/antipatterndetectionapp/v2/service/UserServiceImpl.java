@@ -124,7 +124,6 @@ public class UserServiceImpl implements UserService {
         if (u == null) {
             return UserModelStatusCodes.USER_LOGIN_FAILED;
         }
-        //TODO request to OAuth for authentication
         final boolean passwordMatches = comparePassword(password,u.getPassword());
 
         return (!passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN);
@@ -151,4 +150,11 @@ public class UserServiceImpl implements UserService {
         //TODO with OAuth app
         return UserModelStatusCodes.USER_LOGGED_OUT;
     }
+
+    @Override
+    public User getUserByName(String name) {
+        return this.userRepository.findByName(name);
+    }
+
+
 }

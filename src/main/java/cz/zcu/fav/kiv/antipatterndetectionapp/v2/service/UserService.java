@@ -28,5 +28,7 @@ public interface UserService {
      */
     public UserModelStatusCodes logoutUser(User user);
 
+    public User getUserByName(String name);
+
 
 }

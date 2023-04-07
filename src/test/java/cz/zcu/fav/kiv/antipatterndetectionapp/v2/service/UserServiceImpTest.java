@@ -202,7 +202,7 @@ public class UserServiceImpTest {
         Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
         String name = "test";
-        UserModelStatusCodes foundCode = userService.loginUser(new User(name, ""));
+        UserModelStatusCodes foundCode = userService.verifyUser(new User(name, ""));
 
         assertEquals(foundCode, UserModelStatusCodes.USER_LOGGED_IN);
     }
@@ -217,7 +217,7 @@ public class UserServiceImpTest {
         //Mockito.when(userRepository.findByName(mockUser.getName())).thenReturn(mockUser);
 
         String name = "notest";
-        UserModelStatusCodes foundCode = userService.loginUser(new User(name, ""));
+        UserModelStatusCodes foundCode = userService.verifyUser(new User(name, ""));
 
         assertEquals(foundCode, UserModelStatusCodes.USER_LOGIN_FAILED);
     }

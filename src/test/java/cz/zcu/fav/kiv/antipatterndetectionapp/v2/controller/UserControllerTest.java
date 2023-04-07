@@ -99,7 +99,7 @@ public class UserControllerTest {
 
     @Test
     public void loginValidUser() throws Exception {
-        Mockito.when(userService.loginUser(any())).thenReturn(UserModelStatusCodes.USER_LOGGED_IN);
+        Mockito.when(userService.verifyUser(any())).thenReturn(UserModelStatusCodes.USER_LOGGED_IN);
         HashMap<String,String> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
@@ -119,7 +119,7 @@ public class UserControllerTest {
 
     @Test
     public void loginInValidUser() throws Exception {
-        Mockito.when(userService.loginUser(any())).thenReturn(UserModelStatusCodes.USER_LOGIN_FAILED);
+        Mockito.when(userService.verifyUser(any())).thenReturn(UserModelStatusCodes.USER_LOGIN_FAILED);
         HashMap<String,String> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
