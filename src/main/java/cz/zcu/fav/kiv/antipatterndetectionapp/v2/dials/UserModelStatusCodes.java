@@ -16,8 +16,9 @@ public enum UserModelStatusCodes {
     public final String label;
     public final int statusCode;
 
-    private UserModelStatusCodes(String s, int i) {
+    UserModelStatusCodes(String s, int i) {
         this.label = s;
         this.statusCode = i;
     }
+
 }
