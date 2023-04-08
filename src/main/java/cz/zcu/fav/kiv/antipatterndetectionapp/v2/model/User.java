@@ -51,9 +51,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email) {
+    public User(String name, String token) {
         this.name = name;
-        this.email = email;
+        this.token = token;
     }
 
     public User(String name, String email, String password){

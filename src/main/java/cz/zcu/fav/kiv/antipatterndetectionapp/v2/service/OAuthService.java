@@ -1,10 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 
-public interface OAuthService {
-    public ResponseEntity<String> authenticate(User user);
-    public ResponseEntity<String> loginUser(User user);
+import javax.servlet.http.HttpServletRequest;
 
+public interface OAuthService {
+    public ResponseEntity<String> authenticate(String token);
+    public ResponseEntity<String> loginUser(User user);
+    public ResponseEntity<String> logoutUser(User user);
 }

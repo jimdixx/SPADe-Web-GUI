@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 
 import org.springframework.http.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class RequestBuilder {
 
 

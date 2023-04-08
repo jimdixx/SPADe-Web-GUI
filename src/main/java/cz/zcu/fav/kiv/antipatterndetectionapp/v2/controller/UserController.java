@@ -32,8 +32,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Service for login, logout and authenticate
+     */
     @Autowired
-    private OAuthService authService;
+    private OAuthService aOuthService;
 
     /**
      * Method to register new user in the app
@@ -56,13 +59,13 @@ public class UserController {
     @PostMapping(value = "/login")
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         UserModelStatusCodes statusCode = userService.verifyUser(user);
-        ResponseEntity<String> response = authService.loginUser(user);
+//        ResponseEntity<String> response = aOuthService.loginUser(user);
 
         String jwtToken = null;
         if (statusCode.getStatusCode() == 200) {
+            ResponseEntity<String> response = aOuthService.loginUser(user);
             jwtToken = response.getBody();
         }
-
 
         return getResponseEntity(statusCode, jwtToken);
     }
@@ -75,8 +78,7 @@ public class UserController {
      */
     @PostMapping(value = "/logout")
     public ResponseEntity<String> logoutUser(@RequestBody User user) {
-        UserModelStatusCodes statusCode = userService.logoutUser(user);
-        return getResponseEntity(statusCode, null);
+        return aOuthService.logoutUser(user);
     }
 
     /**

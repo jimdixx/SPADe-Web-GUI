@@ -23,27 +23,39 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Service which communicate with OAuth application
+ */
 @Service
 public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
-
+    /**
+     * URL path to authenticate endpoint of OAuth application
+     */
     @Value("${auth.realm.authenticate}")
     private String AUTH_URL_AUTH;
 
+    /**
+     * URL path to login endpoint of OAuth application
+     */
     @Value("${auth.realm.login}")
     private String AUTH_URL_LOGIN;
 
+    /**
+     * URL path to logout endpoint of OAuth application
+     */
+    @Value("${auth.realm.logout}")
+    private String AUTH_URL_LOGOUT;
+
+    /**
+     *
+     */
     @Autowired
     private UserService userService;
 
     public ResponseEntity<String> authenticate(String token) {
 
-        requestBody.put("name", userName);
-        requestBody.put("token", token);
-
-        ResponseEntity<String> response = RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, requestBody);
-
-        return response;
+        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, null, token);
     }
 
     public ResponseEntity<String> loginUser(User user) {
@@ -57,14 +69,29 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
         requestBody.put("name", userName);
 
-        ResponseEntity<String> response = RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
+        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
+    }
 
-        return response;
+    public ResponseEntity<String> logoutUser(User user) {
+        final String userName = user.getName();
+        final String token = user.getToken();
+
+        if(userName == null || token == null) {
+            return null;
+        }
+
+        //HttpURLConnection con = RequestBuilder.createConnection(AUTH_URL);
+        HashMap<String, String> requestBody = new HashMap<>();
+
+        requestBody.put("name", userName);
+        requestBody.put("token", token);
+
+        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         final User user = this.userService.getUserByName(s);
-        return new org.springframework.security.core.userdetails.User(user.getName(),user.getPassword(),new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),new ArrayList<>());
     }
 }
