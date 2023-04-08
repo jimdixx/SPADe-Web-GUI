@@ -21,9 +21,7 @@ public class RequestBuilder {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-
-        return response;
+        return restTemplate.postForEntity(url, entity, String.class);
     }
 
     public static ResponseEntity<String> sendRequestResponse(String url, HashMap<String,String> body, String token) {
