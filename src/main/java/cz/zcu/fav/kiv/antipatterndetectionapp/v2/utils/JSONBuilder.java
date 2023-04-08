@@ -17,6 +17,9 @@ public class JSONBuilder {
      * @return String representation of JSON object
      */
     public static String buildJson(HashMap<String, String> map){
+        if(map == null) {
+            return "";
+        }
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode jsonObject = mapper.createObjectNode();
         for (String key : map.keySet()) {

@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -21,11 +24,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService);
     }
 
+    @Bean
+    public AuthenticationProvider provider() {
+        return new AuthProvider(template());
+    }
+
+    @Bean
+    public RestTemplate template() {
+        return new RestTemplate();
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {
         return super.userDetailsService();
     }
+
+
 
     @Override
     @Bean
@@ -33,17 +47,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/v2/user/register","/v2/user/login").permitAll().
-                anyRequest().authenticated().and().
-                exceptionHandling().and().sessionManagement()
+        httpSecurity
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/v2/user/register", "/v2/user/login").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
+        httpSecurity.addFilterAfter(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
-
 
 }

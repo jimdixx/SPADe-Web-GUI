@@ -4,11 +4,22 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,16 +36,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
     @Autowired
     private UserService userService;
 
-    public ResponseEntity<String> authenticate(User user) {
-        final String userName = user.getName();
-        final String token = user.getToken();
-
-        if(userName == null || token == null) {
-            return null;
-        }
-
-        //HttpURLConnection con = RequestBuilder.createConnection(AUTH_URL);
-        HashMap<String, String> requestBody = new HashMap<>();
+    public ResponseEntity<String> authenticate(String token) {
 
         requestBody.put("name", userName);
         requestBody.put("token", token);
