@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsService();
     }
 
-
+//    @Bean
+//    public JwtAuthenticationFilter jwtAuthenticationFilter(OAuthService oAuthService) {
+//        return new JwtAuthenticationFilter(oAuthService);
+//    }
 
     @Override
     @Bean

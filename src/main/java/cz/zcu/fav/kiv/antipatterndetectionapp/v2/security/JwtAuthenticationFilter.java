@@ -4,6 +4,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthServiceImpl;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.*;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
 @Component
