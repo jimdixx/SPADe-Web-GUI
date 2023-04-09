@@ -66,14 +66,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/v2/user/register", "/v2/user/login").permitAll()
                 .anyRequest().authenticated()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new OAuthServiceImpl())
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new OAuthServiceImpl())
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                .and()
-//                .addFilterBefore(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
 //        httpSecurity.addFilterAfter(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
 //        httpSecurity.addFilter(new JwtAuthenticationFilter(new OAuthServiceImpl()));
     }
