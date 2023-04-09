@@ -40,4 +40,17 @@ public class RequestBuilder {
         return response;
     }
 
+    public static ResponseEntity<String> sendRequestResponse(String url, String token) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + token);
+
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity("{}", entity, String.class);
+        return response;
+    }
+
 }

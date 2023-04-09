@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     private OAuthService oAuthService;
 
