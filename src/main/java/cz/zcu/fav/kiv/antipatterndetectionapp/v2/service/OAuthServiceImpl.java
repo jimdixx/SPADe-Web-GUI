@@ -32,14 +32,14 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
     /**
      * URL path to authenticate endpoint of OAuth application
      */
-    @Value("${auth.realm.authenticate}")
-    private String AUTH_URL_AUTH;
+//    @Value("${auth.realm.authenticate}")
+    private String AUTH_URL_AUTH = "http://localhost:8081/authenticate";
 
     /**
      * URL path to login endpoint of OAuth application
      */
-    @Value("${auth.realm.login}")
-    private String AUTH_URL_LOGIN;
+//    @Value("${auth.realm.login}")
+    private String AUTH_URL_LOGIN = "http://localhost:8081/login";
 
     /**
      * URL path to logout endpoint of OAuth application
