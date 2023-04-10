@@ -26,20 +26,6 @@ public class RequestBuilder {
         return restTemplate.postForEntity(url, entity, String.class);
     }
 
-    public static ResponseEntity<String> sendRequestResponse(String url, HashMap<String,String> body, String token) {
-        RestTemplate restTemplate = new RestTemplate();
-        String json = JSONBuilder.buildJson(body);
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + token);
-
-        HttpEntity<String> entity = new HttpEntity<>(json, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        return response;
-    }
-
     public static ResponseEntity<String> sendRequestResponse(String url, String token) {
         RestTemplate restTemplate = new RestTemplate();
 
@@ -49,7 +35,7 @@ public class RequestBuilder {
         headers.set("Authorization", "Bearer " + token);
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity("{}", entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         return response;
     }
 

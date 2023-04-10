@@ -68,10 +68,6 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService, Authe
     }
 
     public ResponseEntity<String> authenticate(String token) {
-        HashMap<String, String> requestBody = new HashMap<>();
-
-        requestBody.put("name", "userName");
-        requestBody.put("token", token);
 
         return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
     }

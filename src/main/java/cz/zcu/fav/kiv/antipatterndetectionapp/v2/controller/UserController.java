@@ -6,6 +6,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.UserService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -77,8 +78,13 @@ public class UserController {
      * @return message after logout
      */
     @PostMapping(value = "/logout")
-    public ResponseEntity<String> logoutUser(@RequestBody User user) {
-
+    public ResponseEntity<String> logoutUser(@RequestHeader HttpHeaders headers, @RequestBody User user) {
+        final String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+        if(authHeader == null || !authHeader.startsWith("Bearer")){
+            //chyba
+        }
+        final String token = authHeader.substring(7);
+        user.setToken(token);
         return aOuthService.logoutUser(user);
     }
 
