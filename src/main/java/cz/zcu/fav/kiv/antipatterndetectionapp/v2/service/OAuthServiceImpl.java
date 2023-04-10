@@ -73,7 +73,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService, Authe
         requestBody.put("name", "userName");
         requestBody.put("token", token);
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, requestBody);
+        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
     }
 
     public ResponseEntity<String> loginUser(User user) {

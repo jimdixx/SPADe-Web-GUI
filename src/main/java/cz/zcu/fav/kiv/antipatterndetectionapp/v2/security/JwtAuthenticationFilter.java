@@ -49,28 +49,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-
             String token = authorizationHeader.replace("Bearer ", "");
-
             ResponseEntity<String> responseEntity = oAuthService.authenticate(token);
-            if (responseEntity.getBody().contains("OK")) {
 
-                UserDetails userDetails = User.builder()
-                        .username("jmeno")
+
+
+            UserDetails userDetails = User.builder()
+                        .username(responseEntity.getBody())
                         .password("")
                         .authorities(Collections.emptyList())
                         .build();
 
                 Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
-
-            }
+    /*
             else {
                 SecurityContextHolder.clearContext();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getOutputStream().println("{\"error\" : \"Token timed out!\"}");
                 return;
-            }
+            }*/
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
