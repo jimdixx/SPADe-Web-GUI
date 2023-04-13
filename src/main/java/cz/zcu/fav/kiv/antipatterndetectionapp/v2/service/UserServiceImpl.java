@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
      * @param password  password from client
      * @return          hashed password for database
      */
-    private String hashPassword(String password) {
+    public String hashPassword(String password) {
         //standard java security encryption module
         MessageDigest digest = null;
         try {
@@ -140,17 +140,6 @@ public class UserServiceImpl implements UserService {
     boolean comparePassword(String password, String hash) {
         final String passwordHash = this.hashPassword(password);
         return hash.equals(passwordHash);
-    }
-
-    /**
-     * Methods invalidates JWT token in OAuth application
-     * @param user serialized JSON object representing user
-     * @return UserModelStatusCodes user logged out status flag
-     */
-    @Override
-    public UserModelStatusCodes logoutUser(User user) {
-        //TODO with OAuth app
-        return UserModelStatusCodes.USER_LOGGED_OUT;
     }
 
     @Override

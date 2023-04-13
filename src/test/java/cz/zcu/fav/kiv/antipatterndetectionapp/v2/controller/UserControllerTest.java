@@ -137,26 +137,4 @@ public class UserControllerTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
     }
 
-    @Test
-    public void logoutUser() throws Exception {
-        Mockito.when(userService.logoutUser(any())).thenReturn(UserModelStatusCodes.USER_LOGGED_OUT);
-        HashMap<String,String> map = new HashMap<>();
-        map.put("name","pepa");
-        map.put("password","ahojSvete");
-        map.put("email","yxz");
-        String json = JSONBuilder.buildJson(map);
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/v2/user/logout")
-                .accept(MediaType.APPLICATION_JSON).content(json)
-                .contentType(MediaType.APPLICATION_JSON);
-
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        MockHttpServletResponse response = result.getResponse();
-
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-    }
-
-
-
 }

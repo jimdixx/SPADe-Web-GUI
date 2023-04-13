@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -15,8 +16,10 @@ public class RequestBuilder {
 
     private static Logger logger = Logger.getLogger(RequestBuilder.class.getName());
 
+    public RequestBuilder() {
+    }
 
-    public static ResponseEntity<String> sendRequestResponse(String url, HashMap<String,String> body) {
+    public ResponseEntity<String> sendRequestResponse(String url, HashMap<String, String> body) {
         RestTemplate restTemplate = new RestTemplate();
         String json = JSONBuilder.buildJson(body);
 
@@ -26,7 +29,7 @@ public class RequestBuilder {
         return restTemplate.postForEntity(url, entity, String.class);
     }
 
-    public static ResponseEntity<String> sendRequestResponse(String url, String token) {
+    public ResponseEntity<String> sendRequestResponse(String url, String token) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();

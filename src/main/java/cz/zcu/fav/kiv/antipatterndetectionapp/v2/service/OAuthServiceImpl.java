@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Service which communicate with OAuth application
  */
 @Service
-public class OAuthServiceImpl implements OAuthService, UserDetailsService, AuthenticationEntryPoint {
+public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
     /**
      * URL path to authenticate endpoint of OAuth application
@@ -49,27 +49,12 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService, Authe
     @Autowired
     private UserService userService;
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException, ServletException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null || authorizationHeader.length() < 7) {
-            return;
-        }
-        String token = authorizationHeader.substring(7);
 
-        ResponseEntity<String> responseEntity = authenticate(token);
-         if (token != null && responseEntity.getBody().contains("OK")) {
-            // Token is valid, proceed with the request
-            response.setStatus(501);
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-    }
+    private RequestBuilder requestBuilder = new RequestBuilder();
 
     public ResponseEntity<String> authenticate(String token) {
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
+        return requestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
     }
 
     public ResponseEntity<String> loginUser(User user) {
@@ -83,7 +68,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService, Authe
 
         requestBody.put("name", userName);
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
+        return requestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
     }
 
     public ResponseEntity<String> logoutUser(User user) {
@@ -100,7 +85,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService, Authe
         requestBody.put("name", userName);
         requestBody.put("token", token);
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
+        return requestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
     }
 
     @Override

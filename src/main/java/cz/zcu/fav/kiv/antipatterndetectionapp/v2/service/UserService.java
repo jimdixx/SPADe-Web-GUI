@@ -21,12 +21,6 @@ public interface UserService {
      * @return Integer - status code of the operation, ie 1 - successful, 0 - failed, ....
      */
     public UserModelStatusCodes verifyUser(User user);
-    /**
-     * Method attempts to log out a user
-     * @param user serialized JSON object representing user
-     * @return Integer - status code of the operation, ie 1 - successful, 0 - failed, ....
-     */
-    public UserModelStatusCodes logoutUser(User user);
 
     public User getUserByName(String name);
 
