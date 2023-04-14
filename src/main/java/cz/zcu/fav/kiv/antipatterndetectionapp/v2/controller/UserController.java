@@ -107,12 +107,12 @@ public class UserController {
      * @return String that represents JSON object
      */
     private String generateResponseObject(UserModelStatusCodes code, String jwtToken) {
-        HashMap<String, String> json = new HashMap<>();
+        HashMap<String, Object> json = new HashMap<>();
         json.put("message", code.getLabel());
         if (jwtToken != null) {
             json.put("jwtToken", jwtToken);
         }
-        return JSONBuilder.buildJson(json);
+        return JSONBuilder.buildJSON(json);
     }
 
 

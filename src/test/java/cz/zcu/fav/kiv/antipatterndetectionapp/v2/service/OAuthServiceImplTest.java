@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,47 +29,66 @@ public class OAuthServiceImplTest {
     @Autowired
     private OAuthService oAuthService;
 
-    @MockBean
-    private RequestBuilder requestBuilder;
 
     /**
      * Mocked User
      */
     private final User mockUser = new User("foo", "foo@foo.cz", "foo");
-    
+    private final String sampleToken = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyMGU4NmJiMC1lMDU4LTQwYTMtYjQyZC02ZTBjOWIyMmQ5MWQiL" +
+            "CJzdWIiOiJmb28iLCJpYXQiOjE2ODE0MTY2ODAsImV4cCI6MTY4MTQxNjk4MH0.YJTwPEI4njQqYRuLGilf_oVl0gGD5BWFmdolk1O" +
+            "vYWIgTcoIAFwh6bwqrW7XM6Hlj-ItYj9EmihYIqN5gfJVtg";
+    // valid user logged in - http response with code 200 and token in body is expected
     @Test
     public void loginValidUser(){
-        ResponseEntity<String> response = ResponseEntity.ok().body("eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyMGU4NmJiMC1lMDU4LTQwYTMtYjQyZC02ZTBjOWIyMmQ5MWQiL" +
-                "CJzdWIiOiJmb28iLCJpYXQiOjE2ODE0MTY2ODAsImV4cCI6MTY4MTQxNjk4MH0.YJTwPEI4njQqYRuLGilf_oVl0gGD5BWFmdolk1O" +
-                "vYWIgTcoIAFwh6bwqrW7XM6Hlj-ItYj9EmihYIqN5gfJVtg");
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("name", mockUser.getName());
-//        when(requestBuilder.sendRequestResponse(anyString(), anyCollection())).thenReturn(response);
-//        try(MockedStatic<RequestBuilder> requestBuilderMockedStatic = Mockito.mockStatic(RequestBuilder.class)){
-//                requestBuilderMockedStatic.when(() -> RequestBuilder.sendRequestResponse(anyString(), mockHashMap)).thenReturn(response);
-//        }
+        ResponseEntity<String> response = ResponseEntity.ok().body(sampleToken);
+        try(MockedStatic<RequestBuilder> requestBuilderMockedStatic = Mockito.mockStatic(RequestBuilder.class)){
+               requestBuilderMockedStatic.when(() -> RequestBuilder.sendRequestResponse(anyString(), anyMap())).thenReturn(response);
+            ResponseEntity<String> response1 = oAuthService.loginUser(mockUser);
 
-        ResponseEntity<String> response1 = oAuthService.loginUser(mockUser);
-
-        assertEquals(response, response1);
-
-    }
-
-
-    /*    public ResponseEntity<String> loginUser(User user) {
-        final String userName = user.getName();
-
-        if(userName == null) {
-            return null;
+            assertEquals(response, response1);
         }
-        //HttpURLConnection con = RequestBuilder.createConnection(AUTH_URL);
-        HashMap<String, String> requestBody = new HashMap<>();
-
-        requestBody.put("name", userName);
-
-        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
     }
-     */
+
+    // return 200 response if valid user is trying to authenticate
+    @Test
+    public void authenticateValidUser(){
+        ResponseEntity<String> expectedResponse = ResponseEntity.ok().body(mockUser.getName());
+        try(MockedStatic<RequestBuilder> requestBuilderMockedStatic = Mockito.mockStatic(RequestBuilder.class)){
+            requestBuilderMockedStatic.when(() -> RequestBuilder.sendRequestResponse(anyString(), anyString())).thenReturn(expectedResponse);
+            ResponseEntity<String> response = oAuthService.authenticate(sampleToken);
+            assertEquals(expectedResponse, response);
+        }
+
+    }
+
+    // return 401 if unauthorized user is trying to authenticate
+    @Test
+    public void authenticateInvalidUser(){
+        ResponseEntity<String> expectedResponse = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mockUser.getName());
+        try(MockedStatic<RequestBuilder> requestBuilderMockedStatic = Mockito.mockStatic(RequestBuilder.class)){
+            requestBuilderMockedStatic.when(() -> RequestBuilder.sendRequestResponse(anyString(), anyString())).thenReturn(expectedResponse);
+            ResponseEntity<String> response = oAuthService.authenticate(sampleToken);
+            assertEquals(expectedResponse, response);
+        }
+
+    }
+    @Test
+    public void logoutUser(){
+        Map<String,Object> json = new HashMap<>();
+        json.put("message","ok");
+        //have to set token to the user - in this scenario we assume user is logged in
+        mockUser.setToken(sampleToken);
+        String jsonString = JSONBuilder.buildJSON(json);
+        ResponseEntity<String> expectedResponse = ResponseEntity.status(HttpStatus.OK).body(jsonString);
+        try(MockedStatic<RequestBuilder> requestBuilderMockedStatic = Mockito.mockStatic(RequestBuilder.class)){
+            requestBuilderMockedStatic.when(() -> RequestBuilder.sendRequestResponse(anyString(), anyMap())).thenReturn(expectedResponse);
+            ResponseEntity<String> response = oAuthService.logoutUser(mockUser);
+            assertEquals(expectedResponse, response);
+        }
+
+
+    }
+
 
 
 

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Service which communicate with OAuth application
@@ -50,11 +51,11 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
     private UserService userService;
 
 
-    private RequestBuilder requestBuilder = new RequestBuilder();
+    //private RequestBuilder requestBuilder = new RequestBuilder();
 
     public ResponseEntity<String> authenticate(String token) {
 
-        return requestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
+        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
     }
 
     public ResponseEntity<String> loginUser(User user) {
@@ -64,11 +65,11 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
             return null;
         }
         //HttpURLConnection con = RequestBuilder.createConnection(AUTH_URL);
-        HashMap<String, String> requestBody = new HashMap<>();
+        Map<String, Object> requestBody = new HashMap<>();
 
         requestBody.put("name", userName);
 
-        return requestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
+        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
     }
 
     public ResponseEntity<String> logoutUser(User user) {
@@ -80,12 +81,12 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
         }
 
         //HttpURLConnection con = RequestBuilder.createConnection(AUTH_URL);
-        HashMap<String, String> requestBody = new HashMap<>();
+        HashMap<String, Object> requestBody = new HashMap<>();
 
         requestBody.put("name", userName);
         requestBody.put("token", token);
 
-        return requestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
+        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
     }
 
     @Override

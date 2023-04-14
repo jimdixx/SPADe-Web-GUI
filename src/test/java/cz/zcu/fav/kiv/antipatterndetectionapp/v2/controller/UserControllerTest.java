@@ -39,11 +39,11 @@ public class UserControllerTest {
     @Test
     public void registerUserNew() throws Exception {
         Mockito.when(userService.registerUser(any())).thenReturn(UserModelStatusCodes.USER_CREATED);
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
         map.put("email","yxz@ahoj.cz");
-        String json = JSONBuilder.buildJson(map);
+        String json = JSONBuilder.buildJSON(map);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/v2/user/register")
                 .accept(MediaType.APPLICATION_JSON).content(json)
@@ -58,11 +58,11 @@ public class UserControllerTest {
     @Test
     public void registerUserInvalidArguments() throws Exception {
         Mockito.when(userService.registerUser(any())).thenReturn(UserModelStatusCodes.INVALID_USER_ARGUMENTS);
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
         map.put("email","yxz");
-        String json = JSONBuilder.buildJson(map);
+        String json = JSONBuilder.buildJSON(map);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/v2/user/register")
                 .accept(MediaType.APPLICATION_JSON).content(json)
@@ -80,11 +80,11 @@ public class UserControllerTest {
     @Test
     public void registerUserExists() throws Exception {
         Mockito.when(userService.registerUser(any())).thenReturn(UserModelStatusCodes.USER_EXISTS);
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
         map.put("email","yxz@ahoj.cz");
-        String json = JSONBuilder.buildJson(map);
+        String json = JSONBuilder.buildJSON(map);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/v2/user/register")
                 .accept(MediaType.APPLICATION_JSON).content(json)
@@ -100,11 +100,11 @@ public class UserControllerTest {
     @Test
     public void loginValidUser() throws Exception {
         Mockito.when(userService.verifyUser(any())).thenReturn(UserModelStatusCodes.USER_LOGGED_IN);
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
         map.put("email","yxz@ahoj.cz");
-        String json = JSONBuilder.buildJson(map);
+        String json = JSONBuilder.buildJSON(map);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
               .post("/v2/user/login")
               .accept(MediaType.APPLICATION_JSON).content(json)
@@ -120,11 +120,11 @@ public class UserControllerTest {
     @Test
     public void loginInValidUser() throws Exception {
         Mockito.when(userService.verifyUser(any())).thenReturn(UserModelStatusCodes.USER_LOGIN_FAILED);
-        HashMap<String,String> map = new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
         map.put("name","pepa");
         map.put("password","ahojSvete");
         map.put("email","yxz@ahoj.cz");
-        String json = JSONBuilder.buildJson(map);
+        String json = JSONBuilder.buildJSON(map);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/v2/user/login")
                 .accept(MediaType.APPLICATION_JSON).content(json)

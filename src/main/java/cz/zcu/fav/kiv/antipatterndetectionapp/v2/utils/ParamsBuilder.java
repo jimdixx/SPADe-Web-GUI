@@ -12,8 +12,8 @@ public class ParamsBuilder {
      * @param parameters Key: value pair parameters
      * @return String JSON representation
      */
-    public static String createPostParams(HashMap<String,String> parameters) {
-        return JSONBuilder.buildJson(parameters);
+    public static String createPostParams(HashMap<String,Object> parameters) {
+        return JSONBuilder.buildJSON(parameters);
     }
 
     /**
