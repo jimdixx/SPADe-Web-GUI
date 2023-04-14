@@ -1,9 +1,9 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -13,28 +13,30 @@ import javax.servlet.http.HttpServletRequest;
 
 public class RequestBuilder {
 
-
+    //@Value("${auth.realm.authenticate}")
+    private static String spadeSignature;
     private static Logger logger = Logger.getLogger(RequestBuilder.class.getName());
 
-    public RequestBuilder() {
-    }
 
-    public ResponseEntity<String> sendRequestResponse(String url, HashMap<String, String> body) {
+
+    public static ResponseEntity<String> sendRequestResponse(String url, Map<String, Object> body) {
         RestTemplate restTemplate = new RestTemplate();
-        String json = JSONBuilder.buildJson(body);
+        String json = JSONBuilder.buildJSON(body);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        //headers.set("X-spade-request",spadeSignature);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         return restTemplate.postForEntity(url, entity, String.class);
     }
 
-    public ResponseEntity<String> sendRequestResponse(String url, String token) {
+    public static ResponseEntity<String> sendRequestResponse(String url, String token) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_JSON);
+        //headers.set("X-spade-request",spadeSignature);
         headers.set("Authorization", "Bearer " + token);
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
