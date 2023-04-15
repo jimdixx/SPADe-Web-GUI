@@ -11,7 +11,9 @@ public enum UserModelStatusCodes {
     USER_LOGGED_IN("User logged in successfully",200),
     USER_LOGIN_FAILED("User login failed",401),
     USER_CREATION_FAILED("Error occurred while creating user",503),
-    USER_LOGGED_OUT("User logged out.",200);
+    USER_LOGGED_OUT("User logged out.",200),
+    TOKEN_REFRESHED("User token refreshed.",200),
+    TOKEN_EXPIRED("User token is expired.",401);
 
     private final String label;
     private final int statusCode;
