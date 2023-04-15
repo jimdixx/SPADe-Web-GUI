@@ -64,18 +64,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/v2/user/register", "/v2/user/login").permitAll()
+                .mvcMatchers("/v2/user/register", "/v2/user/login", "/v2/user/refresh", "/v2/user/logout").permitAll()
                 .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new OAuthServiceImpl())
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
-//        httpSecurity.addFilterAfter(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
-//        httpSecurity.addFilter(new JwtAuthenticationFilter(new OAuthServiceImpl()));
     }
 
 }

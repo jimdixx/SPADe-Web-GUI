@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpExceptions.CustomExceptionHandler;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -59,12 +60,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }*/
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
             return;
         }
 
         chain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+            String path = request.getRequestURI().substring(request.getContextPath().length());
+        return path.startsWith("/v2/user/");
     }
 }
 

@@ -10,4 +10,7 @@ public interface OAuthService {
     public ResponseEntity<String> authenticate(String token);
     public ResponseEntity<String> loginUser(User user);
     public ResponseEntity<String> logoutUser(User user);
+
+    ResponseEntity<String> refreshToken(String token);
+
 }

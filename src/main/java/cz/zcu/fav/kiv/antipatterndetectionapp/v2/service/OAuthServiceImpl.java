@@ -44,6 +44,8 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 //    @Value("${auth.realm.logout}")
     private String AUTH_URL_LOGOUT = "http://localhost:8081/logout";
 
+    private String AUTH_URL_REFRESH = "http://localhost:8081/refresh";
+
     /**
      *
      */
@@ -87,6 +89,11 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
         requestBody.put("token", token);
 
         return RequestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
+    }
+
+    @Override
+    public ResponseEntity<String> refreshToken(String token) {
+        return RequestBuilder.sendRequestResponse(AUTH_URL_REFRESH, token, true);
     }
 
     @Override

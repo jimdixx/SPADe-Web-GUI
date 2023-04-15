@@ -44,4 +44,18 @@ public class RequestBuilder {
         return response;
     }
 
+    public static ResponseEntity<String> sendRequestResponse(String url, String token, boolean get) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        //headers.set("X-spade-request",spadeSignature);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        return response;
+    }
+
 }

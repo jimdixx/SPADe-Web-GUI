@@ -88,6 +88,26 @@ public class UserController {
         return aOuthService.logoutUser(user);
     }
 
+    @GetMapping("/refresh")
+    public ResponseEntity<String> refreshToken(@RequestHeader HttpHeaders headers) {
+        final String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+            // err
+        }
+        final String token = authHeader.substring(7);
+
+        String jwtToken = null;
+        ResponseEntity<String> response = aOuthService.refreshToken(token);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            jwtToken = response.getBody();
+            return getResponseEntity(UserModelStatusCodes.TOKEN_REFRESHED,jwtToken);
+        }
+
+        return getResponseEntity(UserModelStatusCodes.TOKEN_EXPIRED, UserModelStatusCodes.TOKEN_EXPIRED.getLabel());
+
+    }
+
     /**
      * Method to create response
      *
