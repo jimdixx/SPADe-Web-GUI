@@ -92,7 +92,7 @@ public class UserController {
     public ResponseEntity<String> refreshToken(@RequestHeader HttpHeaders headers) {
         final String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer")) {
-            // err
+            return getResponseEntity(UserModelStatusCodes.USER_LOGIN_FAILED, UserModelStatusCodes.USER_LOGIN_FAILED.getLabel());
         }
         final String token = authHeader.substring(7);
 
