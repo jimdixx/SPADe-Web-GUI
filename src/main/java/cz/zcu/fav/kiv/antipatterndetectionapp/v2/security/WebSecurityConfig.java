@@ -2,12 +2,10 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,8 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -26,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userService;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -47,10 +46,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsService();
     }
 
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter(OAuthService oAuthService) {
-//        return new JwtAuthenticationFilter(oAuthService);
-//    }
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean(OAuthService oAuthService) {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(jwtAuthenticationFilter);
+        return filterRegistrationBean;
+    }
 
     @Override
     @Bean
@@ -69,8 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(new OAuthServiceImpl()), UsernamePasswordAuthenticationFilter.class);
+                .and();
     }
 
 }

@@ -33,15 +33,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            chain.doFilter(request, response);
+//            chain.doFilter(request, response);
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
             return;
         }
+        System.out.println("<------------------------tady jsem------------------------->");
 
         try {
             String token = authorizationHeader.replace("Bearer ", "");
             ResponseEntity<String> responseEntity = oAuthService.authenticate(token);
-
-
 
             UserDetails userDetails = User.builder()
                         .username(responseEntity.getBody())
@@ -71,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
             String path = request.getRequestURI().substring(request.getContextPath().length());
-        return path.startsWith("/v2/user/");
+        return path.startsWith("/v2/user/login") || path.startsWith("/v2/user/register");
     }
 }
 

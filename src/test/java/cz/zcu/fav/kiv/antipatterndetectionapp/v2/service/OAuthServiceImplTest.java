@@ -29,7 +29,6 @@ public class OAuthServiceImplTest {
     @Autowired
     private OAuthService oAuthService;
 
-
     /**
      * Mocked User
      */
