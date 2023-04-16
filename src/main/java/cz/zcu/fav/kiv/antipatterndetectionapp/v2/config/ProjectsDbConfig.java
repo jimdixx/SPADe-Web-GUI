@@ -21,16 +21,14 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "primaryEntityManagerFactory",
         transactionManagerRef = "primaryTransactionManager",
-        basePackages = {
-                "cz.zcu.fav.kiv.antipatterndetectionapp.repository"
-        }
+        basePackages = {"cz.zcu.fav.kiv.antipatterndetectionapp.repository"}
 )
 public class ProjectsDbConfig {
 
     @Primary
     @Bean(name = "primaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource customerDataSource() {
+    public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
     }
 
@@ -45,8 +43,8 @@ public class ProjectsDbConfig {
 
     @Primary
     @Bean(name = "primaryTransactionManager")
-    public PlatformTransactionManager customerTransactionManager(
-            @Qualifier("primaryEntityManagerFactory") EntityManagerFactory customerEntityManagerFactory ) {
-        return new JpaTransactionManager(customerEntityManagerFactory);
+    public PlatformTransactionManager primaryTransactionManager(
+            @Qualifier("primaryEntityManagerFactory") EntityManagerFactory primaryEntityManagerFactory ) {
+        return new JpaTransactionManager(primaryEntityManagerFactory);
     }
 }

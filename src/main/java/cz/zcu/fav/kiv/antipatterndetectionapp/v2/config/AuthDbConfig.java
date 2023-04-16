@@ -31,12 +31,10 @@ public class AuthDbConfig {
     }
 
     @Bean(name = "secondaryEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean secondaryEntityManagerFactory(EntityManagerFactoryBuilder builder,
-                                                                                @Qualifier("secondaryDataSource") DataSource secondaryDataSource) {
-        return builder
-                .dataSource(secondaryDataSource)
-                .packages("cz.zcu.fav.kiv.antipatterndetectionapp.v2.model")
-                .build();
+    public LocalContainerEntityManagerFactoryBean
+            secondaryEntityManagerFactory(EntityManagerFactoryBuilder builder,
+            @Qualifier("secondaryDataSource") DataSource secondaryDataSource) {
+        return builder.dataSource(secondaryDataSource).packages("cz.zcu.fav.kiv.antipatterndetectionapp.v2.model").build();
     }
 
     @Bean(name = "secondaryTransactionManager")
