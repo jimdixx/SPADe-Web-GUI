@@ -101,7 +101,7 @@ public class UserController {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             jwtToken = response.getBody();
-            return getResponseEntity(UserModelStatusCodes.TOKEN_REFRESHED,jwtToken);
+            return getResponseEntity(UserModelStatusCodes.TOKEN_REFRESHED, jwtToken);
         }
 
         return getResponseEntity(UserModelStatusCodes.TOKEN_EXPIRED, UserModelStatusCodes.TOKEN_EXPIRED.getLabel());
