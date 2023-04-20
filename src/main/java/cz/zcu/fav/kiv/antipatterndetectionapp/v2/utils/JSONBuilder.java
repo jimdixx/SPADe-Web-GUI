@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,4 +61,20 @@ public class JSONBuilder {
         //some simple data type without any indentation, we can just return it
         return value;
     }
+
+    /**
+     * Transform string json to json object
+     * @param jsonString json object in string type
+     * @return JSONObject parsed string
+     */
+    public static JSONObject parseJSON(String jsonString) throws ParseException {
+        if(jsonString == null||jsonString.length()==0) return null;
+        JSONParser parser = new JSONParser();
+        JSONObject json = (JSONObject) parser.parse(jsonString);
+        return json;
+    }
+
+
+
+
 }

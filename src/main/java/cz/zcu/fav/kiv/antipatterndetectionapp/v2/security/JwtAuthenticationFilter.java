@@ -2,6 +2,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpExceptions.CustomExceptionHandler;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -9,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -39,7 +43,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
             return;
         }
-        System.out.println("<------------------------tady jsem------------------------->");
 
         try {
             String token = authorizationHeader.replace("Bearer ", "");
@@ -60,10 +63,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.getOutputStream().println("{\"error\" : \"Token timed out!\"}");
                 return;
             }*/
-        } catch (Exception e) {
+        }
+        //4xx or 5xx http response from auth application
+        //basically copies the response from auth app and send it to client
+        catch (HttpClientErrorException e){
             SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
+            //read response body
+            String responseBody = e.getResponseBodyAsString();
+            response.setStatus(e.getStatusCode().value());
+            response.getOutputStream().println(responseBody);
             return;
         }
 
