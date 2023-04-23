@@ -2,10 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthServiceImpl;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +14,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.Arrays;
 
@@ -30,13 +27,8 @@ import java.util.Arrays;
 @EnableWebSecurity(debug = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public FilterChainProxy filterChainProxy() {
-        return new FilterChainProxy();
-    }
-
-//    @Autowired
-    private final UserDetailsService userService = new OAuthServiceImpl();
+    @Autowired
+    private UserDetailsService userService;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -73,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
