@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.config.SecurityBasics;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpExceptions.CustomExceptionHandler;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
@@ -20,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Component
@@ -80,8 +82,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-            String path = request.getRequestURI().substring(request.getContextPath().length());
-        return path.startsWith("/v2/user/login") || path.startsWith("/v2/user/register");
+        String path = request.getRequestURI().substring(request.getContextPath().length());
+        return Arrays.stream(SecurityBasics.NO_AUTHORIZATION_NEEDED).anyMatch(path::startsWith);
     }
 
 
