@@ -28,7 +28,7 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     /**
      * Name of the User
@@ -67,7 +67,7 @@ public class User {
      * Getter of id
      * @return id of the user
      */
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
