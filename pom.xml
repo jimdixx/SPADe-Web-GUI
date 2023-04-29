@@ -22,13 +22,24 @@
 		<org.reflections.version>0.10.2</org.reflections.version>
 		<org.jsoup.version>1.15.2</org.jsoup.version>
 		<com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
-		<org.junit.jupiter.version>5.4.0</org.junit.jupiter.version>
+		<org.junit.jupiter.version>5.9.1</org.junit.jupiter.version>
 		<org.apache.maven.plugins.version>3.0.0-M7</org.apache.maven.plugins.version>
 		<spring-cloud-contract.version>3.0.3</spring-cloud-contract.version>
 	</properties>
 
-	<dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.9.3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
+	<dependencies>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -112,16 +123,20 @@
 
 		<!-- Junit libraries for unit tests-->
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${org.junit.jupiter.version}</version>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${org.junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -151,17 +166,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-inline</artifactId>
-			<version>4.3.1</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Contract testing -->
 		<dependency>
@@ -170,6 +174,8 @@
 			<version>2.1.1.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- MS SQL Server DataBase -->
 
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
