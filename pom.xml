@@ -124,7 +124,6 @@
 			<version>${org.junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- json library with minimal overhead -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>

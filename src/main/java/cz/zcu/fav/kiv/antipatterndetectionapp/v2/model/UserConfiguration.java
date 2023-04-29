@@ -1,30 +1,35 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
 
 /**
- * @Author Jiri Trefil
- * Join table between user and configuration
- * One user can have multiple (or none) configurations associated with him
- * One configuration can have associated multiple users
- * there this Many:Many relationship has to be decomposed with this table
- * Primary key is a Composite key (userId+configId is always a unique pair)
+ * @author Jiri Trefil
+ * Wrapper for http request for uploading a new configuration by user
  */
-@Entity
-@Table(name="user_configurations")
 public class UserConfiguration {
-    @EmbeddedId
-    private UserConfigKey id;
+    private User user;
+    private Configuration configuration;
 
 
-    public UserConfiguration(){
+    public UserConfiguration(User user, Configuration configuration){
+        this.user = user;
+        this.configuration = configuration;
+    }
+    public UserConfiguration(){}
+
+
+    public User getUser() {
+        return user;
     }
 
-    public UserConfiguration(UserConfigKey id){
-        this.id = id;
+    public Configuration getConfiguration() {
+        return configuration;
     }
-    public UserConfigKey getUserConfigKey(){
-        return this.id;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }

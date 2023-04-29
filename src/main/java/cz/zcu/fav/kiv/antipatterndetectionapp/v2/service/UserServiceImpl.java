@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.Crypto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
             return UserModelStatusCodes.USER_EXISTS;
         }
 
-        String passwordHash = hashPassword(password);
+        String passwordHash = Crypto.hashString(password);
         //server side fault
         if (passwordHash == null) {
             return UserModelStatusCodes.HASH_FAILED;
@@ -83,26 +84,7 @@ public class UserServiceImpl implements UserService {
         return emailPattern.matcher(email).find();
     }
 
-    /**
-     * Method to hash password
-     * @param password  password from client
-     * @return          hashed password for database
-     */
-    public String hashPassword(String password) {
-        //standard java security encryption module
-        MessageDigest digest = null;
-        try {
-            //try to instance the class - throws an error if algorithm
-            digest = MessageDigest.getInstance("SHA3-256");
-        }
-        catch(NoSuchAlgorithmException exception){
-            exception.printStackTrace();
-            return null;
-        }
-        byte [] tmp = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-        //convert byte array into string
-        return (new HexBinaryAdapter()).marshal(tmp);
-    }
+
 
     /**
      * Method
@@ -125,21 +107,12 @@ public class UserServiceImpl implements UserService {
         if (u == null) {
             return UserModelStatusCodes.USER_LOGIN_FAILED;
         }
-        final boolean passwordMatches = comparePassword(password,u.getPassword());
+        final boolean passwordMatches = Crypto.compareHashes(password, u.getPassword());
 
         return (!passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN);
     }
 
-    /**
-     * Method compares user password with stored hash
-     * @param password String user provided password
-     * @param hash String hash saved in database
-     * @return true if hashes are the same
-     */
-    boolean comparePassword(String password, String hash) {
-        final String passwordHash = this.hashPassword(password);
-        return hash.equals(passwordHash);
-    }
+
 
     @Override
     public User getUserByName(String name) {

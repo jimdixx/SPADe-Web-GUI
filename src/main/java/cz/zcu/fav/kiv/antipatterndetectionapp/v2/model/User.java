@@ -55,7 +55,9 @@ public class User {
         this.name = name;
         this.token = token;
     }
-
+    public User(String name){
+        this.name = name;
+    }
     public User(String name, String email, String password){
         this.name = name;
         this.email = email;

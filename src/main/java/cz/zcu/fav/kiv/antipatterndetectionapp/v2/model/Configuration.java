@@ -3,7 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="configuration")
+@Table(name="configurations")
 public class Configuration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,15 +13,24 @@ public class Configuration {
     //hash of the configuration so users cant upload duplicates
     private String configHash;
     // 'Y' if the configuration is accessible to everyone, 'N' if its user defined
-    private char isDefault;
+    private String isDefault;
 
     public Configuration(){}
-    public Configuration(String config, String configHash, boolean isDefault){
+    public Configuration(String config, String configHash, String isDefault){
         this.config = config;
         this.configHash = configHash;
-        this.isDefault = isDefault?'Y':'N';
+        this.isDefault = isDefault;
     }
 
+    public Configuration(int id){
+        this.id = id;
+    }
+
+    public Configuration(String config, String isDefault){
+        this.config = config;
+        this.configHash = null;
+        this.isDefault = isDefault;
+    }
 
     public int getId() {
         return id;
@@ -35,7 +44,14 @@ public class Configuration {
         return configHash;
     }
 
-    public char getIsDefault() {
+    public String getIsDefault() {
         return isDefault;
     }
+
+
+    public void setHash(String hash){
+        this.configHash = hash;
+    }
+
+
 }

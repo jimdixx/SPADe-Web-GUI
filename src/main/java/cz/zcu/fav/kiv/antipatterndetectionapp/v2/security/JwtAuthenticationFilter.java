@@ -1,10 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
-
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpExceptions.CustomExceptionHandler;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +32,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-//            chain.doFilter(request, response);
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
@@ -56,13 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
-    /*
-            else {
-                SecurityContextHolder.clearContext();
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getOutputStream().println("{\"error\" : \"Token timed out!\"}");
-                return;
-            }*/
         }
         //4xx or 5xx http response from auth application
         //basically copies the response from auth app and send it to client
@@ -79,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
             String path = request.getRequestURI().substring(request.getContextPath().length());
         return path.startsWith("/v2/user/login") || path.startsWith("/v2/user/register");
     }

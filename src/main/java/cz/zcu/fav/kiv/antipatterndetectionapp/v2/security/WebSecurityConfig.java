@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -70,11 +71,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/v2/user/register", "/v2/user/login", "/v2/user/refresh", "/v2/user/logout","/v2/configuration//test").permitAll()
+                .mvcMatchers("/v2/user/register", "/v2/user/login", "/v2/user/refresh", "/v2/user/logout","/v2/configuration//get_configuration","v2/configuration/upload_configuration").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
