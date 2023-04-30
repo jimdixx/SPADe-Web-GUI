@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.config.SecurityBasics;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/v2/user/register", "/v2/user/login", "/v2/user/refresh", "/v2/user/logout","/v2/configuration//get_configuration","v2/configuration/upload_configuration").permitAll()
+                .mvcMatchers(SecurityBasics.NO_AUTHORIZATION_NEEDED).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
