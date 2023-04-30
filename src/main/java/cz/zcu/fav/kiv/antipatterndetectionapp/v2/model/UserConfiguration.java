@@ -4,6 +4,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
 /**
  * @author Jiri Trefil
  * Wrapper for http request for uploading a new configuration by user
+ * DTO pattern
  */
 public class UserConfiguration {
     private User user;
