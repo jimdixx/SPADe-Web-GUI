@@ -11,7 +11,7 @@ Contract.make {
             contentType applicationJson()
         }
         body(
-                "name": "foo",
+                "name": "existing",
                 "password": "foo",
                 "email": "foo@foo.foo"
         )

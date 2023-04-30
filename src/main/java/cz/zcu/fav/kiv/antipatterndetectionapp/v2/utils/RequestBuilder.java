@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpErrorHandler.CustomErrorHandler;
 import org.json.simple.JSONObject;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -17,12 +18,11 @@ import org.springframework.http.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Component
 public class RequestBuilder {
     private static Logger logger = Logger.getLogger(RequestBuilder.class.getName());
 
-
-
-    public static ResponseEntity<String> sendRequestResponse(String url, Map<String, Object> body) {
+    public ResponseEntity<String> sendRequestResponse(String url, Map<String, Object> body) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new CustomErrorHandler());
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -35,7 +35,7 @@ public class RequestBuilder {
         return restTemplate.postForEntity(url, entity, String.class);
     }
 
-    public static ResponseEntity<String> sendRequestResponse(String url, String token) {
+    public ResponseEntity<String> sendRequestResponse(String url, String token) {
         RestTemplate restTemplate = new RestTemplate();
         //custom error handler to handle http response
         restTemplate.setErrorHandler(new CustomErrorHandler());
@@ -52,7 +52,7 @@ public class RequestBuilder {
 
     }
 
-    public static ResponseEntity<String> sendRequestResponse(String url, String token, boolean get) {
+    public ResponseEntity<String> sendRequestResponse(String url, String token, boolean get) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new CustomErrorHandler());
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -68,7 +68,7 @@ public class RequestBuilder {
     }
 
 
-    public static ResponseEntity<String> sendRequestResponse(String url, Map<String, Object> body, String token) {
+    public ResponseEntity<String> sendRequestResponse(String url, Map<String, Object> body, String token) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new CustomErrorHandler());
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());

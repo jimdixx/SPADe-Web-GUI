@@ -3,23 +3,22 @@ package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    description "Creates new user in the application"
+    description "Login of registered user with wrong password."
     request {
         method POST()
-        url("/v2/user/register")
+        url("/v2/user/login")
         headers {
             contentType applicationJson()
         }
         body(
-                "name": "new_user",
-                "password": "foo",
-                "email": "foo@foo.foo"
+                "name": "foo",
+                "password": "wrong"
         )
     }
     response {
         body(
-                "message" : "User successfully created"
+                "message" : "User login failed"
         )
-        status 201
+        status 401
     }
 }

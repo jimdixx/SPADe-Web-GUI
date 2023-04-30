@@ -46,6 +46,8 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
     private String AUTH_URL_REFRESH = "http://localhost:8081/refresh";
 
+    @Autowired
+    private RequestBuilder requestBuilder;
     /**
      *
      */
@@ -57,7 +59,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
     public ResponseEntity<String> authenticate(String token) {
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
+        return requestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
     }
 
     public ResponseEntity<String> loginUser(User user) {
@@ -71,7 +73,7 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
 
         requestBody.put("name", userName);
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
+        return requestBuilder.sendRequestResponse(AUTH_URL_LOGIN, requestBody);
     }
 
     public ResponseEntity<String> logoutUser(User user) {
@@ -88,12 +90,12 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
         requestBody.put("name", userName);
         requestBody.put("token", token);
 
-        return RequestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
+        return requestBuilder.sendRequestResponse(AUTH_URL_LOGOUT, requestBody);
     }
 
     @Override
     public ResponseEntity<String> refreshToken(String token) {
-        return RequestBuilder.sendRequestResponse(AUTH_URL_REFRESH, token, true);
+        return requestBuilder.sendRequestResponse(AUTH_URL_REFRESH, token, true);
     }
 
     @Override

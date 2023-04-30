@@ -3,23 +3,22 @@ package contracts
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    description "Creates new user in the application"
+    description "Logout of logged in user."
     request {
         method POST()
-        url("/v2/user/register")
+        url("/v2/user/logout")
         headers {
+            header("Authorization": "Bearer token")
             contentType applicationJson()
         }
         body(
-                "name": "new_user",
-                "password": "foo",
-                "email": "foo@foo.foo"
+                "name": "existing"
         )
     }
     response {
         body(
-                "message" : "User successfully created"
+                "message": "User logged out"
         )
-        status 201
+        status 200
     }
 }
