@@ -113,13 +113,9 @@ public class ConfigurationServiceImplementation implements ConfigurationService{
         //fetch all configurations this particular user can see
         //ie all public configs + configurations uploaded by this particular user
         List<Configuration> configurations = this.configurationRepository.getAllUserConfigurations(userInfo.getId());
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < configurations.size(); i++){
-            sb.append(configurations.get(i).getConfig());
-        }
         Map<String,Object> json = new HashMap<>();
         json.put("message","configuration retrived");
-        json.put("configurations",sb.toString());
+        json.put("configurations",configurations);
         String jsonString = JSONBuilder.buildJSON(json);
         return new ResponseEntity<>(jsonString,HttpStatus.OK);
     }

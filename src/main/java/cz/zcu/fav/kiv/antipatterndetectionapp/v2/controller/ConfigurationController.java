@@ -26,9 +26,8 @@ public class ConfigurationController {
         return response;
     }
 
-    @GetMapping(value="/get_configuration")
-    public ResponseEntity<String> getUserConfigurations(@RequestParam(name="name") String userName){
-        User user = new User(userName);
+    @PostMapping(value="/get_configuration")
+    public ResponseEntity<String> getUserConfigurations(@RequestBody User user){
         ResponseEntity<String> response = this.configurationService.getUserConfigurations(user);
         return response;
     }

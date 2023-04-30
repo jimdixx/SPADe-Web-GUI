@@ -53,5 +53,10 @@ public class Configuration {
         this.configHash = hash;
     }
 
+    @Override
+    public String toString(){
+        return this.config;
+    }
+
 
 }

@@ -53,7 +53,7 @@ public class JSONBuilder {
             ArrayList<Object> list;
             list = (ArrayList<Object>) value;
             for(int i = 0,n=list.size(); i < n; i++)
-                jsonArray.add(parseJSONValue(list.get(i)));
+                jsonArray.add(parseJSONValue(list.get(i).toString()));
             return jsonArray;
         }
 
