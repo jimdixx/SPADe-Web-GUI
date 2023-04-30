@@ -23,8 +23,7 @@ public class ConfigurationController {
     @PostMapping(value="/upload_configuration")
     public ResponseEntity<String> test(@RequestBody UserConfiguration userConfiguration) {
         ResponseEntity<String> response = configurationService.addConfiguration(userConfiguration);
-
-        return null;
+        return response;
     }
 
     @GetMapping(value="/get_configuration")
