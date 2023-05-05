@@ -100,7 +100,7 @@ public class ConfigurationServiceImplementation implements ConfigurationService{
             return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.BAD_REQUEST);
         }
         //save the relation between user and configuration
-        this.userConfigurationJoinRepository.save(new UserConfigurationJoin(key));
+        this.userConfigurationJoinRepository.save(new UserConfigurationJoin(key,configuration.getConfigurationName()));
         json.put("message","configuration added to collection.");
         return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.OK);
     }
@@ -118,5 +118,19 @@ public class ConfigurationServiceImplementation implements ConfigurationService{
         json.put("configurations",configurations);
         String jsonString = JSONBuilder.buildJSON(json);
         return new ResponseEntity<>(jsonString,HttpStatus.OK);
+    }
+
+    @Override
+    public List<String> getConfigurationNames(User user) {
+        final String userName = user.getName();
+        if(userName == null){
+            return null;
+        }
+        //client can only send his name - he obviously does not know his id in db, we have to query that
+        User userInfo = this.userService.getUserByName(userName);
+        //fetch all configurations this particular user can see
+        //ie all public configs + configurations uploaded by this particular user
+        List<String> configurationNames = this.configurationRepository.getAllUserConfigurationNames(userInfo.getId());
+        return configurationNames;
     }
 }

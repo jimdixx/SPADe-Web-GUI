@@ -15,14 +15,21 @@ import javax.persistence.*;
 public class UserConfigurationJoin {
     @EmbeddedId
     private UserConfigKey id;
-
+    private String configurationName;
 
     public UserConfigurationJoin(){
     }
 
-    public UserConfigurationJoin(UserConfigKey id){
+
+    public UserConfigurationJoin(UserConfigKey id, String configurationName){
+        this.configurationName = configurationName;
         this.id = id;
     }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
     public UserConfigKey getUserConfigKey(){
         return this.id;
     }

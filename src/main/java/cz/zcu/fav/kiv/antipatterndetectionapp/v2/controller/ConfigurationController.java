@@ -4,11 +4,15 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserConfigurationJoinRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.ConfigurationService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Jiri Trefil
@@ -26,11 +30,28 @@ public class ConfigurationController {
         return response;
     }
 
-    @PostMapping(value="/get_configuration")
-    public ResponseEntity<String> getUserConfigurations(@RequestBody User user){
+    @PostMapping(value="/configuration")
+    public ResponseEntity<String> getUserConfigurations(@RequestBody User user) {
         ResponseEntity<String> response = this.configurationService.getUserConfigurations(user);
         return response;
     }
+
+    @PostMapping(value="/configuration_name")
+    public ResponseEntity<String> getConfigurationNames(@RequestBody User user) {
+        Map<String, Object> json = new HashMap<>();
+        List<String> configuration = this.configurationService.getConfigurationNames(user);
+        if(configuration == null) {
+            json.put("message", "internal sever error");
+            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        json.put("message", "ok");
+        json.put("configuration_names", configuration);
+        String jsonString = JSONBuilder.buildJSON(json);
+        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+    }
+
+
+
 
 
 
