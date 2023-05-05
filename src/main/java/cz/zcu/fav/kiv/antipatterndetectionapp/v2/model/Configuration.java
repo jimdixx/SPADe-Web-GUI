@@ -14,22 +14,28 @@ public class Configuration {
     private String configHash;
     // 'Y' if the configuration is accessible to everyone, 'N' if its user defined
     private String isDefault;
+    // name of the configuration
+    @Transient
+    private String configurationName;
 
     public Configuration(){}
-    public Configuration(String config, String configHash, String isDefault){
+
+    public Configuration(String config, String configHash, String isDefault, String configurationName) {
         this.config = config;
         this.configHash = configHash;
         this.isDefault = isDefault;
+        this.configurationName = configurationName;
     }
 
     public Configuration(int id){
         this.id = id;
     }
 
-    public Configuration(String config, String isDefault){
+    public Configuration(String config, String isDefault, String configurationName) {
         this.config = config;
         this.configHash = null;
         this.isDefault = isDefault;
+        this.configurationName = configurationName;
     }
 
     public int getId() {
@@ -53,10 +59,20 @@ public class Configuration {
         this.configHash = hash;
     }
 
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
+    }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
     @Override
     public String toString(){
         return this.config;
     }
+
+
 
 
 }
