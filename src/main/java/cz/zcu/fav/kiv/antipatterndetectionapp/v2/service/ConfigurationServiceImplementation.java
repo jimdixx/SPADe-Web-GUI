@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ConfigurationServiceImplementation implements ConfigurationService{
+public class ConfigurationServiceImplementation implements ConfigService {
     //repository which represents connection to database and the configuration table in particular
     @Autowired
     private ConfigRepository configurationRepository;
@@ -132,5 +132,15 @@ public class ConfigurationServiceImplementation implements ConfigurationService{
         //ie all public configs + configurations uploaded by this particular user
         List<String> configurationNames = this.configurationRepository.getAllUserConfigurationNames(userInfo.getId());
         return configurationNames;
+    }
+
+    @Override
+    public Configuration getConfigurationById(int id) {
+        return this.configurationRepository.findConfigurationById(id);
+    }
+
+    @Override
+    public String getConfigurationName(int userId, int configurationId) {
+        return this.configurationRepository.findConfigurationByCompoundKey(new UserConfigKey(userId, configurationId));
     }
 }

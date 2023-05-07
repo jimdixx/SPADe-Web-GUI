@@ -4,7 +4,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfiguration;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
-public interface ConfigurationService {
+public interface ConfigService {
     //upload configuration
     ResponseEntity<String> addConfiguration(Configuration cfg);
     ResponseEntity<String> addConfiguration(UserConfiguration cfg);
@@ -15,8 +15,8 @@ public interface ConfigurationService {
 
     List<String> getConfigurationNames(User user);
 
-
-
+    Configuration getConfigurationById(int id);
+    String getConfigurationName(int userId, int configurationId);
 
 
 }

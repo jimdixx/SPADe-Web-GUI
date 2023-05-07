@@ -24,9 +24,13 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
             "or config.id in (select userconfig.id.userId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1)")
     List<Configuration> getAllUserConfigurations(int userId);
 
-
-    @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id.userId = ?1 or userconfig.id.userId=2 ")
+    //todo default user id parametrem
+    @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id.userId = ?1 or userconfig.id.userId=2")
     List<String> getAllUserConfigurationNames(int userId);
+
+    @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id = ?1")
+    String findConfigurationByCompoundKey(UserConfigKey key);
+
 
 
 

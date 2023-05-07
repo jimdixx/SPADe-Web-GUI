@@ -1,9 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserConfigurationJoinRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.ConfigurationService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.ConfigService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,7 @@ import java.util.Map;
 @RequestMapping("v2/configuration")
 public class ConfigurationController {
     @Autowired
-    private ConfigurationService configurationService;
+    private ConfigService configurationService;
 
     @PostMapping(value="/upload_configuration")
     public ResponseEntity<String> test(@RequestBody UserConfiguration userConfiguration) {

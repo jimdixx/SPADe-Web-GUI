@@ -74,6 +74,32 @@ public class JSONBuilder {
         return json;
     }
 
+    public static Map<String, Map<String, String>> createMapFromString(String jsonContent){
+
+        ConfigurationDto cfgDto = new Gson().fromJson(jsonContent, ConfigurationDto.class);
+
+        Map<String, Map<String, String>> newAntiPatternMap = new HashMap<>();
+
+        for (AntiPatternDto antiPatternDto : cfgDto.getConfiguration()) {
+
+            String antiPatternName = antiPatternDto.getAntiPattern();
+
+            Map<String, String> newThresholds = new HashMap<String, String>();
+
+            for (ThresholdDto thresholdDto : antiPatternDto.getThresholds()) {
+
+                String thresholdName = thresholdDto.getThresholdName();
+                String value = thresholdDto.getValue();
+
+                newThresholds.put(thresholdName, value);
+            }
+            newAntiPatternMap.put(antiPatternName, newThresholds);
+
+        }
+
+        return newAntiPatternMap;
+    }
+
 
 
 
