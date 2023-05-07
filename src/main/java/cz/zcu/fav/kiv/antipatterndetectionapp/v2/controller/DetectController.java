@@ -26,7 +26,7 @@ public class DetectController {
     DetectionService detectionService;
 
     @GetMapping("/list")
-    public ResponseEntity<String> getAntipatternsAndProjects(){
+    public ResponseEntity<String> getAntipatternsAndProjects() {
         //List<Project> projects = projectService.getAllProjects();
         //List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
         //List<AntiPattern> antiPatterns = antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns());
