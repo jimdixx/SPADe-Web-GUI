@@ -1,9 +1,16 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.Gson;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.AntiPatternDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ConfigurationDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ThresholdDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
