@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.AntiPatternManager;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,11 +39,24 @@ public class DetectController {
 
     @PostMapping("/analyze")
     public ResponseEntity<String> detect(@RequestBody UserDetectionDto detectionRequest) {
-
+        final String[] projects = detectionRequest.getSelectedProjects();
+        if(projects == null ||projects.length == 0){
+            return sendDetectionBadRequest("No projects provided in request");
+        }
+        final String[] patterns = detectionRequest.getSelectedAntipatterns();
+        if(patterns == null ||patterns.length == 0){
+            return sendDetectionBadRequest("No antipatterns provided in request");
+        }
         List<QueryResult> results = detectionService.analyze(detectionRequest);
         //Map<String, Map<String, String>> currentConfiguration = configurationService.getConfigurationByName();
         return ResponseEntity.ok(new Gson().toJson(results));
+    }
 
+
+    private ResponseEntity<String> sendDetectionBadRequest(String message){
+        Map<String,String> error = new HashMap<>();
+        error.put("message",message);
+        return new ResponseEntity<>(new Gson().toJson(error), HttpStatus.BAD_REQUEST);
     }
 
 

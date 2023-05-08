@@ -20,7 +20,6 @@ public class UserConfigurationJoin {
     public UserConfigurationJoin(){
     }
 
-
     public UserConfigurationJoin(UserConfigKey id, String configurationName){
         this.configurationName = configurationName;
         this.id = id;

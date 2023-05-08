@@ -121,7 +121,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
     }
 
     @Override
-    public List<String> getConfigurationNames(User user) {
+    public List<Object[]> getConfigurationNamesAndIds(User user) {
         final String userName = user.getName();
         if(userName == null){
             return null;
@@ -130,8 +130,8 @@ public class ConfigurationServiceImplementation implements ConfigService {
         User userInfo = this.userService.getUserByName(userName);
         //fetch all configurations this particular user can see
         //ie all public configs + configurations uploaded by this particular user
-        List<String> configurationNames = this.configurationRepository.getAllUserConfigurationNames(userInfo.getId());
-        return configurationNames;
+        List<Object[]> configurations = this.configurationRepository.getAllUserConfigurationNames(userInfo.getId());
+        return configurations;
     }
 
     @Override

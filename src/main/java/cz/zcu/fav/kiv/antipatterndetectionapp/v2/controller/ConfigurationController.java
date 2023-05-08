@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +38,23 @@ public class ConfigurationController {
     @PostMapping(value="/configuration_name")
     public ResponseEntity<String> getConfigurationNames(@RequestBody User user) {
         Map<String, Object> json = new HashMap<>();
-        List<String> configuration = this.configurationService.getConfigurationNames(user);
+        List<Object[]> configuration = this.configurationService.getConfigurationNamesAndIds(user);
         if(configuration == null) {
             json.put("message", "internal sever error");
             return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        List<String> configurationNames = new ArrayList<>();
+        List<Integer> configurationIds = new ArrayList<>();
+        for(Object[] o : configuration){
+            String name = (String) o[0];
+            int id = (int) o[1];
+            configurationNames.add(name);
+            configurationIds.add(id);
+        }
         json.put("message", "ok");
-        json.put("configuration_names", configuration);
+        json.put("configuration_names", configurationNames);
+        json.put("configuration_ids", configurationIds);
+
         String jsonString = JSONBuilder.buildJSON(json);
         return new ResponseEntity<>(jsonString, HttpStatus.OK);
     }

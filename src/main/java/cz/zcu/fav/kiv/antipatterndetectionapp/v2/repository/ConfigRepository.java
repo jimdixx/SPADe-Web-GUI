@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigKey;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigurationJoin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -25,8 +26,8 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
     List<Configuration> getAllUserConfigurations(int userId);
 
     //todo default user id parametrem
-    @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id.userId = ?1 or userconfig.id.userId=2")
-    List<String> getAllUserConfigurationNames(int userId);
+    @Query("select userconfig.configurationName,userconfig.id.configId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1 or userconfig.id.userId=2")
+    List<Object[]> getAllUserConfigurationNames(int userId);
 
     @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id = ?1")
     String findConfigurationByCompoundKey(UserConfigKey key);
