@@ -28,7 +28,7 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     /**
      * Name of the User
@@ -55,7 +55,9 @@ public class User {
         this.name = name;
         this.token = token;
     }
-
+    public User(String name){
+        this.name = name;
+    }
     public User(String name, String email, String password){
         this.name = name;
         this.email = email;
@@ -67,7 +69,7 @@ public class User {
      * Getter of id
      * @return id of the user
      */
-    public Long getId() {
+    public int getId() {
         return id;
     }
 

@@ -41,8 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
 //            chain.doFilter(request, response);
             SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getOutputStream().println("{\"error\" : \"Some other error related to jwt token!\"}");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getOutputStream().println("{\"message\" : \"Authentication failed\"}");
             return;
         }
 
