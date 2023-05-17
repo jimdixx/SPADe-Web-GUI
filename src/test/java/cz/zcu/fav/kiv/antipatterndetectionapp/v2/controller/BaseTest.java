@@ -3,7 +3,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Metadata;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.AboutPageRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.DetectionService;
@@ -42,6 +44,9 @@ public abstract class BaseTest {
 
     @MockBean
     private ConfigRepository configurationRepository;
+
+    @MockBean
+    private AboutPageRepository aboutPageRepository;
 
     @BeforeEach
     public void init() {
@@ -99,6 +104,15 @@ public abstract class BaseTest {
         , "Y", "default_config");
         configuration.add(con);
         when(configurationRepository.getAllUserConfigurations(config_user.getId())).thenReturn(configuration);
+
+        /* About */
+        List<Metadata> metadata = new ArrayList<>();
+        Metadata met = new Metadata();
+        met.setAppDataValue("[ { \"version\": \"1.0.0\", \"authors\": [ { \"name\": \"Ondřej Váně\", \"email\": \"vaneo@students.zcu.cz\"}], \"description\": \"This application is used to detect presence of anti-patterns in project management tools data. Seven selected anti-patterns are implemented in this application.\"}, { \"version\": \"1.1.0\", \"authors\": [ { \"name\": \"Ondřej Váně\", \"email\": \"vaneo@students.zcu.cz\"}], \"description\": \"This application is used to detect presence of anti-patterns in project management tools data. Seven selected anti-patterns are implemented in this application.\"}, { \"version\": \"1.2.0\", \"authors\": [ { \"name\": \"Petr Štěpánek\", \"email\": \"petrs1@students.zcu.cz\"}], \"description\": \"This application is used to detect presence of anti-patterns in project management tools data. Ten selected anti-patterns are implemented in this application.\"}, { \"version\": \"2.0.0\", \"authors\": [ { \"name\": \"Petr Štěpánek\", \"email\": \"petrs1@students.zcu.cz\"}, { \"name\": \"Petr Urban\", \"email\": \"urbanp@students.zcu.cz\"}, { \"name\": \"Jiří Trefil\", \"email\": \"trefil@students.zcu.cz\"}, { \"name\": \"Václav Hrabík\", \"email\": \"hrabikv@students.zcu.cz\"}], \"description\": \"TODO\"}]");
+        met.setId(1L);
+        met.setAppDataKey("basics");
+        metadata.add(met);
+        when(aboutPageRepository.findAll()).thenReturn(metadata);
 
         RestAssuredMockMvc.webAppContextSetup(webApplicationContext);
     }
