@@ -26,25 +26,25 @@ Contract.make {
     response {
         body(
                [["version" : '2.0.0',
-                 "authors": [["name": "Petr Štěpánek", "email": 'petrs1@students.zcu.cz'],
+                 "authors": [["name": "Petr Stepanek", "email": 'petrs1@students.zcu.cz'],
                              ["name": "Petr Urban", "email": 'urbanp@students.zcu.cz'],
-                             ["name": "Jiří Trefil", "email": 'trefil@students.zcu.cz'],
-                             ["name": "Václav Hrabík", "email": 'hrabikv@students.zcu.cz']
+                             ["name": "Jiri Trefil", "email": 'trefil@students.zcu.cz'],
+                             ["name": "Vaclav Hrabik", "email": 'hrabikv@students.zcu.cz']
                             ],
                  "description": 'TODO'],
                 ["version": '1.2.0',
-                 "authors": [["name": 'Petr Štěpánek', "email": 'petrs1@students.zcu.cz']],
+                 "authors": [["name": 'Petr Stepanek', "email": 'petrs1@students.zcu.cz']],
                  "description": 'This application is used to detect presence of anti-patterns in project management tools data. Ten selected anti-patterns are implemented in this application.'
                 ],
                 ["version": '1.1.0',
-                 "authors": ["name": 'Ondřej Váně', "email": 'vaneo@students.zcu.cz'],
+                 "authors": ["name": 'Ondrej Vane', "email": 'vaneo@students.zcu.cz'],
                  "description": 'This application is used to detect presence of anti-patterns in project management tools data. Seven selected anti-patterns are implemented in this application.'
                 ],
                 ["version": '1.0.0',
-                 "authors": ["name": 'Ondřej Váně', "email": 'vaneo@students.zcu.cz'],
+                 "authors": ["name": 'Ondrej Vane', "email": 'vaneo@students.zcu.cz'],
                  "description": 'This application is used to detect presence of anti-patterns in project management tools data. Seven selected anti-patterns are implemented in this application.'
                 ]
-                ]
+               ]
         )
         status 200
     }
