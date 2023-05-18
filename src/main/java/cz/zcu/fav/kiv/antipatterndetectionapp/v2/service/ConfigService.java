@@ -13,7 +13,7 @@ public interface ConfigService {
     //get all configurations available to user
     ResponseEntity<String> getUserConfigurations(User user);
 
-    List<Object[]> getConfigurationNamesAndIds(User user);
+    List<Configuration> getConfigurationNamesAndIds(User user);
 
     Configuration getConfigurationById(int id);
     String getConfigurationName(int userId, int configurationId);

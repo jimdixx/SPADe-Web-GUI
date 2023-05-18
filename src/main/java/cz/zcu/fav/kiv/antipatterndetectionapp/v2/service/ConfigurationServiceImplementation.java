@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
+import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserConfigurationJoinRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,16 +114,16 @@ public class ConfigurationServiceImplementation implements ConfigService {
         User userInfo = this.userService.getUserByName(userName);
         //fetch all configurations this particular user can see
         //ie all public configs + configurations uploaded by this particular user
-        List<Configuration> configurations = this.configurationRepository.getAllUserConfigurations(userInfo.getId());
-        Map<String,Object> json = new HashMap<>();
-        json.put("message","configuration retrived");
-        json.put("configurations",configurations);
-        String jsonString = JSONBuilder.buildJSON(json);
-        return new ResponseEntity<>(jsonString,HttpStatus.OK);
+        List<Object[]> configurations = this.configurationRepository.getAllUserConfigurations(userInfo.getId());
+//        Map<String,Object> json = new HashMap<>();
+//        json.put("message","configuration retrived");
+//        json.put("configurations",configurations);
+//        String jsonString = JSONBuilder.buildJSON(json);
+        return new ResponseEntity<>(new Gson().toJson(configurations),HttpStatus.OK);
     }
 
     @Override
-    public List<Object[]> getConfigurationNamesAndIds(User user) {
+    public List<Configuration> getConfigurationNamesAndIds(User user) {
         final String userName = user.getName();
         if(userName == null){
             return null;
@@ -130,8 +132,17 @@ public class ConfigurationServiceImplementation implements ConfigService {
         User userInfo = this.userService.getUserByName(userName);
         //fetch all configurations this particular user can see
         //ie all public configs + configurations uploaded by this particular user
-        List<Object[]> configurations = this.configurationRepository.getAllUserConfigurationNames(userInfo.getId());
-        return configurations;
+        List<Object[]> configurations = this.configurationRepository.getAllUserConfigurations(userInfo.getId());
+        List<Configuration> configurationList = new ArrayList<>();
+        for (Object[] o : configurations) {
+            Configuration cof = (Configuration) (o[0]);
+            UserConfigurationJoin cofJoin = (UserConfigurationJoin) (o[1]);
+            if (cofJoin != null) {
+                cof.setConfigurationName(cofJoin.getConfigurationName());
+            }
+            configurationList.add(cof);
+        }
+        return configurationList;
     }
 
     @Override

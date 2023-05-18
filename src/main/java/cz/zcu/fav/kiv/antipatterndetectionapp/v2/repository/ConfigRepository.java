@@ -21,18 +21,13 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
     List<Configuration> getPublicConfigurations();
     //retrieve all public configurations and configurations available to the user
     //assumption - default configurations are not assigned to any user explicitly
-    @Query("select config from Configuration config where config.isDefault = 'Y' " +
-            "or config.id in (select userconfig.id.userId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1)")
-    List<Configuration> getAllUserConfigurations(int userId);
+    @Query("select config, userconfig from Configuration config left join UserConfigurationJoin userconfig on config.id = userconfig.id.configId where userconfig.id.userId = ?1 or config.isDefault = 'Y'")
+    List<Object[]> getAllUserConfigurations(int userId);
 
     //todo default user id parametrem
-    @Query("select userconfig.configurationName,userconfig.id.configId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1 or userconfig.id.userId=2")
+    @Query("select userconfig.configurationName,userconfig.id.configId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1")
     List<Object[]> getAllUserConfigurationNames(int userId);
 
     @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id = ?1")
     String findConfigurationByCompoundKey(UserConfigKey key);
-
-
-
-
 }

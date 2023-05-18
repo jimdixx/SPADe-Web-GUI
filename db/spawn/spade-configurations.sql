@@ -5,21 +5,11 @@ create table configurations (
 	id int identity(1, 1),
 	configHash nvarchar(255),
 	config nvarchar(max) not null,
-	isDefault char(1) not null,
+	isDefault char(1) not null CHECK ( 'Y', 'N' ),
+	defaultConfigName nvarchar(255),
 	PRIMARY KEY(id)
 );
 
-if not exists (select * from sysobjects where name='users' and xtype='U')
-create table users(
-id int identity(1,1),
-email nvarchar(255) not null,
-name nvarchar(255) not null,
-password varchar(255) not null
-PRIMARY KEY(id)
-);
---declare @userId as int
-insert into users(email,name,password) values('default@user.com','default','2747CABBB481A433679F6DC8AAE833DD1B64452778B97E2729BD3C54DEDE0886')
---set @userId = (select id from users where name='default')
 --rozkladova tabulka mapujici uzivatele a k nemu asociovane konfigurace
 if not exists (select * from sysobjects where name='user_configurations' and xtype='U')
 create table user_configurations (

@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
+import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.ConfigService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
@@ -38,25 +39,23 @@ public class ConfigurationController {
     @PostMapping(value="/configuration_name")
     public ResponseEntity<String> getConfigurationNames(@RequestBody User user) {
         Map<String, Object> json = new HashMap<>();
-        List<Object[]> configuration = this.configurationService.getConfigurationNamesAndIds(user);
+        List<Configuration> configuration = this.configurationService.getConfigurationNamesAndIds(user);
         if(configuration == null) {
             json.put("message", "internal sever error");
             return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         List<String> configurationNames = new ArrayList<>();
         List<Integer> configurationIds = new ArrayList<>();
-        for(Object[] o : configuration){
-            String name = (String) o[0];
-            int id = (int) o[1];
-            configurationNames.add(name);
-            configurationIds.add(id);
+        for(Configuration o : configuration){
+            configurationNames.add(o.getIsDefault().equals("Y") ? o.getDefaultConfigName() : o.getConfigurationName());
+            configurationIds.add(o.getId());
         }
-        json.put("message", "ok");
-        json.put("configuration_names", configurationNames);
-        json.put("configuration_ids", configurationIds);
 
-        String jsonString = JSONBuilder.buildJSON(json);
-        return new ResponseEntity<>(jsonString, HttpStatus.OK);
+        HashMap<String, Object> toJsonString = new HashMap<>();
+        toJsonString.put("configuration_names", configurationNames);
+        toJsonString.put("configuration_ids", configurationIds);
+
+        return new ResponseEntity<>(new Gson().toJson(toJsonString), HttpStatus.OK);
     }
 
 
