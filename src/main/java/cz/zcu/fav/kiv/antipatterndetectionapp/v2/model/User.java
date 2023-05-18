@@ -128,4 +128,8 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

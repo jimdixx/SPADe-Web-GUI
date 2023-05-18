@@ -3,6 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.Crypto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -283,7 +284,7 @@ public class UserServiceImpTest {
 
         UserServiceImpl userService1 = new UserServiceImpl();
 
-        String foundCode = userService1.hashPassword(mockUser.getPassword());
+        String foundCode = Crypto.hashString(mockUser.getPassword());
 
         assertEquals(hash.toUpperCase(), foundCode);
     }
