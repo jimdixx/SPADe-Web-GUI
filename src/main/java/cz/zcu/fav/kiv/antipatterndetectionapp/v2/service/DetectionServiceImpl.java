@@ -1,8 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.AntiPatternManager;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ConfigurationService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
@@ -13,6 +12,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,15 @@ public class DetectionServiceImpl implements DetectionService{
         String[] selectedProjects = detectionRequest.getSelectedProjects();
         String[] selectedAntiPatterns = detectionRequest.getSelectedAntipatterns();
         List<QueryResult> results = antiPatternManager.analyze(selectedProjects, selectedAntiPatterns, currentConfiguration);
+
+       /* List<QueryResultItem> i = new ArrayList<>();
+        Map<String,Threshold> thresholds = new HashMap<>();
+        thresholds.put("divisionOfIterationsWithRetrospective",new Threshold("divisionOfIterationsWithRetrospective","Division of iterations with retrospective","Minimum percentage of the total number of iterations with a retrospective (0,100)","Percentage must be float number between 0 and 100","Percentage"));
+        i.add(new QueryResultItem(new AntiPattern(3,"Business As Usual","BusinessAsUsual","Absence of a retrospective after individual iterations or after the completion project.")))
+        QueryResult q = new QueryResult(new Project("Rozšíření nástroje IMiGEr (KIV) - HKMM",""),new ArrayList<>());
+        */
+
+
         return results;
     }
 }

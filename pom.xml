@@ -11,11 +11,48 @@
 
 	<groupId>cz.zcu.fav.kiv</groupId>
 	<artifactId>anti-pattern-detection-app</artifactId>
-	<version>1.2.0</version>
+	<version>2.0.0</version>
 	<packaging>war</packaging>
 	<name>anti-pattern-detection-app</name>
-	<description>Basic web application for anti pattern detection</description>
+	<description>RESTful application for anti pattern detection</description>
+	<developers>
+		<developer>
+			<name>Petr Urban</name>
+			<email>urbanp@students.zcu.cz</email>
+			<roles>
+				<role>Fullstack developer</role>
+				<role>Team leader</role>
+			</roles>
+		</developer>
 
+		<developer>
+			<name>Jiří Trefil</name>
+			<email>trefil@students.zcu.cz</email>
+			<roles>
+				<role>Fullstack developer</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<name>Petr Štěpánek</name>
+			<email>petrs1@students.zcu.cz</email>
+			<roles>
+				<role>Frontend developer</role>
+				<role>Database plumber</role>
+			</roles>
+		</developer>
+
+		<developer>
+			<name>Václav Hrabík</name>
+			<email>hrabikv@students.zcu.cz</email>
+			<roles>
+				<role>TESTER</role>
+				<role>Backend developer</role>
+
+			</roles>
+		</developer>
+
+	</developers>
 	<properties>
 		<java.version>11</java.version>
 		<spring.boot.version>2.6.9</spring.boot.version>
