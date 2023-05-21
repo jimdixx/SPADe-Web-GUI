@@ -7,7 +7,7 @@ public class SecurityBasics {
             "/v2/user/login",
             "/v2/user/refresh",
             "/v2/user/logout",
-//            "/v2/app/metadata/about"
+            "/v2/app/metadata/about"
     };
 
 }
