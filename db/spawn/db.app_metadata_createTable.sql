@@ -61,7 +61,7 @@ insert into app_metadata (appDataKey, appDataValue)
                 "email": "hrabikv@students.zcu.cz"
               }
             ],
-            "description": "TODO"
+            "description": "Experience the next evolution of our application with version 2.0.0, featuring a revamped infrastructure, three distinct apps, MS SQL Server integration, a comprehensive user provider system, and contract testing for enhanced reliability."
           }
         ]')
 
