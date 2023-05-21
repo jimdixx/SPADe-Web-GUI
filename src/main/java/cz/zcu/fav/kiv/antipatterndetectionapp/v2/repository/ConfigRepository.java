@@ -12,8 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
-    @Value("${default_user_id}")
-    int defaultUserId = 0;
+
     Configuration findConfigurationById(int id);
     Configuration findConfigurationByConfigHash(String hash);
     //query to get all public configurations
@@ -24,7 +23,6 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
     @Query("select config, userconfig from Configuration config left join UserConfigurationJoin userconfig on config.id = userconfig.id.configId where userconfig.id.userId = ?1 or config.isDefault = 'Y'")
     List<Object[]> getAllUserConfigurations(int userId);
 
-    //todo default user id parametrem
     @Query("select userconfig.configurationName,userconfig.id.configId from UserConfigurationJoin userconfig where userconfig.id.userId = ?1")
     List<Object[]> getAllUserConfigurationNames(int userId);
 

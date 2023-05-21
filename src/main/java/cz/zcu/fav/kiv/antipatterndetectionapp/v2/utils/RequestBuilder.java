@@ -1,22 +1,13 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpErrorHandler.CustomErrorHandler;
-import org.json.simple.JSONObject;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.springframework.http.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class RequestBuilder {
@@ -31,6 +22,8 @@ public class RequestBuilder {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         //headers.set("X-spade-request",spadeSignature);
+        logger.log(Level.FINE,"Sending http request with body: \n"+json+"\n to: "+url);
+
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         return restTemplate.postForEntity(url, entity, String.class);
     }
@@ -45,7 +38,7 @@ public class RequestBuilder {
         headers.setContentType(MediaType.APPLICATION_JSON);
         //headers.set("X-spade-request",spadeSignature);
         headers.set("Authorization", "Bearer " + token);
-
+        logger.log(Level.FINE,"Sending http request with no body to: "+url);
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
         return response;

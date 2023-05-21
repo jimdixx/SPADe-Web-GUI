@@ -1,19 +1,19 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfiguration;
-import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 public interface ConfigService {
     //upload configuration
-    ResponseEntity<String> addConfiguration(Configuration cfg);
-    ResponseEntity<String> addConfiguration(UserConfiguration cfg);
+    ConfigurationControllerStatusCodes addConfiguration(Configuration cfg);
+    ConfigurationControllerStatusCodes addConfiguration(UserConfiguration cfg);
 
-    ResponseEntity<String> pairConfigurationWithUser(User user, Configuration configuration);
-    //get all configurations available to user
-    ResponseEntity<String> getUserConfigurations(User user);
+    ConfigurationControllerStatusCodes pairConfigurationWithUser(User user, Configuration configuration);
 
-    List<Configuration> getConfigurationNamesAndIds(User user);
+
+    List<Configuration> getUserConfigurations(User user);
 
     Configuration getConfigurationById(int id);
     String getConfigurationName(int userId, int configurationId);

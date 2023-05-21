@@ -6,11 +6,6 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.Crypto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 /**
