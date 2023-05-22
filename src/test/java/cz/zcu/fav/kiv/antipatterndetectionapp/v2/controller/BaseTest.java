@@ -6,9 +6,11 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.ProjectRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectServiceImpl;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Metadata;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigurationJoin;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.AboutPageRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
@@ -18,6 +20,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -48,6 +51,9 @@ public abstract class BaseTest {
     private AntiPatternService antiPatternService;
 
     @MockBean
+    private ProjectServiceImpl projectService;
+
+    @MockBean
     private ConfigRepository configurationRepository;
 
     @MockBean
@@ -55,9 +61,6 @@ public abstract class BaseTest {
 
     @MockBean
     private AntiPatternManager antiPatternManager;
-
-    @MockBean
-    private ProjectRepository projectRepository;
 
     @BeforeEach
     public void init() {
@@ -123,10 +126,13 @@ public abstract class BaseTest {
         when(configurationRepository.getAllUserConfigurationNames(config_user.getId())).thenReturn(configs);
 
         /* /configuration */
-        List<Configuration> configuration = new ArrayList<>();
+        List<Object[]> configuration = new ArrayList<>();
         Configuration con = new Configuration("{\r\n    \"configuration\": [\r\n        {\r\n            \"antiPattern\": \"TooLongSprint\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxIterationLength\",\r\n                    \"value\": \"21\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxNumberOfTooLongIterations\",\r\n                    \"value\": \"0\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"VaryingSprintLength\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxDaysDifference\",\r\n                    \"value\": \"7\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxIterationChanged\",\r\n                    \"value\": \"1\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"BusinessAsUsual\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"divisionOfIterationsWithRetrospective\",\r\n                    \"value\": \"66.66f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithRetrospective\",\r\n                    \"value\": \"%retr%||%revi%||%week%scrum%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"SpecifyNothing\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"minNumberOfWikiPagesWithSpecification\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minNumberOfActivitiesWithSpecification\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minAvgLengthOfActivityDescription\",\r\n                    \"value\": \"150\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithProjectSpecification\",\r\n                    \"value\": \"%dsp%||%specifikace%||%specification%||%vize%proj%||%vize%produ%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"RoadToNowhere\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"minNumberOfWikiPagesWithProjectPlan\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minNumberOfActivitiesWithProjectPlan\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithProjectPlan\",\r\n                    \"value\": \"%pl?n projektu%||%project plan%||%plan project%||%projektov? pl?n%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"LongOrNonExistentFeedbackLoops\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"divisionOfIterationsWithFeedbackLoop\",\r\n                    \"value\": \"50.00f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxGapBetweenFeedbackLoopRate\",\r\n                    \"value\": \"2f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithFeedbackLoop\",\r\n                    \"value\": \"%sch?z%z?kazn?k%||%p?edveden?%z?kazn?k%||%z?kazn%demo%||%sch?z%zadavat%||%inform%sch?z%||%z?kazn%||%zadavatel%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"NinetyNinetyRule\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxDivisionRange\",\r\n                    \"value\": \"1.25f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxBadDivisionLimit\",\r\n                    \"value\": \"2\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"UnknownPoster\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsInvalidNames\",\r\n                    \"value\": \"%unknown%||%anonym%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"BystanderApathy\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsInvalidContributors\",\r\n                    \"value\": \"%dependabot%\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maximumPercentageOfTasksWithoutTeamwork\",\r\n                    \"value\": \"30f\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"YetAnotherProgrammer\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxNumberOfNewContributors\",\r\n                    \"value\": \"5\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"numberOfFirstMonthsWithoutDetection\",\r\n                    \"value\": \"2\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}"
-                , "Y", "default_config");
-        configuration.add(con);
+                ,null,  "Y", "default config", "default config");
+        Object[] pom = new Object[2];
+        pom[0] = con;
+        pom[1] = new UserConfigurationJoin(null, "default config");
+        configuration.add(pom);
         when(configurationRepository.getAllUserConfigurations(config_user.getId())).thenReturn(configuration);
     }
 
@@ -166,17 +172,18 @@ public abstract class BaseTest {
                 thresholdMap1,
                 "Business_As_Usual.md"
         ));
+        when(antiPatternService.getAllAntiPatterns()).thenReturn(null);
         when(antiPatternService.antiPatternsToModel(any())).thenReturn(antiPatterns);
 
         List<Project> projectList = new ArrayList<>();
         Project project1 = new Project("Aplikace nad otevrenymi daty (KIV) BHVS", "generic description in czech");
         project1.setId(6L);
         projectList.add(project1);
-        when(projectRepository.findAll()).thenReturn(projectList);
+        when(projectService.getAllProjects()).thenReturn(projectList);
 
-        /* /detect */
+        /* /analyze */
         Configuration con = new Configuration("{\r\n    \"configuration\": [\r\n        {\r\n            \"antiPattern\": \"TooLongSprint\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxIterationLength\",\r\n                    \"value\": \"21\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxNumberOfTooLongIterations\",\r\n                    \"value\": \"0\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"VaryingSprintLength\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxDaysDifference\",\r\n                    \"value\": \"7\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxIterationChanged\",\r\n                    \"value\": \"1\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"BusinessAsUsual\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"divisionOfIterationsWithRetrospective\",\r\n                    \"value\": \"66.66f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithRetrospective\",\r\n                    \"value\": \"%retr%||%revi%||%week%scrum%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"SpecifyNothing\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"minNumberOfWikiPagesWithSpecification\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minNumberOfActivitiesWithSpecification\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minAvgLengthOfActivityDescription\",\r\n                    \"value\": \"150\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithProjectSpecification\",\r\n                    \"value\": \"%dsp%||%specifikace%||%specification%||%vize%proj%||%vize%produ%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"RoadToNowhere\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"minNumberOfWikiPagesWithProjectPlan\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"minNumberOfActivitiesWithProjectPlan\",\r\n                    \"value\": \"1\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithProjectPlan\",\r\n                    \"value\": \"%pl?n projektu%||%project plan%||%plan project%||%projektov? pl?n%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"LongOrNonExistentFeedbackLoops\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"divisionOfIterationsWithFeedbackLoop\",\r\n                    \"value\": \"50.00f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxGapBetweenFeedbackLoopRate\",\r\n                    \"value\": \"2f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsWithFeedbackLoop\",\r\n                    \"value\": \"%sch?z%z?kazn?k%||%p?edveden?%z?kazn?k%||%z?kazn%demo%||%sch?z%zadavat%||%inform%sch?z%||%z?kazn%||%zadavatel%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"NinetyNinetyRule\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxDivisionRange\",\r\n                    \"value\": \"1.25f\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maxBadDivisionLimit\",\r\n                    \"value\": \"2\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"UnknownPoster\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsInvalidNames\",\r\n                    \"value\": \"%unknown%||%anonym%\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"BystanderApathy\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"searchSubstringsInvalidContributors\",\r\n                    \"value\": \"%dependabot%\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"maximumPercentageOfTasksWithoutTeamwork\",\r\n                    \"value\": \"30f\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"antiPattern\": \"YetAnotherProgrammer\",\r\n            \"thresholds\": [\r\n                {\r\n                    \"thresholdName\": \"maxNumberOfNewContributors\",\r\n                    \"value\": \"5\"\r\n                },\r\n                {\r\n                    \"thresholdName\": \"numberOfFirstMonthsWithoutDetection\",\r\n                    \"value\": \"2\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}"
-                , "Y", "default_config");
+                , null, "Y", "default config", "default config");
         String[] selectedProjects = new String[1];
         selectedProjects[0] = "1";
         String[] selectedAntiPatterns = new String[1];

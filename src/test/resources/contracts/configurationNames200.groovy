@@ -17,8 +17,7 @@ Contract.make {
     }
     response {
         body(
-                "message": "ok",
-                "configuration_ids": ["1"],
+                "configuration_ids": ["0"],
                 "configuration_names": ["default config"]
         )
         status 200
