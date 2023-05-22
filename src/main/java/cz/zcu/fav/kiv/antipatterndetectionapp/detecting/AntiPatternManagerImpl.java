@@ -26,6 +26,12 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
 
     @Override
     public List<QueryResult> analyze(String[] selectedProjects, String[] selectedAntiPatterns, Map<String, Map<String, String>> configuration) {
+        //not null is assured via controllers and dtos
+        //but the array might be empty
+        //the analysis should not run
+        if(selectedProjects.length == 0 || selectedAntiPatterns.length == 0){
+            return new ArrayList<>();
+        }
 
         return this.analyze(projectService.getAllProjectsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedProjects)),
                 antiPatternService.getAllAntiPatternsForGivenIds(Utils.arrayOfStringsToArrayOfLongs(selectedAntiPatterns)), configuration);
