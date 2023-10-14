@@ -1,10 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.AntiPatternManager;
-import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.*;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.ProjectRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectServiceImpl;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
@@ -14,13 +11,11 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigurationJoin;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.AboutPageRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.DetectionService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -200,7 +195,8 @@ public abstract class BaseTest {
                     resultDetailsList.add(new ResultDetail("Total number of iterations", "5"));
                     resultDetailsList.add(new ResultDetail("Conclusion", "There is right number of retrospectives"));
             queryResultItemList.add(new QueryResultItem(antiPatterns.get(0), false, resultDetailsList));
-        results.add(new QueryResult(project, queryResultItemList));
+        ProjectToDto projectToDto = new ProjectToDto();
+        results.add(new QueryResult(projectToDto.convert(project), queryResultItemList));
         when(antiPatternManager.analyze(selectedProjects, selectedAntiPatterns, currentConfiguration)).thenReturn(results);
     }
 }
