@@ -8,6 +8,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,8 @@ public class AntiPatternManagerImpl implements AntiPatternManager {
 
         for (Project project : projects) {
             QueryResult queryResult = new QueryResult();
-            queryResult.setProject(project);
+            ProjectToDto projectToDto = new ProjectToDto();
+            queryResult.setProject(projectToDto.convert(project));
             List<QueryResultItem> queryResultItems = new ArrayList<>();
 
             for (AntiPatternDetector antiPattern : antiPatternDetectors) {

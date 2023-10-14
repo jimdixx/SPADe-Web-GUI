@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.config.SecurityBasics;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AuthProvider;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.AuthProvider;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;

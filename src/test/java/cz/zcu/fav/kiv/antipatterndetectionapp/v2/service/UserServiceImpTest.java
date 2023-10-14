@@ -3,6 +3,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserServiceImpl;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.Crypto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

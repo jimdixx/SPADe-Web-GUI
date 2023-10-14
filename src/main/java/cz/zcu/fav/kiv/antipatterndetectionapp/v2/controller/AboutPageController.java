@@ -3,7 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.AboutPageDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Metadata;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.AboutPageService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.about.AboutPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,18 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.AntiPatternManager;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Query;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
-import cz.zcu.fav.kiv.antipatterndetectionapp.service.AntiPatternService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.service.ConfigurationService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserDetectionDto;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.DetectionService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.detection.DetectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

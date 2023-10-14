@@ -1,24 +1,16 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResult;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.QueryResultItem;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.ProjectRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserDetectionDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.detection.DetectionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,6 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.OAuthService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
 import org.junit.jupiter.api.Test;

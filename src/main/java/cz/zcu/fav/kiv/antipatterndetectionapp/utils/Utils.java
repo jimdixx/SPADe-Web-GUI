@@ -5,6 +5,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.ResultDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -120,5 +121,11 @@ public class Utils {
         }
 
         return true;
+    }
+    //[JT] tohle taky hodit pryc - session neni validni
+    public static void sessionRecreate(HttpSession session) {
+        session.removeAttribute("activity");
+        session.removeAttribute("categoryFilter");
+        session.removeAttribute("typeFilter");
     }
 }

@@ -41,4 +41,21 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return projects;
     }
+
+    @Override
+    public Project saveProject(Project project) {
+        Project newProject = projectRepository.save(project);
+        projectRepository.flush();
+        return newProject;
+    }
+
+    @Override
+    public List<Project> getParentProjects() {
+        return projectRepository.getParentProjects();
+    }
+
+    @Override
+    public List<Project> getSubordinateProjectsTo(Long id) {
+        return projectRepository.getSubordinateProjectsTo(id);
+    }
 }

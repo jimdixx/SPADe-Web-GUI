@@ -1,11 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.config.SecurityBasics;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.httpExceptions.CustomExceptionHandler;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.OAuthService;
 import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

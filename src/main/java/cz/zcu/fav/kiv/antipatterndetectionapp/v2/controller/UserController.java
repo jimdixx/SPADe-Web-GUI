@@ -2,8 +2,8 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.UserService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.OAuthService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

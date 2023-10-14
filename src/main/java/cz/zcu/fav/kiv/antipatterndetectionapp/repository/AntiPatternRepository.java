@@ -3,7 +3,6 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.repository;
 import com.fasterxml.jackson.databind.JsonNode;
 import cz.zcu.fav.kiv.antipatterndetectionapp.detecting.detectors.AntiPatternDetector;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Threshold;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JsonParser;
 import org.reflections.Reflections;

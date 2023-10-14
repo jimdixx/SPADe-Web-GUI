@@ -3,7 +3,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.ConfigService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration.ConfigService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
