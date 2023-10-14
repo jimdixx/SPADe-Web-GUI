@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class Utils {
-
+    //[JT] pouzit, nebo zahodit
     private final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
     /**
@@ -108,6 +108,7 @@ public class Utils {
      * @return is valid
      */
     public static boolean checkStringSubstrings(String substrings) {
+        //[JT] prepsat do regexu - tohle je zrudne
         if (substrings.startsWith(Constants.SUBSTRING_DELIMITER)) {
             return false;
         }

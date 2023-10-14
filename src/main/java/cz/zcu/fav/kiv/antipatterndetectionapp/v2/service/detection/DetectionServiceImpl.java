@@ -11,6 +11,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserDetectionDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration.ConfigService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ClassToDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +41,9 @@ public class DetectionServiceImpl implements DetectionService{
 
     @Override
     public Query getAllProjectsAndAntipatterns() {
-        Query q = new Query(projectService.getAllProjects(), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
+        ClassToDto<Project, ProjectDto> classToDto = new ProjectToDto();
+        Query q = new Query(classToDto.convert(projectService.getAllProjects()), antiPatternService.antiPatternsToModel(antiPatternService.getAllAntiPatterns()));
+
         return q;
     }
 

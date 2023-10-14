@@ -1,4 +1,4 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
+package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
