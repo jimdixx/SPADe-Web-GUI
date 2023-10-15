@@ -1,6 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.Configuration;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigKey;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.UserConfigurationJoin;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,4 +29,13 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
 
     @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id = ?1")
     String findConfigurationByCompoundKey(UserConfigKey key);
+
+    @Query("SELECT \n" +
+            "cfg.config \n" +
+            "FROM \n" +
+            "UserConfigurationJoin userconfig INNER JOIN Configuration cfg \n" +
+            "ON userconfig.id.configId = cfg.id\n" +
+            "WHERE\n" +
+            "userconfig.id = ?1")
+    Configuration findConfigurationByUserNameAndID(UserConfigKey key);
 }

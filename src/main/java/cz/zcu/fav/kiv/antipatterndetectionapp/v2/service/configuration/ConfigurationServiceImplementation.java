@@ -153,6 +153,13 @@ public class ConfigurationServiceImplementation implements ConfigService {
         return this.configurationRepository.findConfigurationById(id);
     }
 
+    public Configuration getConfiguration(String userName, int id) {
+        User user = this.userService.getUserByName(userName);
+        UserConfigKey key = new UserConfigKey(user.getId(), id);
+        Configuration configuration = this.configurationRepository.findConfigurationByUserNameAndID(key);
+        return configuration;
+    }
+
     @Override
     public String getConfigurationName(int userId, int configurationId) {
         return this.configurationRepository.findConfigurationByCompoundKey(new UserConfigKey(userId, configurationId));

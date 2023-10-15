@@ -35,6 +35,10 @@ public class Configuration {
         this.id = id;
     }
 
+    public Configuration(String config) {
+        this.config = config;
+    }
+
     public Configuration(String config, String isDefault, String configurationName, String defaultConfigName) {
         this.config = config;
         this.configHash = null;

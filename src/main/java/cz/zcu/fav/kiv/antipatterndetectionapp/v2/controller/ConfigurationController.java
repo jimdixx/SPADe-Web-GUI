@@ -49,28 +49,41 @@ public class ConfigurationController {
      *         500 if db server died or no default configurations are present in the database
      */
     @PostMapping(value="/configuration")
-    public ResponseEntity<String> getUserConfigurations(@RequestBody User user) {
+    public ResponseEntity<String> getConfiguration(@RequestBody UserConfiguration userConfiguration) {
         Map<String, Object> json = new HashMap<>();
-        List<Configuration> configuration = this.configurationService.getUserConfigurations(user);
-        //this can only happen if db server is offline
-        //or no default configuration exists in database
-        if(configuration == null) {
+//        Configuration config = this.configurationService.getConfigurationById(Integer.parseInt(userConfiguration.getId()));
+
+        Configuration config = this.configurationService.getConfiguration(userConfiguration.getUser().getName(), Integer.parseInt(userConfiguration.getId()));
+
+        if(config == null) {
             json.put("message", "internal sever error");
             return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        //list of configuration definitions
-        List<String> configurationDefinition = new ArrayList<>();
-        //and their names
-        List<String> configurationNames = new ArrayList<>();
-        //hipster syntax for Petr
-        configuration.forEach(cfg -> {
-            configurationDefinition.add(cfg.getConfig());
-            configurationNames.add(cfg.getConfigurationName());
-        });
-        json.put("configuration",configurationDefinition);
-        json.put("configuration_names",configurationNames);
+
+        json.put("configuration", config.getConfig());
 
         return new ResponseEntity<>(new Gson().toJson(json),HttpStatus.OK);
+
+//        List<Configuration> configuration = this.configurationService.getUserConfigurations(user);
+//        //this can only happen if db server is offline
+//        //or no default configuration exists in database
+//        if(configuration == null) {
+//            json.put("message", "internal sever error");
+//            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        //list of configuration definitions
+//        List<String> configurationDefinition = new ArrayList<>();
+//        //and their names
+//        List<String> configurationNames = new ArrayList<>();
+//        //hipster syntax for Petr
+//        configuration.forEach(cfg -> {
+//            configurationDefinition.add(cfg.getConfig());
+//            configurationNames.add(cfg.getConfigurationName());
+//        });
+//        json.put("configuration",configurationDefinition);
+//        json.put("configuration_names",configurationNames);
+//
+//        return new ResponseEntity<>(new Gson().toJson(json),HttpStatus.OK);
     }
 
     /**

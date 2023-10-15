@@ -16,6 +16,8 @@ public interface ConfigService {
     List<Configuration> getUserConfigurations(User user);
 
     Configuration getConfigurationById(int id);
+
+    public Configuration getConfiguration(String userName, int id);
     String getConfigurationName(int userId, int configurationId);
 
 

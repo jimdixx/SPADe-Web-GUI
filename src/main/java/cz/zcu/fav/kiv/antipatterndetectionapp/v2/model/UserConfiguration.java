@@ -11,13 +11,24 @@ public class UserConfiguration {
     private String isDefault;
     private String configurationName;
 
+    private String id;
+
     public UserConfiguration(User user, ConfigurationDto configuration, String isDefault, String configurationName) {
         this.user = user;
         this.configuration = configuration;
         this.isDefault = isDefault;
         this.configurationName = configurationName;
+        this.id = null;
     }
     public UserConfiguration(){}
+
+    public UserConfiguration(User user, String id) {
+        this.user = user;
+        this.configuration = null;
+        this.configurationName = null;
+        this.isDefault = null;
+        this.id = id;
+    }
 
 
     public User getUser() {
@@ -50,5 +61,13 @@ public class UserConfiguration {
 
     public void setConfigurationName(String configurationName) {
         this.configurationName = configurationName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
