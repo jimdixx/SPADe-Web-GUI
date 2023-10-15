@@ -59,17 +59,40 @@ public class ConfigurationServiceImplementation implements ConfigService {
         if (existingConfiguration == null) {
             configuration.setHash(configHash);
             //save the configuration itself
-            Configuration tmp = this.configurationRepository.save(configuration);
+            this.configurationRepository.save(configuration);
             //can only happen if db server fails or a constraint is breached
             if (configuration == null) {
                 return ConfigurationControllerStatusCodes.INSERT_FAILED;
             }
         }
+        //already exists, update pointer to instance with id
+        else {
+            configuration = existingConfiguration;
+        }
         //pair the configuration to the user
         pairConfigurationWithUser(user,configuration);
         return ConfigurationControllerStatusCodes.INSERT_SUCCESSFUL;
+    }
 
+    /**
+     * Parser for user request wrapped around configuration
+     * @param cfg UserConfiguration instance - wrapper around user request
+     * @return Configuration or Null - null if the request wrapper does not containt json defition of antipatterns
+     *         Instace of Configuration if the request is Okay
+     */
+    private Configuration parseUserConfiguration(UserConfiguration cfg){
+        ConfigurationDto configurationDto = cfg.getConfiguration();
+        String configurationDefinition = new Gson().toJson(configurationDto);
+        String userConfigurationName = cfg.getConfigurationName();
+        String defaultConfigName = null;
+        if (configurationDefinition == null) {
+            return null;
+        }
+        if (userConfigurationName == null) {
+            defaultConfigName = "ahoj_svete";
+        }
 
+        return new Configuration(configurationDefinition,null,cfg.getIsDefault(),userConfigurationName,defaultConfigName);
     }
 
     /**

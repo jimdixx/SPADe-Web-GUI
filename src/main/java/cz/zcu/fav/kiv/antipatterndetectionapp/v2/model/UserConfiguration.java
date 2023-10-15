@@ -7,29 +7,32 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
  */
 public class UserConfiguration {
     private User user;
-    private Configuration configuration;
+    private ConfigurationDto configuration;
+    private String isDefault;
+    private String configurationName;
 
-
-    public UserConfiguration(User user, Configuration configuration){
+    public UserConfiguration(User user, ConfigurationDto configuration, String isDefault, String configurationName) {
         this.user = user;
         this.configuration = configuration;
+        this.isDefault = isDefault;
+        this.configurationName = configurationName;
     }
     public UserConfiguration(){}
 
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
+    public ConfigurationDto getConfiguration() {
+        return this.configuration;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public void setConfiguration(Configuration configuration) {
+    public void setConfiguration(ConfigurationDto configuration) {
         this.configuration = configuration;
     }
 
