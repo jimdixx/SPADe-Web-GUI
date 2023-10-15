@@ -1,6 +1,5 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
 
-
 /**
  * @author Jiri Trefil
  * Wrapper for http request for uploading a new configuration by user
@@ -32,5 +31,21 @@ public class UserConfiguration {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public String getConfigurationName() {
+        return configurationName;
+    }
+
+    public void setConfigurationName(String configurationName) {
+        this.configurationName = configurationName;
     }
 }

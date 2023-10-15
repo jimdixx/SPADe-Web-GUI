@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration;
 
+import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
@@ -41,27 +42,26 @@ public class ConfigurationServiceImplementation implements ConfigService {
      */
     @Override
     public ConfigurationControllerStatusCodes addConfiguration(UserConfiguration cfg) {
+        Configuration configuration = parseUserConfiguration(cfg);
+        //if the request is missing the configuration definition then we kill it
+        if (configuration == null) {
+            return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_DEFINITION;
+        }
         User user = cfg.getUser();
-        Configuration configuration = cfg.getConfiguration();
-
         String userName = user.getName();
         //fetch the user from db because user in UserConfiguration does not contain id
         user = this.userService.getUserByName(userName);
-        String configurationDefinition = configuration.getConfig();
-        //if the request is missing the configuration definition then we kill it
-        if(configurationDefinition == null) {
-            return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_DEFINITION;
-        }
+
         //create the hash of the configuration (w/o salting)
-        String configHash = Crypto.hashString(configurationDefinition);
+        String configHash = Crypto.hashString(configuration.getConfig());
         Configuration existingConfiguration = this.configurationRepository.findConfigurationByConfigHash(configHash);
         //configuration definition does not exist => upload the configuration into database
-        if(existingConfiguration == null){
+        if (existingConfiguration == null) {
             configuration.setHash(configHash);
             //save the configuration itself
             Configuration tmp = this.configurationRepository.save(configuration);
             //can only happen if db server fails or a constraint is breached
-            if(tmp == null){
+            if (configuration == null) {
                 return ConfigurationControllerStatusCodes.INSERT_FAILED;
             }
         }
@@ -87,7 +87,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
         //the configuration pairing already exists, we do not have to do anything
         //request like this should not happen from client, something fishy might be going on
         //or the request is a duplicate
-        if(exists) {
+        if (exists) {
             return ConfigurationControllerStatusCodes.CONFIGURATION_PAIRING_EXISTS;
         }
         //save the relation between user and configuration
@@ -105,7 +105,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
     @Override
     public List<Configuration> getUserConfigurations(User user) {
         final String userName = user.getName();
-        if(userName == null){
+        if (userName == null) {
             return null;
         }
         //client can only send his name - he obviously does not know his id in db, we have to query that
