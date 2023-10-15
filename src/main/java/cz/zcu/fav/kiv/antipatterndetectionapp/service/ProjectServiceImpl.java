@@ -1,7 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.types.Node;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.ProjectRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ProjectDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +60,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getSubordinateProjectsTo(Long id) {
         return projectRepository.getSubordinateProjectsTo(id);
+    }
+
+    @Override
+    public ArrayList<Node> calculate(ProjectDto p) {
+        ProjectToDto projectToDto = new ProjectToDto();
+        ArrayList<Node> nodes = new ArrayList<>();
+        List<ProjectDto> projects = projectToDto.convert(getSubordinateProjectsTo(p.getId()));
+        for(ProjectDto project : projects) {
+            Node n = new Node();
+            n.project = project;
+            n.children = calculate(project);
+            nodes.add(n);
+        }
+        return nodes;
     }
 }
