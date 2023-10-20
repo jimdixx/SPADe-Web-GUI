@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration;
 
 import com.google.gson.Gson;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.ConfigRepository;
@@ -11,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ConfigurationServiceImplementation implements ConfigService {
@@ -21,6 +25,15 @@ public class ConfigurationServiceImplementation implements ConfigService {
     //repository for Join table, necessary to add associations between users and configurations
     @Autowired
     private UserConfigurationJoinRepository userConfigurationJoinRepository;
+
+    @Autowired
+    private AntiPatternRepository antiPatternRepository;
+
+    private String[] configJsonFileNames = {"BusinessAsUsual.json", "BystanderApathy.json", "LongOrNonExistentFeedbackLoops.json",
+            "NinetyNinetyRule.json", "RoadToNowhere.json", "SpecifyNothing.json", "TooLongSprint.json", "UnknownPoster.json",
+            "VaryingSprintLength.json", "YetAnotherProgrammer.json"};
+
+
     //user service is also necessary for retrieving information about users (primarily database query for fetching id)
     @Autowired
     private UserService userService;
@@ -163,5 +176,16 @@ public class ConfigurationServiceImplementation implements ConfigService {
     @Override
     public String getConfigurationName(int userId, int configurationId) {
         return this.configurationRepository.findConfigurationByCompoundKey(new UserConfigKey(userId, configurationId));
+    }
+
+    @Override
+    public Map<String, AntiPattern> getAntiPatterns() {
+        Map<String, AntiPattern> antiPatterns = new HashMap<>();
+        AntiPattern tmp = null;
+        for (int i = 0; i < this.configJsonFileNames.length; i++) {
+            tmp = this.antiPatternRepository.getAntiPatternFromJsonFile(configJsonFileNames[i]);
+            antiPatterns.put(tmp.getName(), tmp);
+        }
+        return antiPatterns;
     }
 }

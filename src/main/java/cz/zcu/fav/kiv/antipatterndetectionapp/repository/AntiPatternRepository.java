@@ -137,7 +137,7 @@ public class AntiPatternRepository {
      * @param jsonFileName Name of the file
      * @return AntiPattern object
      */
-    private AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
+    public AntiPattern getAntiPatternFromJsonFile(String jsonFileName){
         String json = "";  // json configuration file content as string
 
         LOGGER.info("Reading anti-pattern from json file " + jsonFileName);

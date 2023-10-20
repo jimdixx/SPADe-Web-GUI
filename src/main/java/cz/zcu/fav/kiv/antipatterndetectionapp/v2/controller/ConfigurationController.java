@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller;
 
 import com.google.gson.Gson;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.AntiPattern;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.AntiPatternRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.ConfigurationControllerStatusCodes;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.configuration.ConfigService;
@@ -41,13 +43,7 @@ public class ConfigurationController {
         return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.valueOf(returnCode.getStatusCode()));
     }
 
-    /**
-     * Endpoint returns the definitions of configurations (ie the json objects) and their names
-     * @param user User querying the configurations
-     * @return ResponseEntity with json body  appropriate status code indicating result of the operation
-     *         200 with requested body if everything is okay
-     *         500 if db server died or no default configurations are present in the database
-     */
+
     @PostMapping(value="/configuration")
     public ResponseEntity<String> getConfiguration(@RequestBody UserConfiguration userConfiguration) {
         Map<String, Object> json = new HashMap<>();
@@ -55,12 +51,20 @@ public class ConfigurationController {
 
         Configuration config = this.configurationService.getConfiguration(userConfiguration.getUser().getName(), Integer.parseInt(userConfiguration.getId()));
 
-        if(config == null) {
+        Map<String, AntiPattern> antiPatterns = this.configurationService.getAntiPatterns();
+
+        if (config == null) {
+            json.put("message", "internal sever error");
+            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (antiPatterns == null) {
             json.put("message", "internal sever error");
             return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         json.put("configuration", config.getConfig());
+        json.put("antiPatterns", antiPatterns);
 
         return new ResponseEntity<>(new Gson().toJson(json),HttpStatus.OK);
 
