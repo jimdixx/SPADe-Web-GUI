@@ -7,6 +7,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials;
 public enum ConfigurationControllerStatusCodes {
 
     EMPTY_CONFIGURATION_DEFINITION("No configuration definition provided",400),
+    EMPTY_CONFIGURATION_NAME("No configuration name provided",400),
 
     INSERT_FAILED("Failed to save configuration",500),
 

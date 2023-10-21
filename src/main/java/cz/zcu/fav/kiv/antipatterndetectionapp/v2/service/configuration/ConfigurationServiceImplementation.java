@@ -60,6 +60,11 @@ public class ConfigurationServiceImplementation implements ConfigService {
         if (configuration == null) {
             return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_DEFINITION;
         }
+
+        if (cfg.getConfigurationName() == null || cfg.getConfigurationName().equals("")) {
+            return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_NAME;
+        }
+
         User user = cfg.getUser();
         String userName = user.getName();
         //fetch the user from db because user in UserConfiguration does not contain id
