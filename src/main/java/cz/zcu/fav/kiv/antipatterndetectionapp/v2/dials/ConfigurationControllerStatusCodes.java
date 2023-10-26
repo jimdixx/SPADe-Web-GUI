@@ -9,6 +9,10 @@ public enum ConfigurationControllerStatusCodes {
     EMPTY_CONFIGURATION_DEFINITION("No configuration definition provided",400),
     EMPTY_CONFIGURATION_NAME("No configuration name provided",400),
 
+    CONFIGURATION_IS_DEFAULT("Default configurations can not be changed", 400),
+
+    USER_DONT_HAVE_RIGHTS_TO_CHANGE_CONFIGURATION("You don't have rights to change configuration", 403 ),
+
     INSERT_FAILED("Failed to save configuration",500),
 
     INSERT_SUCCESSFUL("Configuration saved",200),

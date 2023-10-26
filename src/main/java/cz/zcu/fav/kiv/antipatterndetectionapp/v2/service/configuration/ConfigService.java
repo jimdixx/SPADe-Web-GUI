@@ -12,6 +12,7 @@ public interface ConfigService {
     //upload configuration
     ConfigurationControllerStatusCodes addConfiguration(Configuration cfg);
     ConfigurationControllerStatusCodes addConfiguration(UserConfiguration cfg);
+    ConfigurationControllerStatusCodes updateConfiguration(UserConfiguration cfg);
 
     ConfigurationControllerStatusCodes pairConfigurationWithUser(User user, Configuration configuration);
 

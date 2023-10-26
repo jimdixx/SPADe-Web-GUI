@@ -60,15 +60,11 @@ public class ConfigurationServiceImplementation implements ConfigService {
         if (configuration == null) {
             return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_DEFINITION;
         }
-
-        if (cfg.getConfigurationName() == null || cfg.getConfigurationName().equals("")) {
+        if (isConfigurationNameInvalid(cfg)) {
             return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_NAME;
         }
-
-        User user = cfg.getUser();
-        String userName = user.getName();
         //fetch the user from db because user in UserConfiguration does not contain id
-        user = this.userService.getUserByName(userName);
+        User user = this.getUser(cfg.getUser());
 
         //create the hash of the configuration (w/o salting)
         String configHash = Crypto.hashString(configuration.getConfig());
@@ -90,6 +86,75 @@ public class ConfigurationServiceImplementation implements ConfigService {
         //pair the configuration to the user
         pairConfigurationWithUser(user,configuration);
         return ConfigurationControllerStatusCodes.INSERT_SUCCESSFUL;
+    }
+
+    /**
+     * Wrapper around user service for fetching user from database by username
+     * @param user Userdto with username only
+     * @return User from db or null if user does not exist
+     */
+
+    private User getUser(User user) {
+        String userName = user.getName();
+        //fetch the user from db because user in UserConfiguration does not contain id
+        return this.userService.getUserByName(userName);
+    }
+
+    /**
+     * Quick verification if configuration name is empty
+     * @param cfg dto wrapper around user update / insert configuration request
+     * @return true if configuration name is empty or empty string
+     */
+    private boolean isConfigurationNameInvalid(UserConfiguration cfg) {
+        return cfg.getConfigurationName() == null || cfg.getConfigurationName().equals("");
+    }
+
+    /**
+     * Util function for creating hash of configuration definition
+     * @param configuration Configuration instance with configuration definition as string
+     * @return String hash created from configuration definition
+     *         empty string if configuration definition is null
+     */
+    private String createConfigurationHash(Configuration configuration) {
+        if(configuration == null) {return "";}
+        return Crypto.hashString(configuration.getConfig());
+    }
+
+    /**
+     * Method updates existing non default user configuration
+     * the user in request must have the rights to access the configuration, ie entry userId,configId must exist in join table
+     * @param cfg UserConfiguration wrapper around update request
+     * @return enum with http code and message informing about the result of the operation
+     */
+    @Override
+    public ConfigurationControllerStatusCodes updateConfiguration(UserConfiguration cfg) {
+        Configuration configuration = parseUserConfiguration(cfg);
+        //if the request is missing the configuration definition then we kill it
+        if (configuration == null) {
+            return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_DEFINITION;
+        }
+
+        if (isConfigurationNameInvalid(cfg)) {
+            return ConfigurationControllerStatusCodes.EMPTY_CONFIGURATION_NAME;
+        }
+        int configurationId = Integer.parseInt(cfg.getConfigurationName());
+        Configuration oldConfiguration = this.getConfiguration(cfg.getUser().getName(), configurationId);
+
+        if (oldConfiguration == null) {
+            return ConfigurationControllerStatusCodes.USER_DONT_HAVE_RIGHTS_TO_CHANGE_CONFIGURATION;
+        }
+
+        if (oldConfiguration.getIsDefault().equals("Y")) {
+            return ConfigurationControllerStatusCodes.CONFIGURATION_IS_DEFAULT;
+        }
+        String updatedConfigHash = this.createConfigurationHash(configuration);
+        int configuration1 = this.configurationRepository.updateHashAndConfigurationDefinition(configurationId,configuration.getConfig(),updatedConfigHash);
+
+        if (configuration1 == 0) {
+            return ConfigurationControllerStatusCodes.INSERT_FAILED;
+        }
+
+        return ConfigurationControllerStatusCodes.UPDATE_SUCCESSFUL;
     }
 
     /**
@@ -173,6 +238,9 @@ public class ConfigurationServiceImplementation implements ConfigService {
 
     public Configuration getConfiguration(String userName, int id) {
         User user = this.userService.getUserByName(userName);
+        if (user == null) {
+            return null;
+        }
         UserConfigKey key = new UserConfigKey(user.getId(), id);
         Configuration configuration = this.configurationRepository.findConfigurationByUserNameAndID(key);
         return configuration;

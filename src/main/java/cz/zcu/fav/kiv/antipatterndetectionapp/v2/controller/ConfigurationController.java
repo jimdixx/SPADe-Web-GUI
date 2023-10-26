@@ -43,6 +43,21 @@ public class ConfigurationController {
         return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.valueOf(returnCode.getStatusCode()));
     }
 
+    /**
+     * Method updates existing configuration
+     * @param userConfiguration wrapper around client request for update - same as for inserting a new configuration
+     * @return ResponseEntity with status code and message informing client about result of the update operation
+     */
+    @PutMapping(value="/update_configuration")
+    public ResponseEntity<String> updateConfiguration(@RequestBody UserConfiguration userConfiguration) {
+        ConfigurationControllerStatusCodes returnCode = configurationService.updateConfiguration(userConfiguration);
+        String message = returnCode.getLabel();
+        Map<String,Object> json = new HashMap<>();
+        json.put("message",message);
+        //ResponseEntity<String> response = configurationService.addConfiguration(userConfiguration);
+        return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.valueOf(returnCode.getStatusCode()));
+    }
+
 
     @PostMapping(value="/configuration")
     public ResponseEntity<String> getConfiguration(@RequestBody UserConfiguration userConfiguration) {
