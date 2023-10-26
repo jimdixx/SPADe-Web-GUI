@@ -10,7 +10,6 @@ import java.util.Map;
 
 public interface ConfigService {
     //upload configuration
-    ConfigurationControllerStatusCodes addConfiguration(Configuration cfg);
     ConfigurationControllerStatusCodes addConfiguration(UserConfiguration cfg);
     ConfigurationControllerStatusCodes updateConfiguration(UserConfiguration cfg);
 
@@ -21,7 +20,7 @@ public interface ConfigService {
 
     Configuration getConfigurationById(int id);
 
-    public Configuration getConfiguration(String userName, int id);
+    Configuration getConfiguration(String userName, int id);
     String getConfigurationName(int userId, int configurationId);
 
     Map<String, AntiPattern> getAntiPatterns();

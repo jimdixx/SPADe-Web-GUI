@@ -15,7 +15,8 @@ public enum ConfigurationControllerStatusCodes {
 
     INSERT_FAILED("Failed to save configuration",500),
 
-    INSERT_SUCCESSFUL("Configuration saved",200),
+    INSERT_SUCCESSFUL("Configuration saved",201),
+    UPDATE_SUCCESSFUL("Configuration updated",200),
 
     CONFIGURATION_PAIRING_EXISTS("Configuration already exists in your collection",400),
     CONFIGURATION_PAIRING_CREATED("configuration added to collection",200);

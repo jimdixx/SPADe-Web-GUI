@@ -58,11 +58,15 @@ public class ConfigurationController {
         return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.valueOf(returnCode.getStatusCode()));
     }
 
-
+    /**
+     * Endpoint for accessing anti-patterns and configurations
+     * @param userConfiguration Wrapper around client request body
+     * @return ResponseEntity with anti-pattern array and configuration array if everything went well
+     *  ResponseEntity with error status code otherwise
+     */
     @PostMapping(value="/configuration")
     public ResponseEntity<String> getConfiguration(@RequestBody UserConfiguration userConfiguration) {
         Map<String, Object> json = new HashMap<>();
-//        Configuration config = this.configurationService.getConfigurationById(Integer.parseInt(userConfiguration.getId()));
 
         Configuration config = this.configurationService.getConfiguration(userConfiguration.getUser().getName(), Integer.parseInt(userConfiguration.getId()));
 
@@ -83,26 +87,6 @@ public class ConfigurationController {
 
         return new ResponseEntity<>(new Gson().toJson(json),HttpStatus.OK);
 
-//        List<Configuration> configuration = this.configurationService.getUserConfigurations(user);
-//        //this can only happen if db server is offline
-//        //or no default configuration exists in database
-//        if(configuration == null) {
-//            json.put("message", "internal sever error");
-//            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        //list of configuration definitions
-//        List<String> configurationDefinition = new ArrayList<>();
-//        //and their names
-//        List<String> configurationNames = new ArrayList<>();
-//        //hipster syntax for Petr
-//        configuration.forEach(cfg -> {
-//            configurationDefinition.add(cfg.getConfig());
-//            configurationNames.add(cfg.getConfigurationName());
-//        });
-//        json.put("configuration",configurationDefinition);
-//        json.put("configuration_names",configurationNames);
-//
-//        return new ResponseEntity<>(new Gson().toJson(json),HttpStatus.OK);
     }
 
     /**

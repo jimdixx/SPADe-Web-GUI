@@ -37,16 +37,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
     //user service is also necessary for retrieving information about users (primarily database query for fetching id)
     @Autowired
     private UserService userService;
-    /**
-     * Saves configuration to database
-     * the configuration is default to everyone
-     * @param cfg Configuration - JSON format of configuration with antipatterns and thresholds
-     * @return ResponseEntity with status code and message with more information about operation
-     */
-    @Override
-    public ConfigurationControllerStatusCodes addConfiguration(Configuration cfg) {
-        return null;
-    }
+
     /**
      * Saves configuration to database
      * the configuration is available to the user who sent the request
@@ -67,7 +58,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
         User user = this.getUser(cfg.getUser());
 
         //create the hash of the configuration (w/o salting)
-        String configHash = Crypto.hashString(configuration.getConfig());
+        String configHash = createConfigurationHash(configuration);
         Configuration existingConfiguration = this.configurationRepository.findConfigurationByConfigHash(configHash);
         //configuration definition does not exist => upload the configuration into database
         if (existingConfiguration == null) {
@@ -230,12 +221,24 @@ public class ConfigurationServiceImplementation implements ConfigService {
         }
         return configurationList;
     }
-    //Wrappers around db connection to configuration table
+
+    /**
+     * finds configuration by id
+     * @param id integer id of configuration to be retrieved
+     */
     @Override
     public Configuration getConfigurationById(int id) {
         return this.configurationRepository.findConfigurationById(id);
     }
 
+    /**
+     * Method fetches configuration with id @param id from database
+     * @param userName String username
+     * @param id int configuration id
+     * @return Configuration if configuration with id @param id exists and user @param userName has access to it
+     *          null otherwise
+     */
+    @Override
     public Configuration getConfiguration(String userName, int id) {
         User user = this.userService.getUserByName(userName);
         if (user == null) {
@@ -251,6 +254,10 @@ public class ConfigurationServiceImplementation implements ConfigService {
         return this.configurationRepository.findConfigurationByCompoundKey(new UserConfigKey(userId, configurationId));
     }
 
+    /**
+     * Method loads antipatterns from json files on file system for metadata about anti patterns
+     * @return Map of antipatterns
+     */
     @Override
     public Map<String, AntiPattern> getAntiPatterns() {
         Map<String, AntiPattern> antiPatterns = new HashMap<>();
