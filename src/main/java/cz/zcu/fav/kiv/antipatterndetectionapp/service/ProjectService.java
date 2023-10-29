@@ -56,4 +56,12 @@ public interface ProjectService {
      * @return  List of project's children with their hierarchy
      */
     ArrayList<Node> calculate(ProjectDto p);
+
+    /**
+     * Method saving new structure of the projects and superprojects
+     * @param nodes List of the nodes with projects to save
+     * @param superProject Parent of the projects in the list
+     * @return true if successful
+     */
+    boolean saveProjectsStructure(List<Node> nodes, Project superProject);
 }

@@ -75,4 +75,34 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return nodes;
     }
+
+    @Override
+    public boolean saveProjectsStructure(List<Node> nodes, Project superProject) {
+        if (nodes != null && !nodes.isEmpty()) {
+            for (Node node : nodes) {
+                ProjectDto projectDto = node.project;
+                Project project = new Project();
+
+                if(projectDto.getId() > 0) {
+                    project.setId(projectDto.getId());
+                }
+
+                project.setName(projectDto.getName());
+                project.setDescription(projectDto.getDescription());
+
+                if(superProject != null) {
+                    project.setSuperProject(superProject);
+                }
+
+                project = projectRepository.save(project); // This may update an existing project or insert a new one
+
+                if (node.children != null && !node.children.isEmpty()) {
+                    List<Node> children = node.children;
+                    saveProjectsStructure(children, project);
+                }
+            }
+            return true; // Success
+        }
+        return false; // No data to save
+    }
 }

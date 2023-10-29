@@ -9,6 +9,7 @@ import java.sql.Timestamp;
  * Model class for configurations. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "committed_configuration")
 public class CommittedConfiguration {
 
     @OneToOne
