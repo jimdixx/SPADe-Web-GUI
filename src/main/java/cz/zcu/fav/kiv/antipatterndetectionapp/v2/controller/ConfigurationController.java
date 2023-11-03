@@ -38,7 +38,8 @@ public class ConfigurationController {
         ConfigurationControllerStatusCodes returnCode = configurationService.addConfiguration(userConfiguration);
         String message = returnCode.getLabel();
         Map<String,Object> json = new HashMap<>();
-        json.put("message",message);
+        json.put("message", message);
+        json.put("id", userConfiguration.getId());
         //ResponseEntity<String> response = configurationService.addConfiguration(userConfiguration);
         return new ResponseEntity<>(JSONBuilder.buildJSON(json),HttpStatus.valueOf(returnCode.getStatusCode()));
     }

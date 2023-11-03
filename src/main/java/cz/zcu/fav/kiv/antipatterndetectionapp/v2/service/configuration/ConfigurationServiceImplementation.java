@@ -74,9 +74,11 @@ public class ConfigurationServiceImplementation implements ConfigService {
         else {
             configuration = existingConfiguration;
         }
+
+        cfg.setId(String.valueOf(configuration.getId()));
+
         //pair the configuration to the user
-        pairConfigurationWithUser(user,configuration);
-        return ConfigurationControllerStatusCodes.INSERT_SUCCESSFUL;
+        return pairConfigurationWithUser(user, configuration);
     }
 
     /**
@@ -189,7 +191,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
         }
         //save the relation between user and configuration
         this.userConfigurationJoinRepository.save(new UserConfigurationJoin(key,configuration.getConfigurationName()));
-        return ConfigurationControllerStatusCodes.CONFIGURATION_PAIRING_CREATED;
+        return ConfigurationControllerStatusCodes.INSERT_SUCCESSFUL;
     }
 
 

@@ -19,7 +19,7 @@ public enum ConfigurationControllerStatusCodes {
     UPDATE_SUCCESSFUL("Configuration updated",200),
 
     CONFIGURATION_PAIRING_EXISTS("Configuration already exists in your collection",400),
-    CONFIGURATION_PAIRING_CREATED("configuration added to collection",200);
+    CONFIGURATION_PAIRING_CREATED("Configuration added to collection",200);
 
 
 

@@ -10,7 +10,6 @@ public class UserConfiguration {
     private ConfigurationDto configuration;
     private String isDefault;
     private String configurationName;
-
     private String id;
 
     public UserConfiguration(User user, ConfigurationDto configuration, String isDefault, String configurationName) {
@@ -29,7 +28,6 @@ public class UserConfiguration {
         this.isDefault = null;
         this.id = id;
     }
-
 
     public User getUser() {
         return this.user;
