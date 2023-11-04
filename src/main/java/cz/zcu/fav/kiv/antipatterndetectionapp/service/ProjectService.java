@@ -1,7 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.types.Node;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ProjectDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ProjectService {
@@ -46,4 +49,19 @@ public interface ProjectService {
      * @return      List of subordinate projects
      */
     List<Project> getSubordinateProjectsTo(Long id);
+
+    /**
+     * Method creating the hierarchy of projects by recursion
+     * @param p Project for which the hierarchy will be generated
+     * @return  List of project's children with their hierarchy
+     */
+    ArrayList<Node> calculate(ProjectDto p);
+
+    /**
+     * Method saving new structure of the projects and superprojects
+     * @param nodes List of the nodes with projects to save
+     * @param superProject Parent of the projects in the list
+     * @return true if successful
+     */
+    boolean saveProjectsStructure(List<Node> nodes, Project superProject);
 }

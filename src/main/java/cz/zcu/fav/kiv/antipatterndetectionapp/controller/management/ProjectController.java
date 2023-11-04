@@ -4,6 +4,8 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.types.Node;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ProjectDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import java.util.Objects;
 /**
  * This class contains all endpoints of projects.html
  */
-@Controller
+//@Controller
 public class ProjectController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
@@ -36,9 +38,10 @@ public class ProjectController {
      */
     @GetMapping("/management/projects")
     public String projects(Model model) {
+        ProjectToDto projectToDto = new ProjectToDto();
         List<Node> parents = new ArrayList<>();
-        List<Project> parentProjects = projectService.getParentProjects();
-        for(Project parentProject : parentProjects) {
+        List<ProjectDto> parentProjects = projectToDto.convert(projectService.getParentProjects());
+        for(ProjectDto parentProject : parentProjects) {
             Node n = new Node();
             n.project = parentProject;
             n.children = new ArrayList<>();
@@ -46,7 +49,7 @@ public class ProjectController {
         }
 
         for(Node n : parents) {
-            n.children = calculate(n.project);
+            n.children = projectService.calculate(n.project);
         }
 
         model.addAttribute("parents", parents);
@@ -146,10 +149,11 @@ public class ProjectController {
      * @param p Project for which the hierarchy will be generated
      * @return  List of project's children with their hierarchy
      */
-    private ArrayList<Node> calculate(Project p) {
+    private ArrayList<Node> calculate(ProjectDto p) {
+        ProjectToDto projectToDto = new ProjectToDto();
         ArrayList<Node> nodes = new ArrayList<>();
-        List<Project> projects = projectService.getSubordinateProjectsTo(p.getId());
-        for(Project project : projects) {
+        List<ProjectDto> projects = projectToDto.convert(projectService.getSubordinateProjectsTo(p.getId()));
+        for(ProjectDto project : projects) {
             Node n = new Node();
             n.project = project;
             n.children = calculate(project);

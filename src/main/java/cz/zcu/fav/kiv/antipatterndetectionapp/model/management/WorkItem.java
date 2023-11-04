@@ -9,6 +9,7 @@ import java.sql.Timestamp;
  * Model class for workitems. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "work_item")
 public class WorkItem {
 
     @Id

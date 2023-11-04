@@ -10,6 +10,7 @@ import javax.persistence.*;
  * Model class for work unit types. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "wu_type")
 public class WuType implements EnumType {
 
     @Id

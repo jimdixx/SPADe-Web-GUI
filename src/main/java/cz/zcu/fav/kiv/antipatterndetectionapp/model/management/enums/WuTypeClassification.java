@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for work unit types classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "wu_type_classification")
 public class WuTypeClassification implements Classification {
 
     @Id

@@ -13,6 +13,7 @@ import java.util.Set;
  * Model class for work units. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "work_unit")
 public class WorkUnit {
 
     @Id

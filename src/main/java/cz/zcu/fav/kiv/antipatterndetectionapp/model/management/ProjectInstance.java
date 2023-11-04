@@ -14,6 +14,7 @@ import java.util.Set;
  * Model class for project instances. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "project_instance")
 public class ProjectInstance {
 
     @Id
