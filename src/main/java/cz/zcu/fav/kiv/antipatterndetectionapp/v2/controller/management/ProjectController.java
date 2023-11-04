@@ -21,7 +21,7 @@ import java.util.*;
 
 
 /**
- * This class contains all endpoints of projects.html
+ * This class contains all endpoints connected to Projects
  */
 @Controller
 @RequestMapping("v2/management")
@@ -30,8 +30,15 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping("/projects")
-    public ResponseEntity<String> getProjectsData() {
+    @GetMapping("/projectsList")
+    public ResponseEntity<String> getProjectsList() {
+        ProjectToDto projectToDto = new ProjectToDto();
+        List<ProjectDto> projects = projectToDto.convert(projectService.getAllProjects());
+        return ResponseEntity.status(projects.size() > 0 ? HttpStatus.OK : HttpStatus.NO_CONTENT).body(new Gson().toJson(projects));
+    }
+
+    @GetMapping("/projectsHierarchy")
+    public ResponseEntity<String> getProjectsHierarchy() {
         ProjectToDto projectToDto = new ProjectToDto();
         List<Node> parents = new ArrayList<>();
         List<ProjectDto> parentProjects = projectToDto.convert(projectService.getParentProjects());

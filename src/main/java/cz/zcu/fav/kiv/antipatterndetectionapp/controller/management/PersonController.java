@@ -25,7 +25,7 @@ import java.util.Objects;
 /**
  * This class contains all endpoints of person.html
  */
-@Controller
+//@Controller
 public class PersonController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
