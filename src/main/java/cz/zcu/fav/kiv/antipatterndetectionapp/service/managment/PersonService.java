@@ -1,6 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Person;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.PersonDto;
 
 import java.util.List;
 
@@ -39,4 +41,6 @@ public interface PersonService {
      * @param id    Identifier of person
      */
     void deletePerson(Long id);
+
+    boolean mergePersons(Project project, List<PersonDto> personsToMerge, PersonDto personToMergeIn, String newName);
 }

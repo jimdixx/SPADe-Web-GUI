@@ -1,7 +1,9 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Person;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.PersonRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +58,35 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
+    }
+
+    public boolean mergePersons(Project project, List<PersonDto> personsToMerge, PersonDto personToMergeIn, String newName) {
+        Person newPerson = null;
+
+        if (newName == null) {
+            newPerson = getPersonById(personToMergeIn.getId());
+        }
+        else if (personToMergeIn == null) {
+            newPerson = new Person(newName, project);
+            newPerson = savePerson(newPerson);
+        }
+        else {
+            return false;
+        }
+
+        if (newPerson == null || project == null || personsToMerge == null)
+            return false;
+
+
+        for(PersonDto personDto : personsToMerge) { // Relation update for every selected person
+            if (personDto.getId().longValue() == newPerson.getId().longValue())
+                continue;
+
+            Person person = getPersonById(personDto.getId());
+            updatePersonRelations(person.getId(), newPerson.getId());
+            deletePerson(person.getId());
+        }
+
+        return true;
     }
 }

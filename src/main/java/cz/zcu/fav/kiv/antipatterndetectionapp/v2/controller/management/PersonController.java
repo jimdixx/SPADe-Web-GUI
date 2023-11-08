@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Person;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.PersonService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.PersonDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.PersonMergeRequest;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.PersonToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,9 @@ public class PersonController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private PersonService personService;
+
     @PostMapping("/personsFromProject")
     public ResponseEntity<String> getPersonsFromProject(@RequestBody Map<String, String> requestData) {
         long ProjectId = Long.parseLong(requestData.get("projectId").toString());
@@ -51,4 +56,20 @@ public class PersonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to serialize data to JSON");
         }
     }
+
+    @PostMapping("/mergePersons")
+    public ResponseEntity<String> mergeToSelected(@RequestBody PersonMergeRequest mergeRequest) {
+        long projectId = mergeRequest.getProjectId();
+        Project personProject = projectService.getProjectById(projectId);
+
+        List<PersonDto> personsToMerge = mergeRequest.getPersons();
+        PersonDto personToMergeIn = mergeRequest.getPerson();
+        String newName = mergeRequest.getNewPersonName();
+
+        if (personService.mergePersons(personProject, personsToMerge, personToMergeIn, newName)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Persons successfully merged");
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Persons merge failed");
+    }
 }
+
