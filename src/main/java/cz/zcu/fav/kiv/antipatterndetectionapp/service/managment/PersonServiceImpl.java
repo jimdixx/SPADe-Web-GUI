@@ -17,6 +17,8 @@ import java.util.Optional;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
+    private final int MAX_INPUT_LENGTH = 50;
+
     @Autowired
     private PersonRepository personRepository;
 
@@ -67,8 +69,8 @@ public class PersonServiceImpl implements PersonService {
             newPerson = getPersonById(personToMergeIn.getId());
         }
         else if (personToMergeIn == null) {
-            if (newName.length() > 50)
-                newName = newName.substring(0, 50);
+            if (newName.length() > MAX_INPUT_LENGTH)
+                newName = newName.substring(0, MAX_INPUT_LENGTH);
 
             newPerson = new Person(newName, project);
             newPerson = savePerson(newPerson);
