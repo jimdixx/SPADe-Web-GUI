@@ -67,6 +67,9 @@ public class PersonServiceImpl implements PersonService {
             newPerson = getPersonById(personToMergeIn.getId());
         }
         else if (personToMergeIn == null) {
+            if (newName.length() > 50)
+                newName = newName.substring(0, 50);
+
             newPerson = new Person(newName, project);
             newPerson = savePerson(newPerson);
         }

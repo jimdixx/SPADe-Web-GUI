@@ -2,6 +2,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.model;
 
 import java.util.List;
 
+/**
+ * Wrapper for the merge of the persons request
+ */
 public class PersonMergeRequest {
 
     private List<PersonDto> persons;

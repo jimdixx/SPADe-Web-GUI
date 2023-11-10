@@ -42,5 +42,14 @@ public interface PersonService {
      */
     void deletePerson(Long id);
 
+    /**
+     * Method for merging selected persons to the new or selected one
+     * personToMergeIn OR newName should be null
+     * @param project project persons are from
+     * @param personsToMerge list of the persons to be merged
+     * @param personToMergeIn person into whom others will be merged
+     * @param newName name of the new person
+     * @return true if the merge was successful
+     */
     boolean mergePersons(Project project, List<PersonDto> personsToMerge, PersonDto personToMergeIn, String newName);
 }
