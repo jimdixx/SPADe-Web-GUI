@@ -32,25 +32,29 @@ public class IterationAndPhasesController {
         Project project = projectService.getProjectById(ProjectId);
 
         if (project == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Project not found");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Project not found.");
         }
 
         return iterationsAndPhasesService.getIterationAndPhases(project);
     }
 
     @PostMapping("/changeIteration")
-    public ResponseEntity<String> changeIteration(@RequestBody Map<String, String[]> requestData) {
+    public ResponseEntity<Map<String, Object>> changeIteration(@RequestBody Map<String, String[]> requestData) {
         if (requestData.get("Ids").length == 0) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Iterations send");
+            Map<String,Object> json = new HashMap<>();
+            json.put("errormessage", "No Iterations send.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         }
 
         return iterationsAndPhasesService.changeToPhase(requestData.get("Ids"));
     }
 
     @PostMapping("/changePhase")
-    public ResponseEntity<String> changePhase(@RequestBody Map<String, String[]> requestData) {
+    public ResponseEntity<Map<String, Object>> changePhase(@RequestBody Map<String, String[]> requestData) {
         if (requestData.get("Ids").length == 0) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Phases send");
+            Map<String,Object> json = new HashMap<>();
+            json.put("errormessage", "No Phases send.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         }
 
         return iterationsAndPhasesService.changeToIteration(requestData.get("Ids"));
