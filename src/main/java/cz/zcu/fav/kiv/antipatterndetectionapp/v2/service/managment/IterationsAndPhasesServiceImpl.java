@@ -147,6 +147,7 @@ public class IterationsAndPhasesServiceImpl implements IterationsAndPhasesServic
         return ResponseEntity.status(HttpStatus.OK).body(json);
     }
 
+    //TODO kontrola, proc tenhle zhavej odpad nefunguje
     @Override
     public ResponseEntity<Map<String, Object>> changeToIteration(String[] phasesIds) {
         List<Long> phaseIds = new ArrayList<>();
