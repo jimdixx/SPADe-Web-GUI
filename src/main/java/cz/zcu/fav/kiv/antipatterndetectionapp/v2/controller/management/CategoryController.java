@@ -12,8 +12,11 @@ import java.util.List;
  * This class contains all endpoints connected to Categories
  */
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("v2/management")
 public class CategoryController {
+
+    private final ICategories categories;
 
     @GetMapping("/getCategories")
     public ResponseEntity<String> getCategories() {
