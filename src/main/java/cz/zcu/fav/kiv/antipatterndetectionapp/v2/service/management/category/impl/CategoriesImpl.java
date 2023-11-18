@@ -79,7 +79,7 @@ public class CategoriesImpl implements ICategories {
                 GeneralResponseDto
                         .<CategoryDto>builder()
                         .message(message)
-                        .categories(categories)
+                        .responseBody(categories)
                         .build(), status);
     }
 
