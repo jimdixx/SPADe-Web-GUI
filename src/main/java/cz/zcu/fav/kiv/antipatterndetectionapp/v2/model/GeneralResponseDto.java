@@ -9,7 +9,10 @@ import java.util.List;
 @Builder
 public class GeneralResponseDto<T> {
     private String message;
-    private List<T> categories;
-    public static <T> GeneralResponseDtoBuilder<T> builder() { return new GeneralResponseDtoBuilder<T>(); }
+    private List<T> content;
+
+    public static <T> GeneralResponseDtoBuilder<T> builder() {
+        return new GeneralResponseDtoBuilder<T>();
+    }
 
 }
