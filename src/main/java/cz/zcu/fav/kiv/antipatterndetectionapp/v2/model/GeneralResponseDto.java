@@ -7,12 +7,12 @@ import java.util.List;
 
 @Data
 @Builder
-public class GeneralResponseDto<T> {
+public class GeneralResponseDto<T,S> {
     private String message;
     private List<T> responseBody;
-
-    public static <T> GeneralResponseDtoBuilder<T> builder() {
-        return new GeneralResponseDtoBuilder<T>();
+    private S additionalInformation;
+    public static <T, S> GeneralResponseDtoBuilder<T, S> builder() {
+        return new GeneralResponseDtoBuilder<T, S>();
     }
 
 }
