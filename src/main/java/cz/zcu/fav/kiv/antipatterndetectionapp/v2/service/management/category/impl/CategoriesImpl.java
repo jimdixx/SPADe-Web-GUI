@@ -7,6 +7,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.Databa
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.AdditionalInformationDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryChangeRequest;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.GeneralResponseDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.management.category.ICategories;
@@ -35,48 +36,46 @@ public class CategoriesImpl implements ICategories {
     private final ActivityService activityService;
     private final PhaseService phaseService;
     private final String GENERAL_ERROR_MESSAGE = "ERROR: Application error occurred";
-    private final String SUBMISSION_ERROR_MESSAGE = "Cannot proceed: Submission went wrong";
     private final CategoryToDto categoryMapper = new CategoryToDto();
     private final String PROJECT_NOT_FOUND_MESSAGE = "Project not found!";
     private final String CATEGORIES_NOT_FOUND_MESSAGE = "Categories not found for the project!";
     private final String INVALID_PROJECT_ID = "Provided project ID is in invalid format!";
+    private final String CATEGORY_NOT_FOUND = "Category not found!";
 
     private Project getProjectById(Long id) {
         return projectService.getProjectById(id);
     }
 
     @Override
-    public ResponseEntity<GeneralResponseDto<CategoryDto, AdditionalInformationDto<String>>> handleCategoryChangeRequest(@Nullable List<CategoryDto> selectedCategories,
-                                                                                                                         @Nullable Integer submitType,
-                                                                                                                         @Nullable String submitId) {
-        List<Category> categories = new ArrayList<>();
+    public ResponseEntity<GeneralResponseDto<CategoryDto, AdditionalInformationDto<String>>> handleCategoryChangeRequest(CategoryChangeRequest categoryChangeRequest) {
+        List<CategoryDto> categoryDtos = categoryChangeRequest.getCategories();
+        Integer submitType = categoryChangeRequest.getSubmitType();
 
-        if (selectedCategories != null && submitType != null) { // Selected submit
+        // Checking input data
+        if (categoryDtos != null && submitType != null) {
             if (submitType <= 0 || submitType > Constants.SUBMIT_TYPES) { // ERROR: Unknown submitType
-                logger.warn("@PostMapping(\"/v2/management/changeCategory\") - Cannot proceed: Unknown submitType " + submitType);
                 return createResponseEntity(HttpStatus.BAD_REQUEST, GENERAL_ERROR_MESSAGE, null, null);
             }
-        } else if (submitId != null) { //Inline submit
-            Pair<Integer, Long> resultPair = extractTypeAndId(submitId);
-            if (resultPair == null) { // Cannot be extracted
-                logger.warn("@PostMapping(\"/v2/management/changeCategory\") - Cannot proceed: Unknown submitId " + submitId);
-                return createResponseEntity(HttpStatus.BAD_REQUEST, GENERAL_ERROR_MESSAGE, null, null);
-            }
-
-            // Add one category into new list
-            submitType = resultPair.getFirst();
-            Long id = resultPair.getSecond();
-            categories.add(categoryService.getCategoryById(id));
-
-        } else { //Unspecific error
-            logger.warn("@PostMapping(\"/management/segment-category\") - Cannot proceed: Submission went wrong");
-            return createResponseEntity(HttpStatus.BAD_REQUEST, SUBMISSION_ERROR_MESSAGE, null, null);
         }
 
-        // Process all selected categories
+        // Mapping CategoryDto to Category
+        List<Category> categories = new ArrayList<>();
+        for (CategoryDto categoryDto : categoryDtos) {
+            Category categoryTmp = categoryService.getCategoryById(categoryDto.getId());
+            if (categoryTmp != null) {
+                categories.add(categoryTmp);
+            }
+            else {
+                return createResponseEntity(HttpStatus.BAD_REQUEST, CATEGORY_NOT_FOUND, null, null);
+            }
+        }
+
+        // Processing all selected categories
         Pair<String, Boolean> result = processSelectedCategories(submitType, categories);
 
+        // Creating reponse information
         AdditionalInformationDto<String> additionalInformation = new AdditionalInformationDto<>();
+
         if (!result.getSecond()) {
             additionalInformation.addIntoCollection("successMessage", "All selected categories (" + categories.size() + ") were assign");
         } else {
@@ -130,8 +129,6 @@ public class CategoriesImpl implements ICategories {
                                                                                                                    @Nullable String message,
                                                                                                                    @Nullable List<CategoryDto> categories,
                                                                                                                    @Nullable AdditionalInformationDto<String> additionalInfo) {
-
-
         return new ResponseEntity<>(
                 GeneralResponseDto
                         .<CategoryDto, AdditionalInformationDto<String>>builder()

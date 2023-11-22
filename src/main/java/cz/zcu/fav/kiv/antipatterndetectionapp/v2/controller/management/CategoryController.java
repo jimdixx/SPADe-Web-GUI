@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Category;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.AdditionalInformationDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryChangeRequest;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.GeneralResponseDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.management.category.ICategories;
@@ -32,9 +33,7 @@ public class CategoryController {
     }
 
     @PostMapping("/changeCategory")
-    public ResponseEntity<GeneralResponseDto<CategoryDto, AdditionalInformationDto<String>>> changeCategory(@RequestParam(value = "selectedBox", required = false) List<CategoryDto> selectedCategories,
-                                                                                                            @RequestParam(value = "submitType", required = false) Integer submitType,
-                                                                                                            @RequestParam(value = "submitId", required = false) String submitId) {
-        return categories.handleCategoryChangeRequest(selectedCategories, submitType, submitId);
+    public ResponseEntity<GeneralResponseDto<CategoryDto, AdditionalInformationDto<String>>> changeCategory(@RequestBody CategoryChangeRequest categoryChangeRequest) {
+        return categories.handleCategoryChangeRequest(categoryChangeRequest);
     }
 }
