@@ -273,7 +273,7 @@ public class SegmentCategoryController {
                                     category.getName(),
                                     category.getDescription(),
                                     category.getProjectInstance().getProjectId());
-                        return activityService.saveActivity(activity);
+//                        return activityService.saveActivity(activity);
                     }
                 }
                 break;

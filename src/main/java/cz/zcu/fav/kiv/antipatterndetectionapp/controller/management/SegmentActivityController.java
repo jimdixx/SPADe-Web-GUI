@@ -11,7 +11,6 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.WuType;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.ActivityRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.WorkUnitRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.ActivityService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.CategoryService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.WorkUnitService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums.WuTypeService;
@@ -38,9 +37,6 @@ public class SegmentActivityController {
 
     @Autowired
     private ProjectService projectService;
-
-    @Autowired
-    private ActivityService activityService;
 
     @Autowired
     private WorkUnitService workUnitService;
@@ -125,16 +121,17 @@ public class SegmentActivityController {
                                  RedirectAttributes redirectAttrs,
                                  HttpSession session) {
 
-        Activity activity = activityService.getActivityById(activityId);
-        if(activity == null) {
-            redirectAttrs.addFlashAttribute("errorMessage", "ERROR: Activity not found");
-            LOGGER.info("@GetMapping(\"/management/segment-activity\")- Activity not found");
-            return "redirect:/management/segment-activity";
-        }
-
-        session.setAttribute("activity", activity);
-        LOGGER.info("@GetMapping(\"/management/segment-activity\") - Accessing page");
-        return "redirect:/management/segment-activity";
+//        Activity activity = activityService.getActivityById(activityId);
+//        if(activity == null) {
+//            redirectAttrs.addFlashAttribute("errorMessage", "ERROR: Activity not found");
+//            LOGGER.info("@GetMapping(\"/management/segment-activity\")- Activity not found");
+//            return "redirect:/management/segment-activity";
+//        }
+//
+//        session.setAttribute("activity", activity);
+//        LOGGER.info("@GetMapping(\"/management/segment-activity\") - Accessing page");
+//        return "redirect:/management/segment-activity";
+        return null;
     }
 
     /**
