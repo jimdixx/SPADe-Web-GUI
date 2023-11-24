@@ -38,8 +38,8 @@ public class SegmentCategoryController {
     @Autowired
     private PhaseService phaseService;
 
-    @Autowired
-    private ActivityService activityService;
+//    //@Autowired
+    //private ActivityService activityService;
 
     @Autowired
     private ProjectService projectService;

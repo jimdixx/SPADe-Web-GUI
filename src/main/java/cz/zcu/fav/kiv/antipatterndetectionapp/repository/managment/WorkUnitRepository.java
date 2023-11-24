@@ -35,5 +35,8 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
             "WHERE work_unit.wuTypeId IN :types " +
             "AND work_unit.projectId = :projectId", nativeQuery = true)
     List<WorkUnit> getTypeFiltredWorkUnits(Long projectId, Collection<Long> types);
-
+    @Query("SELECT unit FROM WorkUnit unit WHERE unit.activity.id = ?1 ")
+    List<WorkUnit> fetchActivityWorkUnits(Long activityId);
+    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1")
+    List<WorkUnit> fetchAllProjectWorkUnits(Long projectId);
 }
