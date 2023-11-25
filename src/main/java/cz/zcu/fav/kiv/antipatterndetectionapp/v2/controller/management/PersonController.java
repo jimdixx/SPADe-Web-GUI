@@ -42,7 +42,7 @@ public class PersonController {
         Project project = projectService.getProjectById(ProjectId);
 
         if (project == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Project not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
         }
         List<Person> persons = project.getPeople();
         List<PersonDto> personDtos = new PersonToDto().convert(persons);

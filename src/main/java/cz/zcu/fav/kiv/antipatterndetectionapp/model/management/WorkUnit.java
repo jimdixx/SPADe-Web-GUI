@@ -57,7 +57,7 @@ public class WorkUnit {
     private Project project;
 
     @ManyToMany
-    @JoinTable(name = "WorkUnitCategory",
+    @JoinTable(name = "work_unit_category",
             joinColumns = @JoinColumn(name = "workunitid"),
             inverseJoinColumns = @JoinColumn(name = "categoryid"))
     private Set<Category> categories = new LinkedHashSet<>();
