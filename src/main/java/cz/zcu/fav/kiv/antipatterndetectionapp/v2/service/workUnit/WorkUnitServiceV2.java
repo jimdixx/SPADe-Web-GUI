@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface WorkUnitServiceV2 {
     List<WorkUnit> fetchProjectWorkUnits(long activityId);
+    boolean updateWorkUnitsActivity(long activityId, List<Long> wuIds);
 }

@@ -2,8 +2,11 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,4 +42,8 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
     List<WorkUnit> fetchActivityWorkUnits(Long activityId);
     @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1")
     List<WorkUnit> fetchAllProjectWorkUnits(Long projectId);
+    @Query("UPDATE WorkUnit unit SET unit.activity.id = :activityId WHERE unit.id in :wuIds")
+    @Modifying
+    @Transactional
+    int updateWuActivity(@Param("activityId")Long activityId, @Param("wuIds") List<Long> wuIds);
 }

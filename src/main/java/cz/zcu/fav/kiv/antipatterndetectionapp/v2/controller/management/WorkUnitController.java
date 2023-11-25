@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,6 +40,22 @@ public class WorkUnitController {
         List<WorkUnitDto> dto = mapper.convert(units);
         return ResponseEntity.ok(new Gson().toJson(dto));
     }
+
+    @PutMapping("/activity_work_units")
+    public ResponseEntity<String> updateActivityWorkUnits(@RequestBody SelectedWorkUnitsDto selectedWorkUnitsRequest) {
+        if(selectedWorkUnitsRequest == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        long activityId = selectedWorkUnitsRequest.getActivityId();
+        List<Long> wuIds = selectedWorkUnitsRequest.getWuIds();
+        boolean updated = this.workUnitService.updateWorkUnitsActivity(activityId, wuIds);
+        if(!updated) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new  ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 

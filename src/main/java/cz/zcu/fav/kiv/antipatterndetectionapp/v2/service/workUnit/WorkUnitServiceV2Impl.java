@@ -23,6 +23,11 @@ public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
         List<WorkUnit> units = this.workUnitRepository.fetchAllProjectWorkUnits(projectId);
         return units;
     }
-
+    @Override
+    public boolean updateWorkUnitsActivity(long activityId, List<Long> wuIds) {
+        int wuCount=  wuIds.size();
+        int updatedRows = this.workUnitRepository.updateWuActivity(activityId,wuIds);
+        return updatedRows == wuCount;
+    }
 
 }
