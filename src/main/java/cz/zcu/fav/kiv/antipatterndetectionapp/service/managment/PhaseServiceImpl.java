@@ -27,7 +27,7 @@ public class PhaseServiceImpl implements PhaseService {
     @Override
     public Phase savePhase(Phase phase) {
         Phase newPhase = phaseRepository.save(phase);
-        phaseRepository.flush();
+        //phaseRepository.flush();
         return newPhase;
     }
 
