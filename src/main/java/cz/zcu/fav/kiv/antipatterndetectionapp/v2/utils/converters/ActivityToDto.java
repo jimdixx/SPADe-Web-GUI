@@ -20,6 +20,7 @@ public class ActivityToDto implements ClassToDto<Activity, ActivityDto> {
                 .startDate(source.getStartDate())
                 .name(source.getName())
                 .description(source.getDescription())
+                .id(source.getId())
                 .build();
     }
 

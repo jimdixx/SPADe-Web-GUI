@@ -17,6 +17,7 @@ public class ActivityDto {
     private long externalId;
     private Date startDate;
     private Date endDate;
+    private long id;
 
 
     public static ActivityDto.ActivityDtoBuilder builder() {return new ActivityDto.ActivityDtoBuilder();}

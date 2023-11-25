@@ -2,6 +2,7 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller.management;
 
 import com.google.gson.Gson;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.SelectedWorkUnitsDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.WorkUnitDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.workUnit.WorkUnitServiceV2;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ClassToDto;
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-@RequestMapping("v2/work_unit")
+@RequestMapping("v2/management")
 @Controller
 public class WorkUnitController {
     @Autowired

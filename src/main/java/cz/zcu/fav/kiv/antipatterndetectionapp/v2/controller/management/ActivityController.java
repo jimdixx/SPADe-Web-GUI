@@ -32,8 +32,7 @@ public class ActivityController {
 
     //"/v2/management/activity_list"
     @GetMapping("/activity_list")
-    public ResponseEntity<String> getProjectsList(@RequestParam Map<String, String> requestData) {
-        Long projectId = Long.parseLong(requestData.get("selectedProjectId").toString());
+    public ResponseEntity<String> getProjectsList(@RequestParam Long projectId) {
 
         //ProjectToDto projectToDto = new ProjectToDto();
         //List<ProjectDto> projects = projectToDto.convert(projectService.getAllProjects());

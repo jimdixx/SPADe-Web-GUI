@@ -10,11 +10,15 @@ import java.util.List;
 
 @Service
 public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
+
     @Autowired
     WorkUnitRepository workUnitRepository;
 
+    @Autowired
+    WorkUnitService workUnitService;
+
     @Override
-    public List<WorkUnit> fetchProjectWorkUnits(long projectId){
+    public List<WorkUnit> fetchProjectWorkUnits(long projectId) {
         //List<WorkUnit> units = this.workUnitRepository.fetchActivityWorkUnits(activityId);
         List<WorkUnit> units = this.workUnitRepository.fetchAllProjectWorkUnits(projectId);
         return units;
