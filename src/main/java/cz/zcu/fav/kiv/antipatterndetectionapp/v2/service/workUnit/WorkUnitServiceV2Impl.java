@@ -21,7 +21,7 @@ public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
     WorkUnitService workUnitService;
 
     @Override
-    public List<WorkUnit> fetchProjectWorkUnits(long projectId, String category, String type) {
+    public List<WorkUnit> fetchProjectWorkUnits(long projectId, String category, List <String> type) {
         //List<WorkUnit> units = this.workUnitRepository.fetchActivityWorkUnits(activityId);
         //no filter applied - return everything
         if(category == null && type == null)

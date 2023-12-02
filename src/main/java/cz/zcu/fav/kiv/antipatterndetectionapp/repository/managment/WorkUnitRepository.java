@@ -43,14 +43,21 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
     @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1")
     List<WorkUnit> fetchAllProjectWorkUnits(Long projectId);
 
-    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 and ?2 IN (SELECT cat.name from unit.categories cat)")
-    List<WorkUnit> fetchActivityWorkUnitsFilteredByCategory(Long projectId, String category);
+    @Query("SELECT unit FROM WorkUnit unit " +
+            "INNER JOIN Category cat " +
+            "ON cat member OF unit.categories " +
+            "WHERE unit.project.id = :projectId AND cat.name = :categoryName")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByCategory(@Param("projectId") Long projectId, @Param("categoryName") String category);
 
-    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 and unit.type.name = ?2")
-    List<WorkUnit> fetchActivityWorkUnitsFilteredByType(Long projectId, String type);
-    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 AND ?2 MEMBER OF unit.categories AND unit.type.name = ?3")
-    List<WorkUnit> fetchActivityWorkUnitsFilteredByTypeAndCategory(Long projectId,String category, String type);
-
+    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = :projectId and unit.type.name in :typeNames")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByType(@Param("projectId") Long projectId, @Param("typeNames") List<String> wuTypes);
+    @Query("SELECT unit from WorkUnit unit " +
+            "INNER JOIN Category cat " +
+            "ON cat MEMBER OF unit.categories " +
+            "WHERE unit.project.id = :projectId AND cat.name = :categoryName AND unit.type.name in :typeNames")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByTypeAndCategory(@Param("projectId")Long projectId,@Param("categoryName") String category,@Param("typeNames")  List <String> type);
+    @Query("SELECT unit from WorkUnit unit ")
+    List<String> fetchCategoryNames(Long projectId);
     @Query("UPDATE WorkUnit unit SET unit.activity.id = :activityId WHERE unit.id in :wuIds")
     @Modifying
     @Transactional

@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Nullable;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -28,7 +25,7 @@ public class WorkUnitController {
     WorkUnitServiceV2 workUnitService;
 
     @GetMapping("/activity_work_units")
-    public ResponseEntity<String> getActivityWorkUnits(Long projectId, @Nullable String category, @Nullable String type) {
+    public ResponseEntity<String> getActivityWorkUnits(Long projectId, @Nullable @RequestParam String category, @Nullable @RequestParam List <String> type) {
         if(projectId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
