@@ -6,7 +6,9 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.WorkUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
@@ -28,6 +30,25 @@ public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
         int wuCount=  wuIds.size();
         int updatedRows = this.workUnitRepository.updateWuActivity(activityId,wuIds);
         return updatedRows == wuCount;
+    }
+
+    @Override
+    public Set<String> parseWorkUnitCategories(List<WorkUnit> workUnits) {
+        Set<String> workUnitCategories = new HashSet<>();
+        for(WorkUnit unit : workUnits) {
+            for(Category categ : unit.getCategories())
+                workUnitCategories.add(categ.getName());
+        }
+        return workUnitCategories;
+    }
+
+    @Override
+    public Set<String> parseWorkUnitTypes(List<WorkUnit> workUnits) {
+        Set<String> workUnitTypes = new HashSet<>();
+        for(WorkUnit unit : workUnits) {
+            workUnitTypes.add(unit.getType().getName());
+        }
+        return workUnitTypes;
     }
 
 }
