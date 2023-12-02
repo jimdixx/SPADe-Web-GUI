@@ -32,8 +32,9 @@ public class WorkUnitController {
         List<WorkUnit> units = this.workUnitService.fetchProjectWorkUnits(projectId, category, type);
         Set<String> workUnitCategories = this.workUnitService.parseWorkUnitCategories(units);
         Set<String> workUnitTypes = this.workUnitService.parseWorkUnitTypes(units);
+
         if(units.size() == 0) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(null);
         }
         ClassToDto<WorkUnit, WorkUnitDto> mapper = new WorkUnitToDto();
         List<WorkUnitDto> dto = mapper.convert(units);
