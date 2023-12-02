@@ -1,6 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.controller.management;
 
 import com.google.gson.Gson;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Category;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.SelectedWorkUnitsDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.WorkUnitDto;
@@ -27,17 +28,24 @@ public class WorkUnitController {
     WorkUnitServiceV2 workUnitService;
 
     @GetMapping("/activity_work_units")
-    public ResponseEntity<String> getActivityWorkUnits(Long projectId) {
+    public ResponseEntity<String> getActivityWorkUnits(Long projectId, @Nullable String category, @Nullable String type) {
         if(projectId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<WorkUnit> units = this.workUnitService.fetchProjectWorkUnits(projectId);
+        List<WorkUnit> units = this.workUnitService.fetchProjectWorkUnits(projectId, category, type);
+        Set<String> workUnitCategories = this.workUnitService.parseWorkUnitCategories(units);
+        Set<String> workUnitTypes = this.workUnitService.parseWorkUnitTypes(units);
         if(units.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         ClassToDto<WorkUnit, WorkUnitDto> mapper = new WorkUnitToDto();
         List<WorkUnitDto> dto = mapper.convert(units);
-        return ResponseEntity.ok(new Gson().toJson(dto));
+        Map<String,Object> data = new HashMap<>();
+        data.put("units", dto);
+        data.put("unit_distinct_categories", workUnitCategories);
+        data.put("unit_distinct_types", workUnitTypes);
+
+        return ResponseEntity.ok(new Gson().toJson(data));
     }
 
     @PutMapping("/activity_work_units")

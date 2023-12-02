@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.workUnit;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Category;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.WorkUnitRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.WorkUnitService;
@@ -20,10 +21,18 @@ public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
     WorkUnitService workUnitService;
 
     @Override
-    public List<WorkUnit> fetchProjectWorkUnits(long projectId) {
+    public List<WorkUnit> fetchProjectWorkUnits(long projectId, String category, String type) {
         //List<WorkUnit> units = this.workUnitRepository.fetchActivityWorkUnits(activityId);
-        List<WorkUnit> units = this.workUnitRepository.fetchAllProjectWorkUnits(projectId);
-        return units;
+        //no filter applied - return everything
+        if(category == null && type == null)
+            return this.workUnitRepository.fetchAllProjectWorkUnits(projectId);
+        if (category != null && type == null){
+            return this.workUnitRepository.fetchActivityWorkUnitsFilteredByCategory(projectId, category);
+        }
+        if(category == null){
+            return this.workUnitRepository.fetchActivityWorkUnitsFilteredByType(projectId, type);
+        }
+        return this.workUnitRepository.fetchActivityWorkUnitsFilteredByTypeAndCategory(projectId, category, type);
     }
     @Override
     public boolean updateWorkUnitsActivity(long activityId, List<Long> wuIds) {

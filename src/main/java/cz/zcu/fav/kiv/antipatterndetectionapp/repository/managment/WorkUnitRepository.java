@@ -42,6 +42,15 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
     List<WorkUnit> fetchActivityWorkUnits(Long activityId);
     @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1")
     List<WorkUnit> fetchAllProjectWorkUnits(Long projectId);
+
+    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 and ?2 IN (SELECT cat.name from unit.categories cat)")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByCategory(Long projectId, String category);
+
+    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 and unit.type.name = ?2")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByType(Long projectId, String type);
+    @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = ?1 AND ?2 MEMBER OF unit.categories AND unit.type.name = ?3")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByTypeAndCategory(Long projectId,String category, String type);
+
     @Query("UPDATE WorkUnit unit SET unit.activity.id = :activityId WHERE unit.id in :wuIds")
     @Modifying
     @Transactional
