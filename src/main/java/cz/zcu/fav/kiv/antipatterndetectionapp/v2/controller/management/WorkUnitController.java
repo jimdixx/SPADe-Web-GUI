@@ -30,8 +30,9 @@ public class WorkUnitController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<WorkUnit> units = this.workUnitService.fetchProjectWorkUnits(projectId, category, type);
-        Set<String> workUnitCategories = this.workUnitService.parseWorkUnitCategories(units);
-        Set<String> workUnitTypes = this.workUnitService.parseWorkUnitTypes(units);
+        //jde optimalizovat - neni cas
+        List<String> workUnitCategories = this.workUnitService.fetchProjectWorkUnitCategories(projectId);
+        List<String> workUnitTypes = this.workUnitService.fetchProjectWorkUnitTypes(projectId);
 
         if(units.size() == 0) {
             return ResponseEntity.ok(null);

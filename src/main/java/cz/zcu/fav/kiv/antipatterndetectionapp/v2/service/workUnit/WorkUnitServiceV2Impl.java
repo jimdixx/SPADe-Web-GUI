@@ -42,22 +42,15 @@ public class WorkUnitServiceV2Impl implements WorkUnitServiceV2 {
     }
 
     @Override
-    public Set<String> parseWorkUnitCategories(List<WorkUnit> workUnits) {
-        Set<String> workUnitCategories = new HashSet<>();
-        for(WorkUnit unit : workUnits) {
-            for(Category categ : unit.getCategories())
-                workUnitCategories.add(categ.getName());
-        }
-        return workUnitCategories;
+    public List<String> fetchProjectWorkUnitCategories(Long projectId) {
+
+        return this.workUnitRepository.fetchProjectWorkUnitsCategories(projectId);
     }
 
     @Override
-    public Set<String> parseWorkUnitTypes(List<WorkUnit> workUnits) {
-        Set<String> workUnitTypes = new HashSet<>();
-        for(WorkUnit unit : workUnits) {
-            workUnitTypes.add(unit.getType().getName());
-        }
-        return workUnitTypes;
+    public List<String> fetchProjectWorkUnitTypes(Long projectId) {
+        return this.workUnitRepository.fetchProjectWorkUnitsTypes(projectId);
     }
+
 
 }

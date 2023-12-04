@@ -62,4 +62,10 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
     @Modifying
     @Transactional
     int updateWuActivity(@Param("activityId")Long activityId, @Param("wuIds") List<Long> wuIds);
+    @Query("SELECT DISTINCT cat.name from WorkUnit  unit INNER JOIN Category cat on cat MEMBER OF unit.categories AND unit.project.id = ?1")
+    List<String> fetchProjectWorkUnitsCategories(Long projectId);
+    @Query("SELECT DISTINCT unit.type.name from WorkUnit  unit WHERE unit.project.id = ?1")
+    List<String> fetchProjectWorkUnitsTypes(Long projectId);
+
+
 }
