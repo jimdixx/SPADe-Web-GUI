@@ -46,16 +46,16 @@ public interface WorkUnitRepository extends JpaRepository<WorkUnit, Long> {
     @Query("SELECT unit FROM WorkUnit unit " +
             "INNER JOIN Category cat " +
             "ON cat member OF unit.categories " +
-            "WHERE unit.project.id = :projectId AND cat.name = :categoryName")
-    List<WorkUnit> fetchActivityWorkUnitsFilteredByCategory(@Param("projectId") Long projectId, @Param("categoryName") String category);
+            "WHERE unit.project.id = :projectId AND cat.name in :categoryName")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByCategory(@Param("projectId") Long projectId, @Param("categoryName") List<String> category);
 
     @Query("SELECT unit from WorkUnit unit WHERE unit.project.id = :projectId and unit.type.name in :typeNames")
     List<WorkUnit> fetchActivityWorkUnitsFilteredByType(@Param("projectId") Long projectId, @Param("typeNames") List<String> wuTypes);
     @Query("SELECT unit from WorkUnit unit " +
             "INNER JOIN Category cat " +
             "ON cat MEMBER OF unit.categories " +
-            "WHERE unit.project.id = :projectId AND cat.name = :categoryName AND unit.type.name in :typeNames")
-    List<WorkUnit> fetchActivityWorkUnitsFilteredByTypeAndCategory(@Param("projectId")Long projectId,@Param("categoryName") String category,@Param("typeNames")  List <String> type);
+            "WHERE unit.project.id = :projectId AND cat.name in :categoryName AND unit.type.name in :typeNames")
+    List<WorkUnit> fetchActivityWorkUnitsFilteredByTypeAndCategory(@Param("projectId")Long projectId,@Param("categoryName") List<String> category,@Param("typeNames")  List <String> type);
     @Query("SELECT unit from WorkUnit unit ")
     List<String> fetchCategoryNames(Long projectId);
     @Query("UPDATE WorkUnit unit SET unit.activity.id = :activityId WHERE unit.id in :wuIds")

@@ -34,9 +34,6 @@ public class WorkUnitController {
         List<String> workUnitCategories = this.workUnitService.fetchProjectWorkUnitCategories(projectId);
         List<String> workUnitTypes = this.workUnitService.fetchProjectWorkUnitTypes(projectId);
 
-        if(units.size() == 0) {
-            return ResponseEntity.ok(null);
-        }
         ClassToDto<WorkUnit, WorkUnitDto> mapper = new WorkUnitToDto();
         List<WorkUnitDto> dto = mapper.convert(units);
         Map<String,Object> data = new HashMap<>();
