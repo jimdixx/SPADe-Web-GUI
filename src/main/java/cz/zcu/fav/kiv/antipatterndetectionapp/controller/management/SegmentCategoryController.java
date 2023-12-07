@@ -38,8 +38,8 @@ public class SegmentCategoryController {
     @Autowired
     private PhaseService phaseService;
 
-    @Autowired
-    private ActivityService activityService;
+//    //@Autowired
+    //private ActivityService activityService;
 
     @Autowired
     private ProjectService projectService;
@@ -273,7 +273,7 @@ public class SegmentCategoryController {
                                     category.getName(),
                                     category.getDescription(),
                                     category.getProjectInstance().getProjectId());
-                        return activityService.saveActivity(activity);
+//                        return activityService.saveActivity(activity);
                     }
                 }
                 break;
