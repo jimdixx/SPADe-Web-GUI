@@ -10,6 +10,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.AdditionalInformationDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryChangeRequest;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.CategoryDto;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.GeneralResponseDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.activity.ActivityService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.management.category.ICategories;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.CategoryToDto;
 import lombok.NonNull;

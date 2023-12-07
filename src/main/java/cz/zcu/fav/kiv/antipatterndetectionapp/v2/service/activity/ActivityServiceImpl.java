@@ -8,6 +8,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Category;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.ProjectInstance;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
 import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.WuType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.DatabaseObject;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.ActivityRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.WorkUnitRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
@@ -59,5 +60,10 @@ public class ActivityServiceImpl implements ActivityService {
         }
         List<Activity> activities = p.getActivities();
         return activities;
+    }
+
+    @Override
+    public DatabaseObject saveActivity(Activity activity) {
+        return activityRepository.save(activity);
     }
 }
