@@ -1,5 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.security;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -15,9 +21,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Service
 public class JwtAuthenticationTokenConverter implements Converter<Jwt, AbstractAuthenticationToken> {
-
     private static final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    @Autowired
+    private UserService userService;
     private String resourceId = "spade-client";
     private String principalAttribute = "preferred_username";
 
@@ -27,6 +35,10 @@ public class JwtAuthenticationTokenConverter implements Converter<Jwt, AbstractA
                 Stream.concat(jwtGrantedAuthoritiesConverter.convert(jwt).stream(), extractResourceRoles(jwt).stream())
                         .collect(Collectors.toSet());
         String claimName = principalAttribute == null ? JwtClaimNames.SUB : principalAttribute;
+
+        String preferredUsername = jwt.getClaim(claimName);
+        userService.registerUserSSO(new User(preferredUsername));
+
         return new JwtAuthenticationToken(jwt, authorities, jwt.getClaim(claimName));
     }
 

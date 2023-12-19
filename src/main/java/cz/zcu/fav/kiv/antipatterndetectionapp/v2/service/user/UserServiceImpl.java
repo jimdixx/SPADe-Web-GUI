@@ -5,6 +5,7 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.repository.UserRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.Crypto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Override
+    public synchronized void registerUserSSO(User user) {
+        if (userRepository.findByName(user.getName()) == null) {
+            final String name = user.getName();
+            if (verifyUserParameters(name))
+                return;
+            //save the user
+            userRepository.save(new User(name));
+        }
+    }
 
     /**
      * Method attempts to register a user
@@ -107,7 +120,9 @@ public class UserServiceImpl implements UserService {
         return (!passwordMatches ? UserModelStatusCodes.USER_LOGIN_FAILED : UserModelStatusCodes.USER_LOGGED_IN);
     }
 
-
+    private boolean verifyUserParameters(String name) {
+        return (name == null || name.isEmpty() || name.isBlank());
+    }
 
     @Override
     public User getUserByName(String name) {

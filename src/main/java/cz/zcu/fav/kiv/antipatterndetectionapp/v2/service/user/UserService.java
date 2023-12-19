@@ -15,6 +15,9 @@ public interface UserService {
      * @return Integer - status code of the operation, ie 1 - successful, 0 - name taken, ...
      */
     public UserModelStatusCodes registerUser(User user);
+
+    void registerUserSSO(User user);
+
     /**
      * Method attempts to log in a user and returns status code indicating login result
      * @param user serialized JSON object representing user
