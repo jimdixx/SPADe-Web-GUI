@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
     List<Configuration> getPublicConfigurations();
     //retrieve all public configurations and configurations available to the user
     //assumption - default configurations are not assigned to any user explicitly
-    @Query("select config, userconfig from Configuration config inner join UserConfigurationJoin userconfig on config.id = userconfig.id.configId where userconfig.id.userId = ?1 or config.isDefault = 'Y'")
+    @Query("select config, userconfig from Configuration config left join UserConfigurationJoin userconfig on config.id = userconfig.id.configId where userconfig.id.userId = ?1 or config.isDefault = 'Y'")
     List<Object[]> getAllUserConfigurations(int userId);
 
     @Modifying
@@ -38,12 +39,11 @@ public interface ConfigRepository extends JpaRepository<Configuration,Integer> {
     @Query("select userconfig.configurationName from UserConfigurationJoin userconfig where userconfig.id = ?1")
     String findConfigurationByCompoundKey(UserConfigKey key);
 
-    @Query("SELECT \n" +
-            "cfg \n" +
-            "FROM \n" +
-            "UserConfigurationJoin userconfig INNER JOIN Configuration cfg \n" +
-            "ON userconfig.id.configId = cfg.id\n" +
-            "WHERE\n" +
-            "userconfig.id = ?1")
-    Configuration findConfigurationByUserNameAndID(UserConfigKey key);
+    @Query("SELECT cfg FROM UserConfigurationJoin userconfig RIGHT JOIN Configuration cfg " +
+            "ON userconfig.id.configId = cfg.id " +
+            "WHERE userconfig.id = ?1 or (cfg.isDefault = 'Y' and cfg.id = ?2)")
+    Configuration findConfigurationByUserNameAndID(UserConfigKey key,int configId);
+
+
+
 }

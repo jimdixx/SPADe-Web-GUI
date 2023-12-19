@@ -6,7 +6,6 @@ import java.io.Serializable;
 /**
  * @Author Jiri Trefil
  * primary key of table user_configuration is compound (userId,configurationId) pair is unique
- * @Deprecated not being used (29.04.2023)
  * the business logic involving this table is in ConfigurationRepository interface
  */
 @Embeddable
@@ -37,6 +36,7 @@ public UserConfigKey(int userId,int configId){
     }
 
     public UserConfigKey() {
-
+        this.userId = -1;
+        this.configId = -1;
     }
 }
