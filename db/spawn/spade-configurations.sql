@@ -21,7 +21,7 @@ create table user_configurations (
 	primary key(userId,configId)
 )
 
-insert into configurations (config, isDefault) values (
+insert into configurations (config, isDefault, defaultConfigName) values (
 	'{
     "configuration": [
         {
@@ -168,7 +168,7 @@ insert into configurations (config, isDefault) values (
         }
     ]
 }',
-	'Y'
+	'Y', 'default configuration'
 
 
 )
