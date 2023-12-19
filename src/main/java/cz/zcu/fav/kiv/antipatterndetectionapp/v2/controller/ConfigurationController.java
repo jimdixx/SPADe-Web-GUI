@@ -74,13 +74,13 @@ public class ConfigurationController {
         Map<String, AntiPattern> antiPatterns = this.configurationService.getAntiPatterns();
 
         if (config == null) {
-            json.put("message", "internal sever error");
-            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
+            json.put("message", "no configurations found");
+            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.BAD_REQUEST);
         }
 
         if (antiPatterns == null) {
-            json.put("message", "internal sever error");
-            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.INTERNAL_SERVER_ERROR);
+            json.put("message", "no anti patterns found");
+            return new ResponseEntity<>(JSONBuilder.buildJSON(json), HttpStatus.NOT_FOUND);
         }
 
         json.put("configuration", config.getConfig());
