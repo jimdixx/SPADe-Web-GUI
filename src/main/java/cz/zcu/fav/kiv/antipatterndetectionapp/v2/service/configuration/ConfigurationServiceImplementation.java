@@ -247,7 +247,7 @@ public class ConfigurationServiceImplementation implements ConfigService {
             return null;
         }
         UserConfigKey key = new UserConfigKey(user.getId(), id);
-        Configuration configuration = this.configurationRepository.findConfigurationByUserNameAndID(key);
+        Configuration configuration = this.configurationRepository.findConfigurationByUserNameAndID(key,key.getConfigId());
         return configuration;
     }
 
