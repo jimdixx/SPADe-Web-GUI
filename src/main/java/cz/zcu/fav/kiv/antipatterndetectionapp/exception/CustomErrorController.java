@@ -64,9 +64,5 @@ public class CustomErrorController implements ErrorController {
         return errorPage;
     }
 
-    @Override
-    public String getErrorPath() {
-        return "/error";
-    }
 
 }

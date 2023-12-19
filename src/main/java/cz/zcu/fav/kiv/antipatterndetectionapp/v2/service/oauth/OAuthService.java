@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface OAuthService {
     public ResponseEntity<String> authenticate(String token);
+    ResponseEntity<String> authenticate(HttpServletRequest request);
     public ResponseEntity<String> loginUser(User user);
     public ResponseEntity<String> logoutUser(User user);
 

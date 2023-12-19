@@ -4,12 +4,14 @@ import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +56,11 @@ public class OAuthServiceImpl implements OAuthService, UserDetailsService {
     public ResponseEntity<String> authenticate(String token) {
 
         return requestBuilder.sendRequestResponse(AUTH_URL_AUTH, token);
+    }
+
+    @Override
+    public ResponseEntity<String> authenticate(HttpServletRequest request) {
+        return requestBuilder.resendHttpRequest(request, AUTH_URL_AUTH);
     }
 
     public ResponseEntity<String> loginUser(User user) {

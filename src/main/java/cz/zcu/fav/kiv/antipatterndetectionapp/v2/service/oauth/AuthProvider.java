@@ -17,17 +17,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
 public class AuthProvider implements AuthenticationProvider {
 
     @Value("${auth.realm.authenticate}")
     private String auth_url;
 
-    private RestTemplate template;
+//    private RestTemplate template;
 
-    public AuthProvider(RestTemplate restTemplate){
-        this.template = restTemplate;
-    }
+//    public AuthProvider(RestTemplate restTemplate){
+//        this.template = restTemplate;
+//    }
 
 
     @Override
