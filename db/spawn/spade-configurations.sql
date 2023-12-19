@@ -5,7 +5,7 @@ create table configurations (
 	id int identity(1, 1),
 	configHash nvarchar(255),
 	config nvarchar(max) not null,
-	isDefault char(1) not null CHECK ( 'Y', 'N' ),
+	isDefault char(1) not null,
 	defaultConfigName nvarchar(255),
 	PRIMARY KEY(id)
 );
@@ -172,6 +172,5 @@ insert into configurations (config, isDefault) values (
 
 
 )
-insert into user_configurations(userId,configId,configurationName) values (1,1,'default config')
 
 commit
