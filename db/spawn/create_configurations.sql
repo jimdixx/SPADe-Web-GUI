@@ -1,28 +1,24 @@
-use [authspade];
-begin transaction create_enviroment
-if not exists (select * from sysobjects where name='configurations' and xtype='U')
-create table configurations (
-	id int identity(1, 1),
-	configHash nvarchar(255),
-	config nvarchar(max) not null,
-	isDefault char(1) not null,
-	defaultConfigName nvarchar(255),
-	PRIMARY KEY(id)
+USE authspade;
+
+CREATE TABLE IF NOT EXISTS configurations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    configHash VARCHAR(255),
+    config TEXT NOT NULL,
+    isDefault CHAR(1) NOT NULL,
+    defaultConfigName VARCHAR(255)
 );
 
---rozkladova tabulka mapujici uzivatele a k nemu asociovane konfigurace
-if not exists (select * from sysobjects where name='user_configurations' and xtype='U')
-create table user_configurations (
-	userId int not null,
-	configId int not null,
-    configurationName nvarchar(255) not null,
-	foreign key(userId) references users(id),
-	foreign key(configId) references configurations(id),
-	primary key(userId,configId)
-)
+CREATE TABLE IF NOT EXISTS user_configurations (
+    userId INT NOT NULL,
+    configId INT NOT NULL,
+    configurationName VARCHAR(255) NOT NULL,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (configId) REFERENCES configurations(id),
+    PRIMARY KEY (userId, configId)
+);
 
-insert into configurations (config, isDefault, defaultConfigName) values (
-	'{
+INSERT INTO configurations (config, isDefault, defaultConfigName) VALUES (
+    '{
     "configuration": [
         {
             "antiPattern": "TooLongSprint",
@@ -97,7 +93,7 @@ insert into configurations (config, isDefault, defaultConfigName) values (
                 },
                 {
                     "thresholdName": "searchSubstringsWithProjectPlan",
-                    "value": "%pl�n projektu%||%project plan%||%plan project%||%projektov� pl�n%"
+                    "value": "%pl n projektu%||%project plan%||%plan project%||%projektov  pl n%"
                 }
             ]
         },
@@ -114,7 +110,7 @@ insert into configurations (config, isDefault, defaultConfigName) values (
                 },
                 {
                     "thresholdName": "searchSubstringsWithFeedbackLoop",
-                    "value": "%sch�z%z�kazn�k%||%p�edveden�%z�kazn�k%||%z�kazn%demo%||%sch�z%zadavat%||%inform%sch�z%||%z�kazn%||%zadavatel%"
+                    "value": "%sch z%z kazn k%||%p edveden %z kazn k%||%z kazn%demo%||%sch z%zadavat%||%inform%sch z%||%z kazn%||%zadavatel%"
                 }
             ]
         },
@@ -168,9 +164,5 @@ insert into configurations (config, isDefault, defaultConfigName) values (
         }
     ]
 }',
-	'Y', 'default configuration'
-
-
-)
-
-commit
+    'Y', 'default configuration'
+);
