@@ -1,2 +1,0 @@
-/* Select count of identities of a person which are without name written in description, without email and with name like "unknown" */
-select count(i.id) from identity i where i.personId = '§0§' and ((i.email is not null and i.email not like '') or (i.description like '% %') or (i.name like '% %') or ((i.name is not null and i.name not like '') and (i.name not like '§1§' )));

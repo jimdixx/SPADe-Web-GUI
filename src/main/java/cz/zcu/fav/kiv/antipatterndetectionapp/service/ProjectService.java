@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.types.Node;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ProjectDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.types.Node;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.dto.ProjectDto;
 
 import java.util.ArrayList;
 import java.util.List;

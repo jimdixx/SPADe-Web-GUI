@@ -1,12 +1,12 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Iteration;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Phase;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Iteration;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Phase;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.WorkUnit;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.IterationService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.PhaseService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.WorkUnitService;

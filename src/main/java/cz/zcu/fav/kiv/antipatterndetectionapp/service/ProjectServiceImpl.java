@@ -1,10 +1,10 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.types.Node;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.ProjectRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.ProjectDto;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.converters.ProjectToDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.types.Node;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.ProjectRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.dto.ProjectDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.converters.ProjectToDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.ProjectInstance;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.ProjectInstance;
 
 import java.util.List;
 

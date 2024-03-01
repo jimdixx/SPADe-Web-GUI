@@ -1,12 +1,12 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.*;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.DatabaseObject;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.DatabaseObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

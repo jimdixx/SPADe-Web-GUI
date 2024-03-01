@@ -2,7 +2,7 @@
 //
 //import cz.zcu.fav.kiv.antipatterndetectionapp.v2.dials.UserModelStatusCodes;
 //import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.user.UserService;
-//import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
+//import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JSONBuilder;
 //import org.junit.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
 //import org.junit.runner.RunWith;

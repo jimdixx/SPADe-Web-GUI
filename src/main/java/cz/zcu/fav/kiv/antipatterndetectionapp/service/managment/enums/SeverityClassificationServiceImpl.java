@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.SeverityClassification;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.Classification;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.enums.SeverityClassificationRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.SeverityClassification;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.Classification;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.enums.SeverityClassificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

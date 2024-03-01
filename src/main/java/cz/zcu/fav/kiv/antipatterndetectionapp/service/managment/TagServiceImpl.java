@@ -1,7 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Tag;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.TagRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Tag;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

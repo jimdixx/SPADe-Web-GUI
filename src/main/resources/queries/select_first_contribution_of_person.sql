@@ -1,1 +1,0 @@
-select c.created from configurationView c where c.authorId = '§0§' ORDER by created ASC limit 1;

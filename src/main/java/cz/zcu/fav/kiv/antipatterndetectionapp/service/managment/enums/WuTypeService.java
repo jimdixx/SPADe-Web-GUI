@@ -1,6 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.WuType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.WuType;
 
 import java.util.List;
 

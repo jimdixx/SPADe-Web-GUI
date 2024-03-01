@@ -1,7 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Identity;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.IdentityRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Identity;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.IdentityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

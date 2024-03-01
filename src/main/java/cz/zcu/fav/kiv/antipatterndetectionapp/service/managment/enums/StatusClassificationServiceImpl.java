@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.StatusClassification;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.Classification;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.enums.StatusClassificationRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.StatusClassification;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.Classification;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.enums.StatusClassificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

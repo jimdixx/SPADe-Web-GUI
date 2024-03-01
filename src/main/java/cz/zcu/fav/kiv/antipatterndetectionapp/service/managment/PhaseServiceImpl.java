@@ -1,7 +1,7 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Phase;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.PhaseRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Phase;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.PhaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

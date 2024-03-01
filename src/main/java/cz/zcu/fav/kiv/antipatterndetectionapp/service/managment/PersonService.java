@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Person;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.PersonDto;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Person;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.dto.PersonDto;
 
 import java.util.List;
 

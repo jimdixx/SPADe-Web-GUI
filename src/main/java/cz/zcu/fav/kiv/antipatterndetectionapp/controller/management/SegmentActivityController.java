@@ -1,16 +1,16 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Activity;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Category;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.ProjectInstance;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.WorkUnit;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.WuType;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.ActivityRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.WorkUnitRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Activity;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Category;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.ProjectInstance;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.WorkUnit;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.WuType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.ActivityRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.WorkUnitRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.CategoryService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.WorkUnitService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums.WuTypeService;

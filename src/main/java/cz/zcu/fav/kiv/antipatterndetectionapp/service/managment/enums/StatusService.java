@@ -1,6 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.Status;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.Status;
 
 import java.util.List;
 

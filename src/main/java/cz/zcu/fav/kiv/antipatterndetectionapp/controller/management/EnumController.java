@@ -1,14 +1,14 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.Constants;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.Project;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.Project;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums.*;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.FormObject;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.ProjectInstance;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.Classification;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.EnumType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.FormObject;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.ProjectInstance;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.Classification;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.EnumType;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

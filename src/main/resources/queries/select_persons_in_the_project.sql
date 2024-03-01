@@ -1,1 +1,0 @@
-select pv.id as id from personView pv where projectId = @projectId;

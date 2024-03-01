@@ -2,9 +2,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.controller.management;
 
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.ProjectService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.utils.Utils;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.Commit;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.CommitRepository;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.ConfigurationPersonRelationRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.Commit;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.CommitRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.ConfigurationPersonRelationRepository;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.BranchService;
 import cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.CommitService;
 import org.slf4j.Logger;

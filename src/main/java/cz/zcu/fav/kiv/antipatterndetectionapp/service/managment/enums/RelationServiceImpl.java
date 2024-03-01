@@ -1,8 +1,8 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.enums.Relation;
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.EnumType;
-import cz.zcu.fav.kiv.antipatterndetectionapp.repository.managment.enums.RelationRepository;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.enums.Relation;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.EnumType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.repository.project.managment.enums.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.service.managment.enums;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.model.management.interfaces.EnumType;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.project.management.interfaces.EnumType;
 
 public interface EnumService {
 

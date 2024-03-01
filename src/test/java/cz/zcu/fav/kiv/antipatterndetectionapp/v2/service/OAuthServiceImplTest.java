@@ -1,9 +1,9 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.v2.service;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.model.User;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.service.oauth.OAuthService;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.JSONBuilder;
-import cz.zcu.fav.kiv.antipatterndetectionapp.v2.utils.RequestBuilder;
+import cz.zcu.fav.kiv.antipatterndetectionapp.model.app.User;
+import cz.zcu.fav.kiv.antipatterndetectionapp.service.oauth.OAuthService;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.JSONBuilder;
+import cz.zcu.fav.kiv.antipatterndetectionapp.utils.RequestBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
