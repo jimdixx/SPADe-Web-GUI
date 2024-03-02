@@ -25,13 +25,14 @@ public class AuthConfiguration {
         http
                 .cors()
                 .and()
-                .authorizeRequests(authz -> authz
-                        .antMatchers("/v2/app/metadata/**", "/v2/user/register").permitAll() // Allow all requests to /v2/app/metadata/**
+                .authorizeRequests(authz -> authz //TODO odstranit detecting
+                        .antMatchers("/v2/app/metadata/**", "/v2/user/register", "/v2/detecting/**").permitAll() // Allow all requests to /v2/app/metadata/**
                         .antMatchers("/v2/**").hasAnyRole("spade_basic")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationTokenConverter)))
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .csrf().disable();
         return http.build();
     }
 
