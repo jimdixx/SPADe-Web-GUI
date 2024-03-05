@@ -1,5 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.spring;
 
+import cz.zcu.fav.kiv.antipatterndetectionapp.errorHandler.CustomResponseErrorHandler;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,6 +58,8 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new CustomResponseErrorHandler());
+        return restTemplate;
     }
 }

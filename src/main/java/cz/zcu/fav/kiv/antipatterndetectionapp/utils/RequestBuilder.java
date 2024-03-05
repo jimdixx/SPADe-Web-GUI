@@ -1,6 +1,6 @@
 package cz.zcu.fav.kiv.antipatterndetectionapp.utils;
 
-import cz.zcu.fav.kiv.antipatterndetectionapp.httpErrorHandler.CustomErrorHandler;
+import cz.zcu.fav.kiv.antipatterndetectionapp.errorHandler.CustomErrorHandler;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;

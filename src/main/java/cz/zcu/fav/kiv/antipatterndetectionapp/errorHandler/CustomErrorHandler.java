@@ -1,8 +1,7 @@
-package cz.zcu.fav.kiv.antipatterndetectionapp.httpErrorHandler;
+package cz.zcu.fav.kiv.antipatterndetectionapp.errorHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpClientErrorException;
 

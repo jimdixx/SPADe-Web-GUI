@@ -3,6 +3,9 @@ package cz.zcu.fav.kiv.antipatterndetectionapp.service.detecting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -15,14 +18,12 @@ public class DetectingService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> requestEntity = null;
-        if (requestBody != null) {
-            requestEntity = new HttpEntity<>(requestBody, headers);
-        } else {
-            requestEntity = new HttpEntity<>(headers);
-        }
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        return restTemplate.exchange(url, method, requestEntity, String.class);
+        try {
+            return restTemplate.exchange(url, method, requestEntity, String.class);
+        } catch (RestClientResponseException e) {
+                return ResponseEntity.status(e.getRawStatusCode()).body(e.getStatusText());
+        }
     }
 }
-
