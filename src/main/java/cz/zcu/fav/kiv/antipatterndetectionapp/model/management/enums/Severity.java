@@ -10,6 +10,7 @@ import javax.persistence.*;
  * Model class for severity. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "severity")
 public class Severity implements EnumType {
 
     @Id

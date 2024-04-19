@@ -8,6 +8,7 @@ import javax.persistence.*;
  * Model class for identities. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "identity")
 public class Identity implements DatabaseObject {
 
     @Id

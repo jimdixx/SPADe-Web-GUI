@@ -13,6 +13,7 @@ import java.util.List;
  * Model class for iteration. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "iteration")
 public class Iteration implements DatabaseObject {
 
     @Id

@@ -8,6 +8,7 @@ import java.util.Set;
  * Model class for commit. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "commit")
 public class Commit {
 
     @OneToOne

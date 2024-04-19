@@ -11,6 +11,7 @@ import javax.persistence.*;
  * Model class for role. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "role")
 public class Role implements EnumType {
 
     @Id

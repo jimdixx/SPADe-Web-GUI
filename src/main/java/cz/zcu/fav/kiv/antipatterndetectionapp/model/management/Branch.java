@@ -8,6 +8,7 @@ import java.util.Set;
  * Model class for branches. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "branch")
 public class Branch {
 
     @Id

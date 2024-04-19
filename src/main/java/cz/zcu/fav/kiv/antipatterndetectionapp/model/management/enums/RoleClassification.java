@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for role classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "role_classification")
 public class RoleClassification implements Classification {
 
     @Id

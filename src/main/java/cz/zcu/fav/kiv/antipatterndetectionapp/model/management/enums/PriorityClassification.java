@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for priority classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "priority_classification")
 public class PriorityClassification implements Classification {
 
     @Id

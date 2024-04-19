@@ -12,6 +12,7 @@ import java.util.Set;
  * Model class for project. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "project")
 public class Project {
 
     @Id

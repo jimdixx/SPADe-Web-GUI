@@ -10,6 +10,7 @@ import javax.persistence.*;
  * Model class for statuses. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "status")
 public class Status implements EnumType {
 
     @Id

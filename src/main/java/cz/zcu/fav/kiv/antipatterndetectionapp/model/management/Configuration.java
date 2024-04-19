@@ -8,6 +8,7 @@ import javax.persistence.*;
  * Model class for configurations. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "configuration")
 public class Configuration {
 
     @Id
