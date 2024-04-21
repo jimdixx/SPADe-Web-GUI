@@ -10,6 +10,7 @@ import javax.persistence.*;
  * Model class for resolution. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "resolution")
 public class Resolution implements EnumType {
 
     @Id

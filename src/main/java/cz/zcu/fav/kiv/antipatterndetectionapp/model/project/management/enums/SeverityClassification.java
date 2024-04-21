@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for severity classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "severity_classification")
 public class SeverityClassification implements Classification {
 
     @Id

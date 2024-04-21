@@ -10,6 +10,7 @@ import java.util.Set;
  * Model class for category. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "category")
 public class Category implements DatabaseObject {
 
     @Id

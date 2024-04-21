@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for resolution classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "resolution_classification")
 public class ResolutionClassification implements Classification {
 
     @Id

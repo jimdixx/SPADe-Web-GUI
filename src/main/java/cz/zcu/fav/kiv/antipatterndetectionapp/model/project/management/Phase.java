@@ -13,6 +13,7 @@ import java.util.List;
  * Model class for phases. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "phase")
 public class Phase implements DatabaseObject {
 
     @Id

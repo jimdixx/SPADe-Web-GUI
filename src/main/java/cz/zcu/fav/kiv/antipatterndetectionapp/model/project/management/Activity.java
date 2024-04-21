@@ -13,6 +13,7 @@ import java.util.List;
  * Model class for category. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "activity")
 public class Activity implements DatabaseObject {
 
     @Id

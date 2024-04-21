@@ -8,7 +8,7 @@ import javax.persistence.*;
  * @author Vaclav Hrabik, Jiri Trefil
  */
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     /**

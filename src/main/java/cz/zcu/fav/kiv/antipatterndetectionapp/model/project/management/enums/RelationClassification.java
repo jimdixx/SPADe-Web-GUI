@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for relation classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "relation_classification")
 public class RelationClassification implements Classification {
 
     @Id

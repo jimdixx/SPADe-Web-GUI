@@ -13,6 +13,7 @@ import java.util.Set;
  * Model class for people. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "person")
 public class Person implements DatabaseObject {
 
     @Id

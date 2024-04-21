@@ -10,6 +10,7 @@ import java.util.List;
  * Model class for status classes. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "status_classification")
 public class StatusClassification implements Classification {
 
     @Id

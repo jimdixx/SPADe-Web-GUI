@@ -10,6 +10,7 @@ import javax.persistence.*;
  * Model class for relations. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "relation")
 public class Relation implements EnumType {
 
     @Id

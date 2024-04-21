@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Model class for configuration person relation. This is Entity class that is loaded from db.
  */
 @Entity
+@Table(name = "configuration_person_relation")
 public class ConfigurationPersonRelation {
 
     @Id
